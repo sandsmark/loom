@@ -1,0 +1,71 @@
+#pragma once
+
+#include <Core\Singleton\ISingleton.h>
+#include <Core\Datatype\cString.h>
+#include <Core\Container\cArray.h>
+#include <Core\Event\IEventListener.h>
+#include <Core\Event\IEventDispatcher.h>
+
+using namespace Loom::Core;
+
+BEGIN_NAMESPACE( Weaver )
+
+class IAppEvent;
+
+class cDispatcherHub : public ISingleton<cDispatcherHub>
+{
+public:
+	class IEventParam
+	{
+	public:
+	};
+
+protected:
+	class cDispatcherInfo
+	{
+	public:
+		IEventDispatcher<IEventListener> *mDispatcher;
+		IEventDispatcher<IEventListener>::cTypeWrapper1<const cDispatcherHub::IEventParam&>::tFunction mFunction;
+
+		cDispatcherInfo( IEventDispatcher<IEventListener> *iDispatcher, IEventDispatcher<IEventListener>::cTypeWrapper1<const IEventParam&>::tFunction iFunction )
+		: mDispatcher( iDispatcher ), mFunction( iFunction )
+		{
+		}
+	};
+
+protected:
+	cHashMap< const cString, cArray<cDispatcherInfo> > mDispatchers;
+
+public:
+	#pragma warning( push )
+	#pragma warning( disable: 4407 )	// Function pointer to member conversion
+	template< typename iParamType1, typename iType >
+	void Register( const cString &iName, typename IEventDispatcher<iType>::cTypeWrapper1<const iParamType1&>::tFunction iFunction, IEventDispatcher<iType>* iDispatcher )
+	{	// TODO: Find some more template magic to get rid of the need to define iParamType1 explicitly
+		cArray<cDispatcherInfo> &iList = mDispatchers[ iName ];
+		iList.Add( cDispatcherInfo( (IEventDispatcher<IEventListener>*)iDispatcher, (IEventDispatcher<IEventListener>::cTypeWrapper1<const IEventParam&>::tFunction)iFunction ) );
+	}
+	#pragma warning( pop )
+
+	template< typename iParamType1 >
+	void Dispatch( const cString &iName, const iParamType1 &vParam1 )
+	{
+		cArray<cDispatcherInfo> *iList = mDispatchers.Find( iName );
+		if ( !iList )
+		{
+			cLogger::Get().Log( cLogger::LOG_WARNING, _T("Events"), _T("Unknown event name") );
+			return;
+		}
+
+		for ( size_t i=0; i<iList->GetSize(); i++ )
+		{
+			cDispatcherInfo &vInfo = (*iList)[i];
+			vInfo.mDispatcher->Dispatch<const cDispatcherHub::IEventParam&>( vInfo.mFunction, vParam1 );
+		}
+	}
+
+	void Init( void );
+	void Destroy( void );
+};
+
+END_NAMESPACE()

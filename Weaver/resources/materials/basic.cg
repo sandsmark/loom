@@ -1,0 +1,28 @@
+sampler2D mTexture : TEXUNIT0;
+
+void main( float4 iPosition : POSITION, float2 iTexCoord : TEXCOORD,
+						  out float4 oPosition : POSITION,
+						  out float4 oColour   : COLOR,
+						  out float2 oTexCoord : TEXCOORD,
+						  
+							uniform float4x4 mWorld,
+							uniform float4x4 mView,
+							uniform float4x4 mProj
+						  )
+{
+    float4 vWorldPos  = mul( mWorld, iPosition );
+    float4 vViewPos   = mul( mView , vWorldPos );
+    float4 vScreenPos = mul( mProj , vViewPos );
+    
+    oPosition = vScreenPos;
+    oTexCoord = iTexCoord;
+    oColour = frac( vWorldPos );
+}
+
+float4 mainFP( float4 iColor : COLOR, float2 iTexCoord : TEXCOORD ) : COLOR
+//float4 mainFP( float4 iColor : COLOR ) : COLOR
+{
+//	return float4( iTexCoord, 0, 0 );
+//	return float4( 1, 0, 0, 1 );
+    return tex2D( mTexture, iTexCoord );
+} 

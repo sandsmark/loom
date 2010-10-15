@@ -1,0 +1,17 @@
+#include <Weaver\Event\cDispatcherHub.h>
+#include <Core\Debug\Logger\Writer\cLogWriterDebugOutput.h>
+
+using namespace Loom::Weaver;
+
+/************************************************************************/
+void cDispatcherHub::Init( void )
+/************************************************************************/
+{
+	cLogger::Get().AddWriter( _T("Events"), new cLogWriterDebugOutput( cLogger::LOG_DEBUG ) ); 
+}
+
+/************************************************************************/
+void cDispatcherHub::Destroy( void )
+/************************************************************************/
+{	// TODO: Delete logger
+}
