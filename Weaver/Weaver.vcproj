@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/FIWeaver/global.h"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include;C:\Code\CMLabs\Loom\Weaver\dependencies\win32\Ogre\boost_1_42;C:\Code\CMLabs\Loom\Weaver\dependencies\win32\Ogre\include;C:\Code\CMLabs\Loom\Weaver\dependencies\win32\Qt\Include"
+				AdditionalIncludeDirectories="../include;.\dependencies\win32\Ogre\boost_1_42;.\dependencies\win32\Ogre\include;.\dependencies\win32\Qt\Include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
@@ -128,7 +128,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="../include;C:\Code\CMLabs\Loom\Weaver\dependencies\win32\Ogre\boost_1_42;C:\Code\CMLabs\Loom\Weaver\dependencies\win32\Ogre\include;C:\Code\CMLabs\Loom\Weaver\dependencies\win32\Qt\Include"
+				AdditionalIncludeDirectories="../include;.\dependencies\win32\Ogre\boost_1_42;.\dependencies\win32\Ogre\include;.\dependencies\win32\Qt\Include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_HAS_EXCEPTIONS=0;BOOST_NO_STD_TYPEINFO"
 				ExceptionHandling="0"
 				RuntimeLibrary="0"
@@ -247,7 +247,7 @@
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Generating cQMainWindow metadata"
-								CommandLine="dependencies\win32\Qt\bin\moc -D__WIN32__ $(InputDir)$(InputFileName) -o $(InputDir)$(InputName)_moc.cpp"
+								CommandLine="dependencies\win32\Qt\bin\moc -D__WIN32__ $(InputDir)$(InputFileName) -o $(InputDir)$(InputName)_moc.cpp&#x0D;&#x0A;"
 								Outputs="$(InputDir)$(InputName)_moc.cpp"
 							/>
 						</FileConfiguration>
