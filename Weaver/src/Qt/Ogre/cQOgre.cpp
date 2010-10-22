@@ -33,7 +33,7 @@ using Loom::Core::cLogger;
 
 /**********************************************************************/
 cQOgre::cQOgre( QWidget *iParent )
-: QGLWidget( iParent ), mWindow( NULL )
+: QGLWidget( iParent ), mWindow( NULL ), mViewport( NULL )
 /**********************************************************************/
 {
     resize( 128, 128 );
@@ -184,6 +184,7 @@ void cQOgre::paintEvent(QPaintEvent *)
 void cQOgre::OnSetBackgroundColour( const Ogre::ColourValue &iColour )
 /**********************************************************************/
 {
+	if ( !mViewport ) return;
 	mViewport->setBackgroundColour( iColour );
 }
 

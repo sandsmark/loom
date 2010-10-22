@@ -98,6 +98,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="copy bin\MoMa_d.dll ..\Weaver\bin\modules&#x0D;&#x0A;copy bin\MoMa_d.pdb ..\Weaver\bin\modules&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
