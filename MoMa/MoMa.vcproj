@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="Core"
-	ProjectGUID="{6A25B323-1C85-4BDB-BAEE-F5F9A937674B}"
-	RootNamespace="Core"
+	Name="MoMa"
+	ProjectGUID="{BD732CBE-5E2C-4023-8D19-B7C4002158F1}"
+	RootNamespace="MoMa"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -40,12 +40,11 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/FICore/Core.h"
+				AdditionalOptions="/FIMoMa/common.h"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_USRDLL;_HAS_EXCEPTIONS=0;CORE_EXPORTS"
+				AdditionalIncludeDirectories="../include;.\dependencies\win32\Ogre\include;.\dependencies\win32\Ogre\boost_1_42"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;MOMA_EXPORTS;CORE_IMPORTS;_HAS_EXCEPTIONS=0"
 				MinimalRebuild="true"
-				ExceptionHandling="0"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="1"
 				BufferSecurityCheck="false"
@@ -55,7 +54,7 @@
 				WarningLevel="4"
 				WarnAsError="true"
 				DebugInformationFormat="4"
-				DisableSpecificWarnings="4127"
+				DisableSpecificWarnings="4251;4127;4244"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -68,15 +67,22 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="OgreMain_d.lib"
 				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
+				LinkIncremental="2"
+				AdditionalLibraryDirectories="dependencies\win32\Ogre\boost_1_42\lib;dependencies\win32\Ogre\lib\debug"
+				GenerateManifest="false"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(TargetDir)$(TargetName).pdb"
+				SubSystem="2"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
 			/>
 			<Tool
 				Name="VCManifestTool"
+				EmbedManifest="false"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -119,12 +125,12 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/FIMoMa/common.h"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="../include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_HAS_EXCEPTIONS=0"
-				ExceptionHandling="0"
-				RuntimeLibrary="0"
+				AdditionalIncludeDirectories="../include;.\dependencies\win32\Ogre\include"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;MOMA_EXPORTS"
+				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
 				EnableFunctionLevelLinking="true"
 				EnableEnhancedInstructionSet="2"
@@ -132,8 +138,7 @@
 				UsePrecompiledHeader="0"
 				WarningLevel="4"
 				WarnAsError="true"
-				DebugInformationFormat="0"
-				DisableSpecificWarnings="4127"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -146,12 +151,20 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				LinkIncremental="1"
+				GenerateManifest="false"
+				GenerateDebugInformation="true"
+				SubSystem="2"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
 			/>
 			<Tool
 				Name="VCManifestTool"
+				EmbedManifest="false"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -179,118 +192,30 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\src\Core.h"
+				RelativePath=".\src\common.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\main.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\MoMa.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\MoMa.h"
 				>
 			</File>
 			<Filter
-				Name="App"
+				Name="Module"
 				>
 				<File
-					RelativePath=".\src\App\IApp.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Debug"
-				>
-				<File
-					RelativePath=".\src\Debug\cDebug.cpp"
+					RelativePath=".\src\Module\cModuleMoMa.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\src\Debug\cDebug.h"
-					>
-				</File>
-				<Filter
-					Name="Logger"
-					>
-					<File
-						RelativePath=".\src\Debug\Logger\cLogger.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\src\Debug\Logger\cLogger.h"
-						>
-					</File>
-					<Filter
-						Name="Writer"
-						>
-						<File
-							RelativePath=".\src\Debug\Logger\Writer\cLogWriterDebugOutput.cpp"
-							>
-						</File>
-						<File
-							RelativePath=".\src\Debug\Logger\Writer\cLogWriterDebugOutput.h"
-							>
-						</File>
-						<File
-							RelativePath=".\src\Debug\Logger\Writer\ILogWriter.h"
-							>
-						</File>
-					</Filter>
-				</Filter>
-			</Filter>
-			<Filter
-				Name="Helper"
-				>
-				<File
-					RelativePath=".\src\Helper\Helper.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Container"
-				>
-				<File
-					RelativePath=".\src\Container\cArray.h"
-					>
-				</File>
-				<File
-					RelativePath=".\src\Container\cHashMap.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Datatype"
-				>
-				<File
-					RelativePath=".\src\Datatype\cAutoPtr.h"
-					>
-				</File>
-				<File
-					RelativePath=".\src\Datatype\cString.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Singleton"
-				>
-				<File
-					RelativePath=".\src\Singleton\ISingleton.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Event"
-				>
-				<File
-					RelativePath=".\src\Event\cDispatcherHub.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\Event\cDispatcherHub.h"
-					>
-				</File>
-				<File
-					RelativePath=".\src\Event\IEventDispatcher.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\Event\IEventDispatcher.h"
-					>
-				</File>
-				<File
-					RelativePath=".\src\Event\IEventListener.h"
+					RelativePath=".\src\Module\cModuleMoMa.h"
 					>
 				</File>
 			</Filter>

@@ -6,7 +6,7 @@ BEGIN_NAMESPACE( Core )
 
 class cString;
 
-class cLogWriterDebugOutput : public ILogWriter
+class CORE_API cLogWriterDebugOutput : public ILogWriter
 {
 public:
 	cLogWriterDebugOutput( const cLogger::eSeverity iMinSeverity ) : ILogWriter( iMinSeverity ) {}

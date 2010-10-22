@@ -10,9 +10,9 @@ using Loom::Core::cString;
 using Loom::Core::cArray;
 using Loom::Core::cHashMap;
 
-BEGIN_NAMESPACE( Weaver )
+BEGIN_NAMESPACE( Core )
 
-class cDispatcherHub : public Loom::Core::ISingleton<cDispatcherHub>
+class CORE_API cDispatcherHub : public Loom::Core::ISingleton<cDispatcherHub>
 {
 public:
 	class IParam

@@ -8,7 +8,7 @@ BEGIN_NAMESPACE( Core )
 
 class ILogWriter;
 
-class cLogger : public ISingleton<cLogger>
+class CORE_API cLogger : public ISingleton<cLogger>
 {
 	friend class ISingleton<cLogger>;
 

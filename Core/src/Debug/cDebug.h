@@ -17,8 +17,8 @@
 #define ASSERTTXT_L( iLogger, iExpression, iMessage )   \
 	if ( !( iExpression ) ) \
 	{   \
-		cLogger::Get().Log( cLogger::LOG_ERROR, iLogger, ( _T("[") _T(__PRETTY_FUNCTION__) _T("] ") iMessage _T(" at line ")  _T(ASSERT_LINE) ) );    \
-		if ( cDebug::Alert( iMessage, _T(__PRETTY_FUNCTION__), _T(ASSERT_LINE) ) )    \
+		Loom::Core::cLogger::Get().Log( Loom::Core::cLogger::LOG_ERROR, iLogger, ( _T("[") _T(__PRETTY_FUNCTION__) _T("] ") iMessage _T(" at line ")  _T(ASSERT_LINE) ) );    \
+		if ( Loom::Core::cDebug::Alert( iMessage, _T(__PRETTY_FUNCTION__), _T(ASSERT_LINE) ) )    \
 		{   \
 			abort();    \
 		}   \
@@ -28,19 +28,19 @@
 	ASSERTTXT_L( _T("Global"), iExpression, iMessage )
 
 #define FAILTXT( iMessage )   \
-	cLogger::Get().Log( cLogger::LOG_ERROR, _T("Global"), ( _T("[") _T(__PRETTY_FUNCTION__) _T("] ") iMessage _T(" at line ")  _T(ASSERT_LINE) ) );    \
-	if ( cDebug::Alert( iMessage, __PRETTY_FUNCTION__, ASSERT_LINE ) )    \
+	Loom::Core::cLogger::Get().Log( Loom::Core::cLogger::LOG_ERROR, _T("Global"), ( _T("[") _T(__PRETTY_FUNCTION__) _T("] ") iMessage _T(" at line ")  _T(ASSERT_LINE) ) );    \
+	if ( Loom::Core::cDebug::Alert( iMessage, __PRETTY_FUNCTION__, ASSERT_LINE ) )    \
 	{   \
 		abort();    \
 	}
 
-//if ( !iExpression ) { cDebug::Alert( iMessage, "Assertion failed" ); abort(); }
+//if ( !iExpression ) { Loom::Core::cDebug::Alert( iMessage, "Assertion failed" ); abort(); }
 
 #define SAFE_DELETE( iObject ) { delete iObject; iObject = NULL; }
 
 BEGIN_NAMESPACE( Core )
 
-class cDebug
+class CORE_API cDebug
 {
 public:
 	static bool Alert( const TCHAR *iMessage, const TCHAR *iHeader = _T("Alert") );

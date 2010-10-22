@@ -7,7 +7,7 @@ BEGIN_NAMESPACE( Core )
 
 class cString;
 
-class ILogWriter
+class CORE_API ILogWriter
 {
 protected:
 	cLogger::eSeverity mMinSeverity;

@@ -98,7 +98,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="mkdir bin\plugins&#x0D;&#x0A;mkdir bin\resources&#x0D;&#x0A;mkdir bin\resources\config&#x0D;&#x0A;&#x0D;&#x0A;copy dependencies\win32\Qt\bin\QtCored4.dll bin\&#x0D;&#x0A;copy dependencies\win32\Qt\bin\QtGuid4.dll bin\&#x0D;&#x0A;copy dependencies\win32\Qt\bin\QtOpenGLd4.dll bin\&#x0D;&#x0A;&#x0D;&#x0A;copy dependencies\win32\Ogre\bin\debug\cg.dll bin\&#x0D;&#x0A;copy dependencies\win32\Ogre\bin\debug\OgreMain_d.dll bin\&#x0D;&#x0A;rem copy dependencies\win32\Ogre\bin\debug\OgrePaging_d.dll bin\&#x0D;&#x0A;rem copy dependencies\win32\Ogre\bin\debug\OgreProperty_d.dll bin\&#x0D;&#x0A;rem copy dependencies\win32\Ogre\bin\debug\OgreRTShaderSystem_d.dll bin\&#x0D;&#x0A;rem copy dependencies\win32\Ogre\bin\debug\OIS_d.dll bin\&#x0D;&#x0A;&#x0D;&#x0A;copy dependencies\win32\Ogre\bin\debug\Plugin_CgProgramManager_d.dll bin\plugins\&#x0D;&#x0A;copy dependencies\win32\Ogre\bin\debug\RenderSystem_GL_d.dll bin\plugins\&#x0D;&#x0A;&#x0D;&#x0A;copy resources\Config\win32\Plugins.cfg bin\Resources\Config\&#x0D;&#x0A;xcopy /S /Y resources\* bin\resources\&#x0D;&#x0A;"
+				CommandLine="mkdir bin\plugins&#x0D;&#x0A;mkdir bin\resources&#x0D;&#x0A;mkdir bin\resources\config&#x0D;&#x0A;mkdir bin\logs&#x0D;&#x0A;mkdir bin\modules&#x0D;&#x0A;&#x0D;&#x0A;copy ..\Core\bin\Core_d.dll bin\&#x0D;&#x0A;copy ..\Core\bin\Core_d.pdb bin\&#x0D;&#x0A;&#x0D;&#x0A;copy dependencies\win32\Qt\bin\QtCored4.dll bin\&#x0D;&#x0A;copy dependencies\win32\Qt\bin\QtGuid4.dll bin\&#x0D;&#x0A;copy dependencies\win32\Qt\bin\QtOpenGLd4.dll bin\&#x0D;&#x0A;&#x0D;&#x0A;copy dependencies\win32\Ogre\bin\debug\cg.dll bin\&#x0D;&#x0A;copy dependencies\win32\Ogre\bin\debug\OgreMain_d.dll bin\&#x0D;&#x0A;rem copy dependencies\win32\Ogre\bin\debug\OgrePaging_d.dll bin\&#x0D;&#x0A;rem copy dependencies\win32\Ogre\bin\debug\OgreProperty_d.dll bin\&#x0D;&#x0A;rem copy dependencies\win32\Ogre\bin\debug\OgreRTShaderSystem_d.dll bin\&#x0D;&#x0A;rem copy dependencies\win32\Ogre\bin\debug\OIS_d.dll bin\&#x0D;&#x0A;&#x0D;&#x0A;copy dependencies\win32\Ogre\bin\debug\Plugin_CgProgramManager_d.dll bin\plugins\&#x0D;&#x0A;copy dependencies\win32\Ogre\bin\debug\RenderSystem_GL_d.dll bin\plugins\&#x0D;&#x0A;&#x0D;&#x0A;copy resources\Config\win32\Plugins.cfg bin\Resources\Config\&#x0D;&#x0A;xcopy /S /Y resources\* bin\resources\&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -217,18 +217,6 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="Event"
-				>
-				<File
-					RelativePath=".\src\Event\cDispatcherHub.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\Event\cDispatcherHub.h"
-					>
-				</File>
-			</Filter>
-			<Filter
 				Name="Qt"
 				>
 				<Filter
@@ -309,6 +297,22 @@
 						</Filter>
 					</Filter>
 				</Filter>
+			</Filter>
+			<Filter
+				Name="Module"
+				>
+				<File
+					RelativePath=".\src\Module\cModuleManager.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Module\cModuleManager.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Module\IModule.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter

@@ -1,11 +1,11 @@
-#include <Weaver/Event/cDispatcherHub.h>
+#include <Core/Event/cDispatcherHub.h>
 
 #include <windows.h>
 #include <strsafe.h>
 #include <Core/Debug/Logger/cLogger.h>
 #include <Core/Debug/Logger/Writer/cLogWriterDebugOutput.h>
 
-using namespace Loom::Weaver;
+using namespace Loom::Core;
 using Loom::Core::cLogger;
 using Loom::Core::cLogWriterDebugOutput;
 

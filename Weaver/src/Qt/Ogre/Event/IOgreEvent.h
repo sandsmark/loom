@@ -1,5 +1,5 @@
 #pragma once
-#include <Weaver\Event\cDispatcherHub.h>
+#include <Core\Event\cDispatcherHub.h>
 #include <Ogre/OgreString.h>
 
 namespace Ogre
