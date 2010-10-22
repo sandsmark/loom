@@ -106,7 +106,7 @@ bool cQOgre::InitWindow( void )
 	vParams[ "externalWindowHandle" ] = Ogre::StringConverter::toString( (size_t)winId() );
     vParams[ "macAPI" ] = "cocoa";
     vParams[ "macAPICocoaUseNSView" ] = "true";
-//    vParams[ "externalGLControl" ] = "true";
+    vParams[ "externalGLControl" ] = "true";
 //    vParams[ "externalGLContext" ] = (unsigned long)vContext;
 //    vParams[ "currentGLContext" ] = (unsigned long)vContext;
     
