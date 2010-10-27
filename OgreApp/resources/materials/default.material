@@ -1,0 +1,22 @@
+material CubeMaterial
+{
+  technique
+  {
+    pass
+    {
+        vertex_program_ref Weaver/Basic
+        {
+        }
+        
+        fragment_program_ref Weaver/BasicFP
+        {
+        }
+        
+      texture_unit
+      {
+        texture cube_default.png
+        filtering trilinear
+      }
+    }
+  }
+}

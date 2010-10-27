@@ -1,0 +1,56 @@
+material MoMa.Creature.0
+{
+  technique
+  {
+    pass
+    {
+        vertex_program_ref MoMa/Basic
+        {
+			param_named mPerturbance float 4.0
+        }
+        
+        fragment_program_ref MoMa/BasicFP
+        {
+        }
+        
+      texture_unit
+      {
+        texture body.png
+        filtering trilinear
+      }
+      
+      scene_blend src_alpha one_minus_src_alpha
+      depth_write off
+      
+    }
+  }
+}
+
+material MoMa.Creature.1
+{
+  technique
+  {
+    pass
+    {
+        vertex_program_ref MoMa/Basic
+        {
+			param_named mPerturbance float 1
+        }
+        
+        fragment_program_ref MoMa/BasicFP
+        {
+			param_named mDeform float 1.0
+        }
+        
+      texture_unit
+      {
+        texture eye.png
+        filtering trilinear
+      }
+      
+      scene_blend src_alpha one_minus_src_alpha
+      depth_write off
+      
+    }
+  }
+}

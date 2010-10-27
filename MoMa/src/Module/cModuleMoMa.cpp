@@ -3,11 +3,24 @@
 #include <Core/Event/cDispatcherHub.h>
 #include <Ogre/OgreMath.h>
 #include <Ogre/OgreColourValue.h>
+#include <Ogre/OgreBillboardSet.h>
+#include <MoMa/Entity/cPCreature.h>
+#include <MoMa/Entity/cCreature.h>
+#include <OgreApp/Module/cModuleOgreApp.h>
 
 using Loom::Core::cLogger;
 using Loom::Core::cDispatcherHub;
+using Loom::OgreApp::cModuleOgreApp;
 
 using namespace Loom::MoMa;
+
+/************************************************************************/
+cModuleMoMa::cModuleMoMa()
+: IModule( _T( "MoMa" ) )
+/************************************************************************/
+{
+	mDependencies.Add( cModuleOgreApp::GetName() );
+}
 
 /************************************************************************/
 void cModuleMoMa::Init( void )
@@ -16,7 +29,19 @@ void cModuleMoMa::Init( void )
 	cLogger &vLogger = cLogger::Get();
 	vLogger.Log( cLogger::LOG_INFO, _T( "Global" ), _T( "cModuleMoMa startup" ) );
 
-	CreateThread( NULL, 0, StartThread, this, 0, NULL );
+//	mThread = CreateThread( NULL, 0, StartThread, this, 0, NULL );
+	// Test
+	struct sTemp { Ogre::ColourValue Colour; };
+	sTemp vParam;
+	vParam.Colour.r = vParam.Colour.g = vParam.Colour.b = vParam.Colour.a = 0;
+	cDispatcherHub::IParam vIParam( (void*)&vParam );
+	cDispatcherHub::Get().Dispatch( _T("Ogre::cOgreResponderSetBGColour"), vIParam );
+
+	cPCreature *vPrototype = new cPCreature();
+	cCreature *vCreature = vPrototype->CreateInstance();
+	vCreature;
+	
+	mInitialized = true;
 }
 
 /************************************************************************/
@@ -41,4 +66,13 @@ DWORD cModuleMoMa::StartThread( LPVOID iParam )
 
 		cDispatcherHub::Get().Dispatch( _T("Ogre::cOgreResponderSetBGColour"), vIParam );
 	}
+}
+
+/************************************************************************/
+void cModuleMoMa::Destroy( void )
+/************************************************************************/
+{
+	TerminateThread( mThread, 0 );
+
+	mInitialized = false;
 }

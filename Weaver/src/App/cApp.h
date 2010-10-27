@@ -13,12 +13,12 @@
 
 BEGIN_NAMESPACE( Weaver )
 
-class cQMainWindow;
+//class cQMainWindow;
 
 class cApp : public Loom::Core::IApp, public QApplication, public Loom::Core::ISingleton<cApp>
 {
 protected:
-	cQMainWindow *mMainWindow;
+//	cQMainWindow *mMainWindow;
 
 	void Init( void );
 	void Destroy( void );

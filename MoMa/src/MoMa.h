@@ -6,11 +6,13 @@
 #define MOMA_API __declspec(dllimport)
 #endif
 
-BEGIN_NAMESPACE( Weaver )
+BEGIN_NAMESPACE( Core )
 	class IModule;
 END_NAMESPACE()
 
+/*
 extern "C"
 {
-	MOMA_API Loom::Weaver::IModule *CreateModule( void );
+	MOMA_API Loom::Core::IModule *CreateModule( void );
 }
+*/

@@ -42,8 +42,8 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/FIMoMa/common.h"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include;.\dependencies\win32\Ogre\include;.\dependencies\win32\Ogre\boost_1_42"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;MOMA_EXPORTS;CORE_IMPORTS;_HAS_EXCEPTIONS=0"
+				AdditionalIncludeDirectories="../include;.\dependencies\win32\Ogre\include;.\dependencies\win32\Ogre\boost_1_42;.\dependencies\win32\Qt\Include"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;MOMA_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="1"
@@ -67,7 +67,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain_d.lib"
+				AdditionalDependencies="OgreMain_d.lib OIS_d.lib OgreRTShaderSystem_d.lib opengl32.lib"
 				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="dependencies\win32\Ogre\boost_1_42\lib;dependencies\win32\Ogre\lib\debug"
@@ -98,7 +98,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy bin\MoMa_d.dll ..\Weaver\bin\modules&#x0D;&#x0A;copy bin\MoMa_d.pdb ..\Weaver\bin\modules&#x0D;&#x0A;"
+				CommandLine="copy bin\MoMa_d.dll ..\Weaver\bin\modules&#x0D;&#x0A;copy bin\MoMa_d.pdb ..\Weaver\bin\modules&#x0D;&#x0A;&#x0D;&#x0A;xcopy /S /Y resources\* ..\Weaver\bin\resources\&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -197,10 +197,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\main.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\src\MoMa.cpp"
 				>
 			</File>
@@ -220,12 +216,56 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Entity"
+				>
+				<File
+					RelativePath=".\src\Entity\cCreature.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Entity\cCreature.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Entity\cPCreature.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Entity\cPCreature.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
+			<Filter
+				Name="materials"
+				>
+				<File
+					RelativePath=".\resources\materials\creature.png"
+					>
+				</File>
+				<File
+					RelativePath=".\resources\materials\moma.material"
+					>
+				</File>
+				<File
+					RelativePath=".\resources\materials\moma.program"
+					>
+				</File>
+				<Filter
+					Name="MoMa"
+					>
+					<File
+						RelativePath=".\resources\materials\MoMa\basic.cg"
+						>
+					</File>
+				</Filter>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>

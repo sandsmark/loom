@@ -8,10 +8,18 @@ class cAutoPtr
 protected:
 	iType *mData;
 
+protected:
+	cAutoPtr &operator =( const cAutoPtr & )
+	{
+		FAILTXT( _T("AutoPtr can't be copied!") );
+
+		return *this;
+	}
+
 public:
 	cAutoPtr() : mData( NULL ) {}
 	cAutoPtr( iType *iData ) : mData( iData ) {}
-	cAutoPtr( const cAutoPtr &iOther )
+	cAutoPtr( const cAutoPtr & )
 	{
 		FAILTXT( _T("AutoPtr can't be copied!") );
 	}

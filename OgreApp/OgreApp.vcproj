@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="Weaver"
-	ProjectGUID="{51A6A483-D465-4B01-BC01-EEE762380E12}"
-	RootNamespace="Weaver"
+	Name="OgreApp"
+	ProjectGUID="{0DA386FE-F850-47A8-A73A-07FDE2E6DE10}"
+	RootNamespace="OgreApp"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -20,7 +20,7 @@
 			Name="Debug|Win32"
 			OutputDirectory="bin"
 			IntermediateDirectory="build/$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			CharacterSet="1"
 			>
 			<Tool
@@ -43,7 +43,7 @@
 				AdditionalOptions="/FIWeaver/common.h"
 				Optimization="0"
 				AdditionalIncludeDirectories="../include;.\dependencies\win32\Ogre\boost_1_42;.\dependencies\win32\Ogre\include;.\dependencies\win32\Qt\Include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;OGREAPP_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="1"
@@ -68,7 +68,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="QtCored4.lib QtGuid4.lib QtOpenGLd4.lib OgreMain_d.lib OIS_d.lib OgreRTShaderSystem_d.lib opengl32.lib"
-				OutputFile="$(OutDir)\$(ProjectName)_d.exe"
+				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="dependencies\win32\Qt\lib;dependencies\win32\Ogre\boost_1_42\lib;dependencies\win32\Ogre\lib\debug"
 				GenerateManifest="false"
@@ -97,14 +97,14 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				CommandLine="copy bin\OgreApp_d.dll ..\Weaver\bin\modules&#x0D;&#x0A;copy bin\OgreApp_d.pdb ..\Weaver\bin\modules&#x0D;&#x0A;&#x0D;&#x0A;mkdir ..\Weaver\bin\plugins&#x0D;&#x0A;mkdir ..\Weaver\bin\resources&#x0D;&#x0A;mkdir ..\Weaver\bin\resources\config&#x0D;&#x0A;mkdir ..\Weaver\bin\logs&#x0D;&#x0A;mkdir ..\Weaver\bin\modules&#x0D;&#x0A;&#x0D;&#x0A;copy dependencies\win32\Qt\bin\QtCored4.dll ..\Weaver\bin\&#x0D;&#x0A;copy dependencies\win32\Qt\bin\QtGuid4.dll ..\Weaver\bin\&#x0D;&#x0A;copy dependencies\win32\Qt\bin\QtOpenGLd4.dll ..\Weaver\bin\&#x0D;&#x0A;&#x0D;&#x0A;copy dependencies\win32\Ogre\bin\debug\cg.dll ..\Weaver\bin\&#x0D;&#x0A;copy dependencies\win32\Ogre\bin\debug\OgreMain_d.dll ..\Weaver\bin\&#x0D;&#x0A;rem copy dependencies\win32\Ogre\bin\debug\OgrePaging_d.dll ..\Weaver\bin\&#x0D;&#x0A;rem copy dependencies\win32\Ogre\bin\debug\OgreProperty_d.dll ..\Weaver\bin\&#x0D;&#x0A;rem copy dependencies\win32\Ogre\bin\debug\OgreRTShaderSystem_d.dll ..\Weaver\bin\&#x0D;&#x0A;rem copy dependencies\win32\Ogre\bin\debug\OIS_d.dll ..\Weaver\bin\&#x0D;&#x0A;&#x0D;&#x0A;copy dependencies\win32\Ogre\bin\debug\Plugin_CgProgramManager_d.dll ..\Weaver\bin\plugins\&#x0D;&#x0A;copy dependencies\win32\Ogre\bin\debug\RenderSystem_GL_d.dll ..\Weaver\bin\plugins\&#x0D;&#x0A;&#x0D;&#x0A;copy resources\Config\win32\Plugins.cfg ..\Weaver\bin\Resources\Config\&#x0D;&#x0A;xcopy /S /Y resources\* ..\Weaver\bin\resources\&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="bin"
 			IntermediateDirectory="build/$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -128,19 +128,16 @@
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories="../include;.\dependencies\win32\Ogre\boost_1_42;.\dependencies\win32\Ogre\include;.\dependencies\win32\Qt\Include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_HAS_EXCEPTIONS=0;BOOST_NO_STD_TYPEINFO"
-				ExceptionHandling="0"
-				RuntimeLibrary="0"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;OGREAPP_EXPORTS"
+				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
 				EnableFunctionLevelLinking="true"
 				EnableEnhancedInstructionSet="2"
 				FloatingPointModel="2"
-				RuntimeTypeInfo="false"
 				UsePrecompiledHeader="0"
 				WarningLevel="4"
 				WarnAsError="true"
-				DebugInformationFormat="0"
-				DisableSpecificWarnings="4127"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -154,9 +151,8 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="dependencies\win32\Qt\lib"
 				GenerateManifest="false"
-				GenerateDebugInformation="false"
+				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -183,7 +179,6 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="mkdir bin\plugins&#x0D;&#x0A;mkdir bin\resources&#x0D;&#x0A;mkdir bin\resources\config&#x0D;&#x0A;&#x0D;&#x0A;copy dependencies\win32\Qt\bin\QtCored4.dll bin\&#x0D;&#x0A;copy dependencies\win32\Qt\bin\QtGuid4.dll bin\&#x0D;&#x0A;copy dependencies\win32\Qt\bin\QtOpenGLd4.dll bin\&#x0D;&#x0A;&#x0D;&#x0A;copy dependencies\win32\Ogre\bin\debug\cg.dll bin\&#x0D;&#x0A;copy dependencies\win32\Ogre\bin\debug\OgreMain_d.dll bin\&#x0D;&#x0A;rem copy dependencies\win32\Ogre\bin\debug\OgrePaging_d.dll bin\&#x0D;&#x0A;rem copy dependencies\win32\Ogre\bin\debug\OgreProperty_d.dll bin\&#x0D;&#x0A;rem copy dependencies\win32\Ogre\bin\debug\OgreRTShaderSystem_d.dll bin\&#x0D;&#x0A;rem copy dependencies\win32\Ogre\bin\debug\OIS_d.dll bin\&#x0D;&#x0A;&#x0D;&#x0A;copy dependencies\win32\Ogre\bin\debug\Plugin_CgProgramManager_d.dll bin\plugins\&#x0D;&#x0A;copy dependencies\win32\Ogre\bin\debug\RenderSystem_GL_d.dll bin\plugins\&#x0D;&#x0A;&#x0D;&#x0A;copy resources\Config\win32\Plugins.cfg bin\Resources\Config\&#x0D;&#x0A;xcopy /S /Y resources\* bin\resources\&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -196,24 +191,111 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\src\global.h"
+				RelativePath="..\Weaver\src\common.h"
 				>
 			</File>
 			<File
-				RelativePath=".\src\main.cpp"
+				RelativePath=".\src\OgreApp.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\OgreApp.h"
 				>
 			</File>
 			<Filter
-				Name="App"
+				Name="Module"
 				>
 				<File
-					RelativePath=".\src\App\cApp.cpp"
+					RelativePath=".\src\Module\cModuleOgreApp.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\src\App\cApp.h"
+					RelativePath=".\src\Module\cModuleOgreApp.h"
 					>
 				</File>
+			</Filter>
+			<Filter
+				Name="Qt"
+				>
+				<Filter
+					Name="Ogre"
+					>
+					<File
+						RelativePath=".\src\Qt\Ogre\cQOgre.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Qt\Ogre\cQOgre.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Qt\Ogre\cQScene.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Qt\Ogre\cQScene.h"
+						>
+					</File>
+					<Filter
+						Name="Event"
+						>
+						<File
+							RelativePath=".\src\Qt\Ogre\Event\cOgreResponders.h"
+							>
+						</File>
+						<File
+							RelativePath=".\src\Qt\Ogre\Event\IOgreEvent.h"
+							>
+						</File>
+						<Filter
+							Name="Responders"
+							>
+							<File
+								RelativePath=".\src\Qt\Ogre\Event\Responders\cOgreResponderCreateBox.h"
+								>
+							</File>
+							<File
+								RelativePath=".\src\Qt\Ogre\Event\Responders\cOgreResponderSetBgColour.h"
+								>
+							</File>
+							<File
+								RelativePath=".\src\Qt\Ogre\Event\Responders\cOgreResponderSetPosition.h"
+								>
+							</File>
+							<File
+								RelativePath=".\src\Qt\Ogre\Event\Responders\IOgreResponder.h"
+								>
+							</File>
+						</Filter>
+					</Filter>
+				</Filter>
+				<Filter
+					Name="MainWindow"
+					>
+					<File
+						RelativePath=".\src\Qt\MainWindow\cQMainWindow.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Qt\MainWindow\cQMainWindow.h"
+						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Generating cQMainWindow metadata"
+								CommandLine="dependencies\win32\Qt\bin\moc -D__WIN32__ $(InputDir)$(InputFileName) -o $(InputDir)$(InputName)_moc.cpp"
+								AdditionalDependencies="$(InputDir)$(InputName).cpp"
+								Outputs="$(InputDir)$(InputName)_moc.cpp"
+							/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath=".\src\Qt\MainWindow\cQMainWindow_moc.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter
@@ -222,10 +304,26 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<Filter
+				Name="config"
+				>
+				<Filter
+					Name="win32"
+					>
+					<File
+						RelativePath=".\resources\config\win32\plugins.cfg"
+						>
+					</File>
+				</Filter>
+			</Filter>
+			<Filter
 				Name="materials"
 				>
 				<File
 					RelativePath=".\resources\materials\basic.cg"
+					>
+				</File>
+				<File
+					RelativePath=".\resources\materials\cube_default.png"
 					>
 				</File>
 				<File

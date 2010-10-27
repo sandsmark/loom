@@ -5,15 +5,15 @@ using Loom::Core::IModule;
 
 #include <windows.h>
 
-BEGIN_NAMESPACE( MoMa )
+BEGIN_NAMESPACE( Network )
 
-class MOMA_API cModuleMoMa : public IModule
+class NETWORK_API cModuleNetwork : public IModule
 {
 protected:
 	HANDLE mThread;
 
 public:
-	cModuleMoMa();
+	cModuleNetwork();
 
 	virtual void Init( void );
 	virtual void Destroy( void );

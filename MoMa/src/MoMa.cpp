@@ -3,7 +3,12 @@
 
 using namespace Loom::MoMa;
 
+extern "C"
+{
+
 MOMA_API IModule *CreateModule( void )
 {
 	return new cModuleMoMa();
+}
+
 }

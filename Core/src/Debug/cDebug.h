@@ -29,7 +29,7 @@
 
 #define FAILTXT( iMessage )   \
 	Loom::Core::cLogger::Get().Log( Loom::Core::cLogger::LOG_ERROR, _T("Global"), ( _T("[") _T(__PRETTY_FUNCTION__) _T("] ") iMessage _T(" at line ")  _T(ASSERT_LINE) ) );    \
-	if ( Loom::Core::cDebug::Alert( iMessage, __PRETTY_FUNCTION__, ASSERT_LINE ) )    \
+	if ( Loom::Core::cDebug::Alert( iMessage, _T(__PRETTY_FUNCTION__), _T(ASSERT_LINE) ) )    \
 	{   \
 		abort();    \
 	}
