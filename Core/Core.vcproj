@@ -91,7 +91,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy bin\Core_d.dll ..\Weaver\bin&#x0D;&#x0A;copy bin\Core_d.pdb ..\Weaver\bin&#x0D;&#x0A;"
+				CommandLine="copy bin\Core_d.dll ..\Weaver\bin\&#x0D;&#x0A;copy bin\Core_d.pdb ..\Weaver\bin\&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration

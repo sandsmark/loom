@@ -25,6 +25,15 @@ echo Creating include directory
 
 mkdir include 2>nul
 
+echo Creating folders
+
+mkdir Weaver\bin                   2>nul
+mkdir Weaver\bin\modules           2>nul
+mkdir Weaver\bin\plugins           2>nul
+mkdir Weaver\bin\resources         2>nul
+mkdir Weaver\bin\resources\config  2>nul
+mkdir Weaver\bin\logs              2>nul
+
 echo Creating internal links...
 
 bin\junction.exe include\Core    Core\src      >nul
