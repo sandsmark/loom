@@ -1,20 +1,19 @@
 #pragma once
 
-#include <NetworkManager.h>
 #include <Core/Module/IModule.h>
 using Loom::Core::IModule;
 
 #include <windows.h>
 
-BEGIN_NAMESPACE( Network )
+BEGIN_NAMESPACE( Speech )
 
-class NETWORK_API cModuleNetwork : public IModule
+class SPEECH_API cModuleSpeech : public IModule
 {
 protected:
 	HANDLE mThread;
 
 public:
-	cModuleNetwork();
+	cModuleSpeech();
 
 	virtual void Init( void );
 	virtual void Destroy( void );

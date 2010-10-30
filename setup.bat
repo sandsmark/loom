@@ -39,6 +39,7 @@ echo Creating internal links...
 bin\junction.exe include\Core    Core\src      >nul
 bin\junction.exe include\MoMa    MoMa\src      >nul
 bin\junction.exe include\Network Network\src   >nul
+bin\junction.exe include\Speech  Speech\src    >nul
 bin\junction.exe include\OgreApp OgreApp\src   >nul
 bin\junction.exe include\Weaver  Weaver\src    >nul
 

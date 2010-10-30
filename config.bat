@@ -1,5 +1,5 @@
 @echo off
 
-set OGRE_PATH=c:\Code\Humanobs\Visor\dependencies\win32\Ogre\
-set QT_PATH=c:\Code\Humanobs\Visor.old\dependencies\win32\Qt\
+set OGRE_PATH=d:\OgreSDK\
+set QT_PATH=c:\Qt\4.7.0\
 

@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="Network"
-	ProjectGUID="{CDB168B9-42D6-4413-8055-31E2B542CAF8}"
-	RootNamespace="Network"
+	Name="Speech"
+	ProjectGUID="{9ABAFDB6-9697-4E4B-B268-06D06F94483A}"
+	RootNamespace="Speech"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -40,10 +40,10 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/FINetwork/common.h"
+				AdditionalOptions="/FISpeech/common.h"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include;../CMSDK/include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;NETWORK_EXPORTS"
+				AdditionalIncludeDirectories="../include"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;SPEECH_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="1"
@@ -52,7 +52,7 @@
 				FloatingPointModel="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="4"
-				WarnAsError="false"
+				WarnAsError="true"
 				DebugInformationFormat="4"
 				DisableSpecificWarnings="4244"
 			/>
@@ -67,13 +67,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="CMSDKDebug2008.lib Ws2_32.lib Psapi.lib Rpcrt4.lib IPHlpApi.Lib"
 				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\CMSDK\lib\$(PlatformName)"
+				AdditionalLibraryDirectories=""
 				GenerateManifest="false"
-				IgnoreAllDefaultLibraries="false"
-				IgnoreDefaultLibraryNames="LIBCMTD"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -99,7 +96,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy bin\Network_d.dll ..\Weaver\bin\modules&#x0D;&#x0A;copy bin\Network_d.pdb ..\Weaver\bin\modules&#x0D;&#x0A;"
+				CommandLine="copy bin\Speech_d.dll ..\Weaver\bin\modules&#x0D;&#x0A;copy bin\Speech_d.pdb ..\Weaver\bin\modules&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -127,11 +124,11 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/FINetwork/common.h"
+				AdditionalOptions="/FISpeech/common.h"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="../include;../CMSDK/include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;NETWORK_EXPORTS"
+				AdditionalIncludeDirectories="../include"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SPEECH_EXPORTS"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
@@ -154,9 +151,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="CMSDK2008.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\CMSDK\lib\$(PlatformName)"
 				GenerateManifest="false"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -201,22 +196,22 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\Network.cpp"
+				RelativePath=".\src\Speech.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\src\Network.h"
+				RelativePath=".\src\Speech.h"
 				>
 			</File>
 			<Filter
 				Name="Module"
 				>
 				<File
-					RelativePath=".\src\Module\cModuleNetwork.cpp"
+					RelativePath=".\src\Module\cModuleSpeech.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\src\Module\cModuleNetwork.h"
+					RelativePath=".\src\Module\cModuleSpeech.h"
 					>
 				</File>
 			</Filter>
