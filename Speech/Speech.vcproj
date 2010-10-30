@@ -215,6 +215,30 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Event"
+				>
+				<File
+					RelativePath=".\src\Event\cSpeechResponders.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Event\ISpeechEvent.h"
+					>
+				</File>
+				<Filter
+					Name="Responders"
+					>
+					<File
+						RelativePath=".\src\Event\Responders\cSpeechResponderSay.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Event\Responders\ISpeechResponder.h"
+						>
+					</File>
+				</Filter>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"

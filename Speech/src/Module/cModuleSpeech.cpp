@@ -1,6 +1,7 @@
 #include <Speech/Module/cModuleSpeech.h>
 #include <Core/Debug/Logger/cLogger.h>
 #include <Core/Event/cDispatcherHub.h>
+#include <Speech/Event/cSpeechResponders.h>
 
 using Loom::Core::cLogger;
 using Loom::Core::cDispatcherHub;
@@ -22,8 +23,18 @@ void cModuleSpeech::Init( void )
 	vLogger.Log( cLogger::LOG_INFO, _T( "Global" ), _T( "cModuleSpeech startup" ) );
 
 	mThread = CreateThread( NULL, 0, StartThread, this, 0, NULL );
-	
+
+	cSpeechResponderSay::Get().AddListener( *this );
+
 	mInitialized = true;
+}
+
+
+/************************************************************************/
+void cModuleSpeech::OnSay( const char* text )
+/************************************************************************/
+{
+	text = text;
 }
 
 /************************************************************************/

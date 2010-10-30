@@ -1,11 +1,10 @@
 #pragma once
 
-#include <NetworkManager.h>
 #include <Core/Module/IModule.h>
 using Loom::Core::IModule;
+#include <NetworkManager.h>
 
 #include <windows.h>
-
 BEGIN_NAMESPACE( Network )
 
 class NETWORK_API cModuleNetwork : public IModule

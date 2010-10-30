@@ -34,24 +34,16 @@ DWORD cModuleNetwork::StartThread( LPVOID /*iParam*/ )
 	// Listen for message name and data and send with Dispatch
 	for ( ;; )
 	{
-		Sleep( 1000 );
 
 		// Test
-		struct sData
-		{
-			float r,g,b,a;
-		};
-		sData vParam;
-		vParam.r = ( rand() % 1000 ) / 10000.0f;
-		vParam.g = ( rand() % 1000 ) / 10000.0f;
-		vParam.b = ( rand() % 1000 ) / 10000.0f;
-		vParam.a = ( rand() % 1000 ) / 10000.0f;
-		cDispatcherHub::IParam vReceivedParam( (void*)&vParam );
+		char text[] = "Hello World";
+		cDispatcherHub::IParam vReceivedParam( (void*)text );
 
-		const TCHAR *vReceivedMessageName = _T("Ogre::cOgreResponderSetBGColour");
+		const TCHAR *vReceivedMessageName = _T("Speech::cSpeechResponderSay");
 
 		// Dispatch received message
 		cDispatcherHub::Get().Dispatch( vReceivedMessageName, vReceivedParam );
+		Sleep( 5000 );
 	}
 }
 
