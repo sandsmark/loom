@@ -1,6 +1,8 @@
 #pragma once
 
 #include <Speech/Event/Responders/ISpeechResponder.h>
+#include <stdio.h>
+#include <string.h>
 
 BEGIN_NAMESPACE( Speech )
 
@@ -10,27 +12,27 @@ public:
 	class cParam
 	{
 	public:
-		char* text;
-		unsigned int size;
+		std::wstring text;
 	public:
-		cParam() {text = NULL; size = 0; }
+		cParam() {}
 		cParam( const cDispatcherHub::IParam &iParam )
 		{
 			char *vData = (char*)iParam.GetData();
 			if (vData) {
-				size = strlen(vData) + 1;
-				text = new char[size];
-				memcpy(text, vData, size);
+				text = (wchar_t *)vData;
+			//	size = strlen(vData) + 1;
+			//	text = new char[size];
+			//	memcpy(text, vData, size);
 			}
 			else {
-				text = NULL;
-				size = 0;
+			//	text = NULL;
+			//	size = 0;
 			}
 		}
 		~cParam() {
-			delete [] text;
-			text = NULL;
-			size = 0; 
+		//	delete [] text;
+		//	text = NULL;
+		//	size = 0; 
 		}
 	};
 
