@@ -21,10 +21,26 @@ void cModuleNetwork::Init( void )
 	cLogger &vLogger = cLogger::Get();
 	vLogger.Log( cLogger::LOG_INFO, _T( "Global" ), _T( "cModuleNetwork startup" ) );
 
+	Speech::cSpeechResponderHeard::Get().AddListener( *this );
 	mThread = CreateThread( NULL, 0, StartThread, this, 0, NULL );
 	
 	mInitialized = true;
 }
+
+/************************************************************************/
+void cModuleNetwork::OnSay( const std::wstring &text )
+/************************************************************************/
+{
+	text.begin();
+}
+
+/************************************************************************/
+void cModuleNetwork::OnHeard( const std::wstring &text )
+/************************************************************************/
+{
+	text.begin();
+}
+
 
 /************************************************************************/
 DWORD cModuleNetwork::StartThread( LPVOID /*iParam*/ )
@@ -36,10 +52,10 @@ DWORD cModuleNetwork::StartThread( LPVOID /*iParam*/ )
 	{
 
 		// Test
-		char text[] = "Hello World";
-		cDispatcherHub::IParam vReceivedParam( (void*)text );
+		std::wstring text = _T("Hello World");
+		cDispatcherHub::IParam vReceivedParam( (void*)text.c_str() );
 
-		const TCHAR *vReceivedMessageName = _T("Speech::cSpeechResponderSay");
+		const TCHAR *vReceivedMessageName = _T("Speech::Say");
 
 		// Dispatch received message
 		cDispatcherHub::Get().Dispatch( vReceivedMessageName, vReceivedParam );

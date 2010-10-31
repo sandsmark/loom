@@ -230,6 +230,10 @@
 					Name="Responders"
 					>
 					<File
+						RelativePath=".\src\Event\Responders\cSpeechResponderHeard.h"
+						>
+					</File>
+					<File
 						RelativePath=".\src\Event\Responders\cSpeechResponderSay.h"
 						>
 					</File>
