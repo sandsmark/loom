@@ -36,6 +36,7 @@ mkdir Weaver\bin\logs              2>nul
 
 echo Creating internal links...
 
+bin\junction.exe include\Avatar  Avatar\src    >nul
 bin\junction.exe include\Core    Core\src      >nul
 bin\junction.exe include\MoMa    MoMa\src      >nul
 bin\junction.exe include\Network Network\src   >nul
@@ -45,6 +46,8 @@ bin\junction.exe include\Weaver  Weaver\src    >nul
 
 echo Creating dependency directories...
 
+mkdir Avatar\dependencies         2>nul
+mkdir Avatar\dependencies\win32   2>nul
 mkdir MoMa\dependencies           2>nul
 mkdir MoMa\dependencies\win32     2>nul
 mkdir OgreApp\dependencies        2>nul
@@ -54,6 +57,8 @@ mkdir Weaver\dependencies\win32   2>nul
 
 echo Creating external links...
 
+bin\junction.exe Avatar\dependencies\win32\Ogre  %OGRE_PATH%  >nul
+bin\junction.exe Avatar\dependencies\win32\Qt    %QT_PATH%    >nul
 bin\junction.exe MoMa\dependencies\win32\Ogre    %OGRE_PATH%  >nul
 bin\junction.exe MoMa\dependencies\win32\Qt      %QT_PATH%    >nul
 bin\junction.exe OgreApp\dependencies\win32\Ogre %OGRE_PATH%  >nul

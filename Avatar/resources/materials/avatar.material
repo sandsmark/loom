@@ -1,0 +1,56 @@
+material Avatar/Floor
+{
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture floortexture.png
+			}
+		}
+	}
+}
+
+material Avatar/Wall
+{
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture walltexture.png
+			}
+		}
+	}
+}
+
+material Avatar/Humanoid
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.5 0.5 0.5 1.0
+			diffuse 1.0 1.0 1.0 1.0
+			specular 0.0 0.0 0.0 1.0 12.5
+			emissive 0.0 0.0 0.0 1.0
+		}
+	}
+}
+
+material Avatar/Chair
+{
+	technique
+	{
+		pass
+		{
+			cull_hardware none		
+			ambient 1.0 0.5 0.5 1.0
+			diffuse 1.0 0.8 0.8 1.0
+			specular 0.0 0.0 0.0 1.0 12.5
+			emissive 0.0 0.0 0.0 1.0
+		}
+	}
+}

@@ -23,6 +23,7 @@ cQMainWindow::cQMainWindow()
 	vFileMenu->addAction( "Create Box", this, SLOT( OnCreateBox() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_2 ) );
 	vFileMenu->addAction( "Move Camera", this, SLOT( OnMoveCamera() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_3 ) );
 	vFileMenu->addAction( "Move Box0", this, SLOT( OnMoveBox0() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_4 ) );
+	vFileMenu->addAction( "IK test", this, SLOT( OnIkTest() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_5 ) );
 
 	// Subscribe for Ogre messages
 	cOgreResponderSetBGColour::Get().AddListener( *mScene );
@@ -115,12 +116,30 @@ void cQMainWindow::OnMoveBox0()
 		char Name[256];
 	};
 	sTemp vTemp;
-	vTemp.Pos.x = Ogre::Math::RangeRandom( -10, 10 );
-	vTemp.Pos.y = Ogre::Math::RangeRandom( -10, 10 );
-	vTemp.Pos.z = Ogre::Math::RangeRandom( -10, 10 );
+	vTemp.Pos.x = Ogre::Math::RangeRandom( -50, 50 );
+	vTemp.Pos.y = Ogre::Math::RangeRandom( -50, 50 );
+	vTemp.Pos.z = Ogre::Math::RangeRandom( -50, 50 );
 	strcpy( vTemp.Name, "Box0" );
 	cDispatcherHub::IParam vIParam( (void*)&vTemp );
 
 	cDispatcherHub::Get().Dispatch( cOgreResponderSetPosition::Get().GetEventName(), vIParam );
 }
 
+
+/************************************************************************/
+void Loom::OgreApp::cQMainWindow::OnIkTest()
+/************************************************************************/
+{
+	struct sTemp
+	{
+		Ogre::Vector3 Pos;
+	};
+	sTemp vTemp;
+	vTemp.Pos;
+	vTemp.Pos.x = Ogre::Math::RangeRandom( -50, 50 );
+	vTemp.Pos.y = Ogre::Math::RangeRandom( -50, 50 );
+	vTemp.Pos.z = Ogre::Math::RangeRandom( -50, 50 );
+	cDispatcherHub::IParam vIParam( (void*)&vTemp );
+
+	cDispatcherHub::Get().Dispatch( _T("Avatar::cAvatarResponderSetPosition"), vIParam );
+}
