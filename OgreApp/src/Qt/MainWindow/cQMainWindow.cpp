@@ -24,6 +24,7 @@ cQMainWindow::cQMainWindow()
 	vFileMenu->addAction( "Move Camera", this, SLOT( OnMoveCamera() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_3 ) );
 	vFileMenu->addAction( "Move Box0", this, SLOT( OnMoveBox0() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_4 ) );
 	vFileMenu->addAction( "IK test", this, SLOT( OnIkTest() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_5 ) );
+	vFileMenu->addAction( "Test Script", this, SLOT( OnTestScript() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_6 ) );
 
 	// Subscribe for Ogre messages
 	cOgreResponderSetBGColour::Get().AddListener( *mScene );
@@ -142,4 +143,24 @@ void Loom::OgreApp::cQMainWindow::OnIkTest()
 	cDispatcherHub::IParam vIParam( (void*)&vTemp );
 
 	cDispatcherHub::Get().Dispatch( _T("Avatar::cAvatarResponderSetPosition"), vIParam );
+}
+
+/************************************************************************/
+void Loom::OgreApp::cQMainWindow::OnTestScript()
+/************************************************************************/
+{
+	QFileDialog vFile;
+//	vFile.show();
+
+	struct sTemp
+	{
+		char Name[256];
+	};
+	sTemp vTemp;
+	strcpy( vTemp.Name, vFile.getOpenFileName().toLocal8Bit() );
+	cDispatcherHub::IParam vIParam( (void*)&vTemp );
+
+//	cDispatcherHub::Get().Dispatch( _T("Scripting::cScriptingResponderRunScript"), vIParam );
+	cDispatcherHub::Get().Dispatch( _T("Scripting::cScriptingResponderRunNative"), vIParam );
+//	cDispatcherHub::Get().Dispatch( _T("Scripting::cScriptingResponderRunDll"), vIParam );
 }

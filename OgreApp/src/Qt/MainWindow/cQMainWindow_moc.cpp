@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'cQMainWindow.h'
 **
-** Created: Mon Nov 8 14:01:26 2010
+** Created: Fri Nov 12 10:24:13 2010
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.6.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_cQMainWindow[] = {
        4,       // revision
        0,       // classname
        0,    0, // classinfo
-       5,   14, // methods
+       6,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -36,6 +36,7 @@ static const uint qt_meta_data_cQMainWindow[] = {
       44,   13,   13,   13, 0x0a,
       59,   13,   13,   13, 0x0a,
       72,   13,   13,   13, 0x0a,
+      83,   13,   13,   13, 0x0a,
 
        0        // eod
 };
@@ -43,7 +44,7 @@ static const uint qt_meta_data_cQMainWindow[] = {
 static const char qt_meta_stringdata_cQMainWindow[] = {
     "cQMainWindow\0\0OnSetBgColour()\0"
     "OnCreateBox()\0OnMoveCamera()\0OnMoveBox0()\0"
-    "OnIkTest()\0"
+    "OnIkTest()\0OnTestScript()\0"
 };
 
 const QMetaObject cQMainWindow::staticMetaObject = {
@@ -80,9 +81,10 @@ int cQMainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 2: OnMoveCamera(); break;
         case 3: OnMoveBox0(); break;
         case 4: OnIkTest(); break;
+        case 5: OnTestScript(); break;
         default: ;
         }
-        _id -= 5;
+        _id -= 6;
     }
     return _id;
 }

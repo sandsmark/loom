@@ -34,15 +34,18 @@ mkdir Weaver\bin\resources         2>nul
 mkdir Weaver\bin\resources\config  2>nul
 mkdir Weaver\bin\logs              2>nul
 
+mkdir Weaver\bin\resources\scripting\temp  2>nul
+
 echo Creating internal links...
 
-bin\junction.exe include\Avatar  Avatar\src    >nul
-bin\junction.exe include\Core    Core\src      >nul
-bin\junction.exe include\MoMa    MoMa\src      >nul
-bin\junction.exe include\Network Network\src   >nul
-bin\junction.exe include\Speech  Speech\src    >nul
-bin\junction.exe include\OgreApp OgreApp\src   >nul
-bin\junction.exe include\Weaver  Weaver\src    >nul
+bin\junction.exe include\Avatar    Avatar\src      >nul
+bin\junction.exe include\Core      Core\src        >nul
+bin\junction.exe include\MoMa      MoMa\src        >nul
+bin\junction.exe include\Network   Network\src     >nul
+bin\junction.exe include\Scripting Scripting\src   >nul
+bin\junction.exe include\Speech    Speech\src      >nul
+bin\junction.exe include\OgreApp   OgreApp\src     >nul
+bin\junction.exe include\Weaver    Weaver\src      >nul
 
 echo Creating dependency directories...
 

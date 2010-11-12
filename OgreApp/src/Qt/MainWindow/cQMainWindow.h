@@ -36,6 +36,7 @@ public:
 		void OnMoveCamera();
 		void OnMoveBox0();
 		void OnIkTest();
+		void OnTestScript();
 };
 
 END_NAMESPACE()
