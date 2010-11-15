@@ -8,7 +8,7 @@ using Loom::Core::IModule;
 #include <windows.h>
 BEGIN_NAMESPACE( Network )
 
-class NETWORK_API cModuleNetwork : public IModule, public Speech::ISpeechEvent
+class NETWORK_API cModuleNetwork : public IModule, public Speech::ISpeechListenerEvent
 {
 protected:
 	HANDLE mThread;

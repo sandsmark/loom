@@ -33,6 +33,11 @@ public:
 		static Loom::Core::cString vName( _T("Weaver") );
 		return vName;
 	}
+	virtual const Loom::Core::cString &GetOrganization( void ) const
+	{
+		static Loom::Core::cString vOrganization( _T("CMLabs") );
+		return vOrganization;
+	}
 };
 
 END_NAMESPACE()

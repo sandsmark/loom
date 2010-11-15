@@ -3,10 +3,10 @@
 
 BEGIN_NAMESPACE( Speech )
 
-class ISpeechEvent
+class ISpeechListenerEvent
 {
 public:
-	virtual void OnSay( const std::wstring &text ) = 0;
+	virtual void OnHeard( const std::wstring &text ) = 0;
 };
 
 END_NAMESPACE()

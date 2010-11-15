@@ -133,16 +133,35 @@ void Loom::OgreApp::cQMainWindow::OnIkTest()
 {
 	struct sTemp
 	{
+		int Effector;
 		Ogre::Vector3 Pos;
 	};
 	sTemp vTemp;
-	vTemp.Pos;
+	vTemp.Effector = 0;
 	vTemp.Pos.x = Ogre::Math::RangeRandom( -50, 50 );
 	vTemp.Pos.y = Ogre::Math::RangeRandom( -50, 50 );
 	vTemp.Pos.z = Ogre::Math::RangeRandom( -50, 50 );
 	cDispatcherHub::IParam vIParam( (void*)&vTemp );
 
 	cDispatcherHub::Get().Dispatch( _T("Avatar::cAvatarResponderSetPosition"), vIParam );
+
+	struct sTempRot
+	{
+		int Effector;
+		Ogre::Quaternion Rot;
+	};
+	sTempRot vTempRot;
+	vTempRot.Effector = 2;
+	Ogre::Vector3 vAxis;
+	vAxis.x = Ogre::Math::RangeRandom( -1, 1 );
+	vAxis.y = Ogre::Math::RangeRandom( -1, 1 );
+	vAxis.z = Ogre::Math::RangeRandom( -1, 1 );
+	vAxis = Ogre::Vector3( 0, 1, 0 );
+	vAxis.normalise();
+	vTempRot.Rot.FromAngleAxis( Ogre::Radian( Ogre::Math::RangeRandom( -1, 1 ) * Ogre::Math::PI * 2.0f ), vAxis );
+	cDispatcherHub::IParam vIParamRot( (void*)&vTempRot );
+
+	cDispatcherHub::Get().Dispatch( _T("Avatar::cAvatarResponderSetRotation"), vIParamRot );
 }
 
 /************************************************************************/

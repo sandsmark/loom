@@ -14,6 +14,8 @@ using namespace Loom::Core;
 void cApp::Init( void ) 
 /************************************************************************/
 {
+	mInstance = this;
+
 	cLogger::Get().Init( cLogger::LOG_DEBUG );
 	cDispatcherHub::Get().Init();
 	cModuleManager::Get().Init();

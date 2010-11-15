@@ -39,10 +39,16 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Avatar", "..\Avatar\Avatar.vcproj", "{C1CAC2DE-D0FB-4F23-84B7-737BF854F2D6}"
 	ProjectSection(ProjectDependencies) = postProject
 		{6A25B323-1C85-4BDB-BAEE-F5F9A937674B} = {6A25B323-1C85-4BDB-BAEE-F5F9A937674B}
+		{9ABAFDB6-9697-4E4B-B268-06D06F94483A} = {9ABAFDB6-9697-4E4B-B268-06D06F94483A}
 		{0DA386FE-F850-47A8-A73A-07FDE2E6DE10} = {0DA386FE-F850-47A8-A73A-07FDE2E6DE10}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Scripting", "..\Scripting\Scripting.vcproj", "{989D965D-E654-4DEA-93A3-D395E8652A43}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6A25B323-1C85-4BDB-BAEE-F5F9A937674B} = {6A25B323-1C85-4BDB-BAEE-F5F9A937674B}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Config", "..\Config\Config.vcproj", "{238B0FAD-E883-412C-A84F-FD05583EECE7}"
 	ProjectSection(ProjectDependencies) = postProject
 		{6A25B323-1C85-4BDB-BAEE-F5F9A937674B} = {6A25B323-1C85-4BDB-BAEE-F5F9A937674B}
 	EndProjectSection
@@ -111,6 +117,12 @@ Global
 		{989D965D-E654-4DEA-93A3-D395E8652A43}.Release|Win32.ActiveCfg = Release|Win32
 		{989D965D-E654-4DEA-93A3-D395E8652A43}.Release|Win32.Build.0 = Release|Win32
 		{989D965D-E654-4DEA-93A3-D395E8652A43}.Release|x64.ActiveCfg = Release|Win32
+		{238B0FAD-E883-412C-A84F-FD05583EECE7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{238B0FAD-E883-412C-A84F-FD05583EECE7}.Debug|Win32.Build.0 = Debug|Win32
+		{238B0FAD-E883-412C-A84F-FD05583EECE7}.Debug|x64.ActiveCfg = Debug|Win32
+		{238B0FAD-E883-412C-A84F-FD05583EECE7}.Release|Win32.ActiveCfg = Release|Win32
+		{238B0FAD-E883-412C-A84F-FD05583EECE7}.Release|Win32.Build.0 = Release|Win32
+		{238B0FAD-E883-412C-A84F-FD05583EECE7}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

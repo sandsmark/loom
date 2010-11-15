@@ -28,10 +28,13 @@ cOgreAvatar::cOgreAvatar()
 	CreateEntity();
 	CreateIkChain();
 
+	mCalibration = Ogre::Matrix3::IDENTITY;
+
 	// Subscribe for Avatar messages
 	cAvatarResponderSetEffectorPosition::Get().AddListener( *this );
+	cAvatarResponderSetEffectorRotation::Get().AddListener( *this );
 
-	SetEffectorPosition( Ogre::Vector3( 0, -100, 0 ) );
+	SetEffectorPosition( EFFECTOR_LEFT_HAND, Ogre::Vector3( 0, -100, 0 ) );
 }
 
 /************************************************************************/
@@ -72,20 +75,20 @@ void Loom::Avatar::cOgreAvatar::CreateIkChain()
 {
 	// Create IK chain manually
 	mIKChain = new IKChain(mNode);
-	Ogre::SkeletonInstance* vSkel = mEntity->getSkeleton();
-	Ogre::Bone* vBone = vSkel->getBone("TailBone");
+	mSkeleton = mEntity->getSkeleton();
+	Ogre::Bone* vBone = mSkeleton->getBone("TailBone");
 	mIKChain->PushOgreBone(vBone);
-	vBone = vSkel->getBone("Spine_1");
+	vBone = mSkeleton->getBone("Spine_1");
 	mIKChain->PushOgreBone(vBone);
-	vBone = vSkel->getBone("Spine_2");
+	vBone = mSkeleton->getBone("Spine_2");
 	mIKChain->PushOgreBone(vBone);
-	vBone = vSkel->getBone("ShoulderLeft");
+	vBone = mSkeleton->getBone("ShoulderLeft");
 	mIKChain->PushOgreBone(vBone);
-	vBone = vSkel->getBone("ArmUpperLeft");
+	vBone = mSkeleton->getBone("ArmUpperLeft");
 	mIKChain->PushOgreBone(vBone);
-	vBone = vSkel->getBone("ArmLowerLeft");
+	vBone = mSkeleton->getBone("ArmLowerLeft");
 	mIKChain->PushOgreBone(vBone);
-	vBone = vSkel->getBone("HandLeft");
+	vBone = mSkeleton->getBone("HandLeft");
 	mIKChain->PushOgreBone(vBone);
 
 	// Lower Spine
@@ -111,7 +114,7 @@ void Loom::Avatar::cOgreAvatar::CreateIkChain()
 }
 
 /************************************************************************/
-void Loom::Avatar::cOgreAvatar::SetEffectorPosition( const Ogre::Vector3 &iPos )
+void Loom::Avatar::cOgreAvatar::SetEffectorPosition( const eEffector iEffector, const Ogre::Vector3 &iPos )
 /************************************************************************/
 {
 	mIKChain->SolveForTargetZInv(iPos);
@@ -123,15 +126,76 @@ void Loom::Avatar::cOgreAvatar::SetEffectorPosition( const Ogre::Vector3 &iPos )
 }
 
 /************************************************************************/
-const Ogre::Vector3 Loom::Avatar::cOgreAvatar::GetEffectorPosition( void )
+const Ogre::Vector3 Loom::Avatar::cOgreAvatar::GetEffectorPosition( const eEffector iEffector )
 /************************************************************************/
 {
 	return mIKChain->GetEffectorPosition();
 }
 
 /************************************************************************/
-void Loom::Avatar::cOgreAvatar::OnSetEffectorPosition( const Ogre::Vector3 &iPosition )
+void Loom::Avatar::cOgreAvatar::OnSetEffectorPosition( const eEffector iEffector, const Ogre::Vector3 &iPosition )
 /************************************************************************/
 {
-	SetEffectorPosition( iPosition );
+	SetEffectorPosition( iEffector, iPosition );
+}
+
+/************************************************************************/
+void Loom::Avatar::cOgreAvatar::Calibrate( void )
+/************************************************************************/
+{
+	mCalibrationState = CALIBRATION_STATE1;
+	cDispatcherHub::Get().Dispatch( _T("Speech::Say"), L"Calibration 1" );
+}
+
+/************************************************************************/
+void Loom::Avatar::cOgreAvatar::OnHeard( const std::wstring &text )
+/************************************************************************/
+{
+	if ( text != L"done" ) return;
+
+	switch ( mCalibrationState )
+	{
+	case CALIBRATION_STATE1:
+		cDispatcherHub::Get().Dispatch( _T("Speech::Say"), L"Calibration 2" );
+		mCalibrationState = CALIBRATION_STATE2;
+		break;
+	case CALIBRATION_STATE2:
+		cDispatcherHub::Get().Dispatch( _T("Speech::Say"), L"Calibration 3" );
+		mCalibrationState = CALIBRATION_STATE3;
+		break;
+	case CALIBRATION_STATE3:
+		cDispatcherHub::Get().Dispatch( _T("Speech::Say"), L"Calibration done" );
+		mCalibrationState = CALIBRATION_DONE;
+		break;
+	}
+}
+
+/************************************************************************/
+void Loom::Avatar::cOgreAvatar::SetEffectorRotation( const eEffector iEffector, const Ogre::Quaternion &iRotation )
+/************************************************************************/
+{
+	/*
+	Ogre::Bone* vNeck = mSkeleton->getBone( "Neck" );
+	vNeck->setManuallyControlled( true );
+	vNeck->setOrientation( iRotation );
+	*/
+	Ogre::Bone* vHead = mSkeleton->getBone( "Head" );
+	vHead->setManuallyControlled( true );
+	vHead->setOrientation( iRotation );
+}
+
+/************************************************************************/
+const Ogre::Quaternion Loom::Avatar::cOgreAvatar::GetEffectorRotation( const eEffector iEffector )
+/************************************************************************/
+{
+	Ogre::Bone* vNeck = mSkeleton->getBone( "Neck" );
+
+	return vNeck->getOrientation();
+}
+
+/************************************************************************/
+void Loom::Avatar::cOgreAvatar::OnSetEffectorRotation( const eEffector iEffector, const Ogre::Quaternion &iRotation )
+/************************************************************************/
+{
+	SetEffectorRotation( iEffector, iRotation );
 }

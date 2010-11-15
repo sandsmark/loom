@@ -1,18 +1,18 @@
 #pragma once
 
 #include <Avatar/Event/Responders/IAvatarResponder.h>
-#include <Ogre/OgreVector3.h>
+#include <Ogre/OgreQuaternion.h>
 
 BEGIN_NAMESPACE( Avatar )
 
-class cAvatarResponderSetEffectorPosition : public IAvatarResponder<cAvatarResponderSetEffectorPosition>
+class cAvatarResponderSetEffectorRotation : public IAvatarResponder<cAvatarResponderSetEffectorRotation>
 {
 public:
 	class cParam
 	{
 	public:
 		eEffector Effector;
-		Ogre::Vector3 Position;
+		Ogre::Quaternion Rotation;
 
 	public:
 		cParam() {}
@@ -20,17 +20,17 @@ public:
 		{
 			cParam *vData = (cParam*)iParam.GetData();
 			Effector = vData->Effector;
-			Position = vData->Position;
+			Rotation = vData->Rotation;
 		}
 	};
 
 public:
-	cAvatarResponderSetEffectorPosition() : IAvatarResponder( _T("Avatar::cAvatarResponderSetPosition") ) {}
+	cAvatarResponderSetEffectorRotation() : IAvatarResponder( _T("Avatar::cAvatarResponderSetRotation") ) {}
 
 	virtual void Respond( const cDispatcherHub::IParam &iParam )
 	{
 		cParam vParam( iParam );
-		Dispatch( &IAvatarEvent::OnSetEffectorPosition, vParam.Effector, vParam.Position );
+		Dispatch( &IAvatarEvent::OnSetEffectorRotation, vParam.Effector, vParam.Rotation );
 	}
 };
 

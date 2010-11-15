@@ -2,6 +2,7 @@
 
 #include <Core/Module/IModule.h>
 #include <Speech/Event/ISpeechEvent.h>
+#include <Speech/Event/ISpeechListenerEvent.h>
 using Loom::Core::IModule;
 
 #include <windows.h>
@@ -13,7 +14,7 @@ using Loom::Core::IModule;
 
 BEGIN_NAMESPACE( Speech )
 
-class SPEECH_API cModuleSpeech : public IModule, public ISpeechEvent
+class SPEECH_API cModuleSpeech : public IModule, public ISpeechEvent, public ISpeechListenerEvent
 {
 protected:
 	HANDLE mThread;
@@ -94,6 +95,13 @@ public:
 
 		return pchStop;
 	}
+
+	static const cString &GetName( void )
+	{
+		static const cString vName = _T("Speech");
+		return vName;
+	}
+
 
 };
 

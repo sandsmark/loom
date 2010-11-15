@@ -6,10 +6,13 @@
 #include <Ogre/OgreBillboardSet.h>
 #include <OgreApp/Module/cModuleOgreApp.h>
 #include <Avatar/Ogre/cOgreAvatar.h>
+#include <Speech/Speech.h>
+#include <Speech/Module/cModuleSpeech.h>
 
 using Loom::Core::cLogger;
 using Loom::Core::cDispatcherHub;
 using Loom::OgreApp::cModuleOgreApp;
+using Loom::Speech::cModuleSpeech;
 
 using namespace Loom::Avatar;
 
@@ -19,6 +22,7 @@ cModuleAvatar::cModuleAvatar()
 /************************************************************************/
 {
 	mDependencies.Add( cModuleOgreApp::GetName() );
+	mDependencies.Add( cModuleSpeech::GetName() );
 }
 
 /************************************************************************/

@@ -226,6 +226,10 @@
 					RelativePath=".\src\Event\ISpeechEvent.h"
 					>
 				</File>
+				<File
+					RelativePath=".\src\Event\ISpeechListenerEvent.h"
+					>
+				</File>
 				<Filter
 					Name="Responders"
 					>
@@ -235,6 +239,10 @@
 					</File>
 					<File
 						RelativePath=".\src\Event\Responders\cSpeechResponderSay.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Event\Responders\ISpeechListenerResponder.h"
 						>
 					</File>
 					<File

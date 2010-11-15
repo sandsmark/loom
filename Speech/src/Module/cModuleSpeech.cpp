@@ -10,7 +10,7 @@ using namespace Loom::Speech;
 
 /************************************************************************/
 cModuleSpeech::cModuleSpeech()
-: IModule( _T( "Speech" ) )
+: IModule( GetName() )
 /************************************************************************/
 {
 	cpVoice = NULL;
@@ -23,6 +23,8 @@ cModuleSpeech::cModuleSpeech()
 void cModuleSpeech::Init( void )
 /************************************************************************/
 {
+	mInitialized = true;
+
 	cLogger &vLogger = cLogger::Get();
 	vLogger.Log( cLogger::LOG_INFO, _T( "Global" ), _T( "cModuleSpeech startup" ) );
 

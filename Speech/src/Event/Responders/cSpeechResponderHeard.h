@@ -1,10 +1,10 @@
 #pragma once
 
-#include <Speech/Event/Responders/ISpeechResponder.h>
+#include <Speech/Event/Responders/ISpeechListenerResponder.h>
 
 BEGIN_NAMESPACE( Speech )
 
-class cSpeechResponderHeard : public ISpeechResponder<cSpeechResponderHeard>
+class cSpeechResponderHeard : public ISpeechListenerResponder<cSpeechResponderHeard>
 {
 public:
 	class cParam
@@ -22,12 +22,12 @@ public:
 	};
 
 public:
-	cSpeechResponderHeard() : ISpeechResponder( _T("Speech::Heard") ) {}
+	cSpeechResponderHeard() : ISpeechListenerResponder( _T("Speech::Heard") ) {}
 
 	virtual void Respond( const cDispatcherHub::IParam &iParam )
 	{
 		cParam vParam( iParam );
-		Dispatch( &ISpeechEvent::OnHeard, vParam.text );
+		Dispatch( &ISpeechListenerEvent::OnHeard, vParam.text );
 	}
 };
 

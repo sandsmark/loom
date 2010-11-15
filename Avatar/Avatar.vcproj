@@ -267,6 +267,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\src\Event\Responders\cAvatarResponderSetEffectorRotation.h"
+						>
+					</File>
+					<File
 						RelativePath=".\src\Event\Responders\IAvatarResponder.h"
 						>
 					</File>

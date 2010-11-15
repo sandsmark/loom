@@ -186,6 +186,10 @@
 				Name="App"
 				>
 				<File
+					RelativePath=".\src\App\IApp.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\src\App\IApp.h"
 					>
 				</File>
