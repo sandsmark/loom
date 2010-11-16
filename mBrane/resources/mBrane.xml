@@ -1,0 +1,24 @@
+<NodeConfiguration application_configuration_file="mBraneApp.xml">
+	<Network sync_period="10000" bcast_timeout="500" boot_callback="NULL">
+		<Interfaces>
+			<TCP shared_library="tcp"/>
+			<UDP shared_library="udp"/>
+		</Interfaces>
+		<Discovery interface="UDP" nic="." port="10000"/>
+		<Primary>
+		  <Control interface="TCP" nic="." port="10001"/>
+		  <Data interface="TCP" nic="." port="10002"/>
+		  <Stream interface="TCP" nic="." port="10003"/>
+		</Primary>
+		<Secondary>
+			<!--same form as primary's-->
+		</Secondary>
+	</Network>
+	<Daemons>
+		<!--ex: <Daemon shared_library="..." parameter0="..." ... parameterN="..."/>-->	   
+	</Daemons>
+	<Nodes>
+		<!--SystemReady will be sent when all the nodes listed here are up and running; no need to list the local node (implicit)-->
+	</Nodes>
+	<Threads thread_count="16"/> <!--in [1,512]-->
+</NodeConfiguration>

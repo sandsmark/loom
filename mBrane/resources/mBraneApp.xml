@@ -1,0 +1,11 @@
+<ApplicationConfiguration user_library="Perf">
+
+  <Space name="space1" activation_threshold="0.5"/>
+  	
+  <Module class="Loom" name="Loom" host="local">
+		<Projection space="space1" activation_level="1">
+			<Subscription message_class="SystemReady"/>
+		</Projection>
+	</Module>
+
+</ApplicationConfiguration>

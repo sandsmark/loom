@@ -52,13 +52,13 @@ DWORD cModuleNetwork::StartThread( LPVOID /*iParam*/ )
 	{
 
 		// Test
-		std::wstring text = _T("Hello World");
-		cDispatcherHub::IParam vReceivedParam( (void*)text.c_str() );
+	//	std::wstring text = _T("Hello World");
+	//	cDispatcherHub::IParam vReceivedParam( (void*)text.c_str() );
 
-		const TCHAR *vReceivedMessageName = _T("Speech::Say");
+	//	const TCHAR *vReceivedMessageName = _T("Speech::Say");
 
 		// Dispatch received message
-		cDispatcherHub::Get().Dispatch( vReceivedMessageName, vReceivedParam );
+	//	cDispatcherHub::Get().Dispatch( vReceivedMessageName, vReceivedParam );
 		Sleep( 5000 );
 	}
 }
