@@ -17,6 +17,12 @@ template< typename iType >
 class IEventDispatcher
 {
 public:
+	class cTypeWrapper0
+	{
+	public:
+		typedef void(iType::*tFunction)();
+	};
+
 	template< typename iParamType1 >
 	class cTypeWrapper1
 	{
@@ -43,7 +49,16 @@ protected:
         
 public:
     void AddListener( iType &iListener ) { mListeners.Add( &iListener ); }
-    
+
+	void Dispatch( typename cTypeWrapper0::tFunction iFunction )
+	{
+		for ( size_t i=0; i<mListeners.GetSize(); i++ )
+		{
+			iType *vListener = mListeners[i];
+			(vListener->*iFunction)();
+		}
+	}
+
     template< typename iParamType1 >
     void Dispatch( typename cTypeWrapper1<iParamType1>::tFunction iFunction, iParamType1 vParam1 )
     {

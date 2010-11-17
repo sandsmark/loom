@@ -6,6 +6,7 @@
 #include <Ogre/OgreBillboardSet.h>
 #include <MoMa/Entity/cPCreature.h>
 #include <MoMa/Entity/cCreature.h>
+#include <MoMa/Entity/cWaveform.h>
 #include <OgreApp/Module/cModuleOgreApp.h>
 
 using Loom::Core::cLogger;
@@ -40,6 +41,9 @@ void cModuleMoMa::Init( void )
 	cPCreature *vPrototype = new cPCreature();
 	cCreature *vCreature = vPrototype->CreateInstance();
 	vCreature;
+
+	cWaveform *vWaveform = new cWaveform();
+	vWaveform;
 	
 	mInitialized = true;
 }

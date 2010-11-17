@@ -54,3 +54,31 @@ material MoMa.Creature.1
     }
   }
 }
+
+material MoMa.Waveform
+{
+  technique
+  {
+    pass
+    {
+        vertex_program_ref MoMa/WaveformVP
+        {
+			param_named mPerturbance float 1.0
+        }
+        
+        fragment_program_ref MoMa/BasicFP
+        {
+        }
+        
+      texture_unit
+      {
+        texture body.png
+        filtering trilinear
+      }
+      
+      scene_blend src_alpha one_minus_src_alpha
+      depth_write off
+      
+    }
+  }
+}

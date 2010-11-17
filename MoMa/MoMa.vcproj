@@ -235,6 +235,14 @@
 					RelativePath=".\src\Entity\cPCreature.h"
 					>
 				</File>
+				<File
+					RelativePath=".\src\Entity\cWaveform.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Entity\cWaveform.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
@@ -262,6 +270,10 @@
 					>
 					<File
 						RelativePath=".\resources\materials\MoMa\basic.cg"
+						>
+					</File>
+					<File
+						RelativePath=".\resources\materials\MoMa\waveform.cg"
 						>
 					</File>
 				</Filter>

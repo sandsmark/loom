@@ -247,6 +247,10 @@
 							RelativePath=".\src\Qt\Ogre\Event\IOgreEvent.h"
 							>
 						</File>
+						<File
+							RelativePath=".\src\Qt\Ogre\Event\IOgreListenerEvent.h"
+							>
+						</File>
 						<Filter
 							Name="Responders"
 							>
@@ -255,11 +259,19 @@
 								>
 							</File>
 							<File
+								RelativePath=".\src\Qt\Ogre\Event\Responders\cOgreResponderOnRender.h"
+								>
+							</File>
+							<File
 								RelativePath=".\src\Qt\Ogre\Event\Responders\cOgreResponderSetBgColour.h"
 								>
 							</File>
 							<File
 								RelativePath=".\src\Qt\Ogre\Event\Responders\cOgreResponderSetPosition.h"
+								>
+							</File>
+							<File
+								RelativePath=".\src\Qt\Ogre\Event\Responders\IOgreListenerResponder.h"
 								>
 							</File>
 							<File
@@ -285,7 +297,7 @@
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Generating cQMainWindow metadata"
-								CommandLine="dependencies\win32\Qt\bin\moc -D__WIN32__ $(InputDir)$(InputFileName) -o $(InputDir)$(InputName)_moc.cpp"
+								CommandLine="dependencies\win32\Qt\bin\moc -D__WIN32__ $(InputDir)$(InputFileName) -o $(InputDir)$(InputName)_moc.cpp&#x0D;&#x0A;"
 								AdditionalDependencies="$(InputDir)$(InputName).cpp"
 								Outputs="$(InputDir)$(InputName)_moc.cpp"
 							/>

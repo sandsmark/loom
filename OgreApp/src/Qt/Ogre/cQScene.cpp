@@ -1,4 +1,6 @@
 #include <OgreApp/Qt/Ogre/cQScene.h>
+#include <Core/Event/cDispatcherHub.h>
+#include <OgreApp/Qt/Ogre/Event/Responders/cOgreResponderOnRender.h>
 
 #pragma warning( push )
 #pragma warning( disable: 4189 )	// local variable is initialized but not referenced
@@ -6,6 +8,8 @@
 #pragma warning( pop )
 
 using namespace Loom::OgreApp;
+using Loom::Core::cDispatcherHub;
+using Loom::OgreApp::cOgreResponderOnRender;
 
 /************************************************************************/
 cQScene::cQScene( QWidget *iParent )
@@ -53,6 +57,8 @@ bool cQScene::InitPost( void )
 void cQScene::RenderFrame( void )
 /**********************************************************************/
 {
+	cDispatcherHub::Get().Dispatch( cOgreResponderOnRender::Get().GetEventName(), NULL );
+	
 //    ASSERTTXT( mWindow, "Main window is invalid" );
 //    ASSERTTXT( mCamera, "Main camera is invalid" );
     

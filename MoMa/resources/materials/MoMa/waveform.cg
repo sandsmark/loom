@@ -1,0 +1,47 @@
+sampler2D mTexture : TEXUNIT0;
+uniform float mTime;
+
+void main( float4 iPosition : POSITION, float2 iTexCoord : TEXCOORD,
+						  out float4 oPosition : POSITION,
+						  out float4 oColour   : COLOR,
+						  out float2 oTexCoord : TEXCOORD,
+						  
+							uniform float4x4 mWorld,
+							uniform float4x4 mView,
+							uniform float4x4 mProj,
+							uniform float mPerturbance
+						  )
+{
+    float4 vWorldPos  = mul( mWorld, iPosition );
+    float4 vViewPos   = mul( mView , vWorldPos );
+    float4 vScreenPos = mul( mProj , vViewPos );
+    
+//    vScreenPos.x += sin( mTime + vScreenPos.y + vScreenPos.x ) * cos( mTime * 1.43f + vScreenPos.y * 0.79f + vScreenPos.x * 1.44f ) * 4;
+    vScreenPos.y += sin( mTime + vScreenPos.y + vScreenPos.x ) * cos( mTime * 1.43f + vScreenPos.y * 0.079f + vScreenPos.x * 0.144f ) * mPerturbance;
+    
+    oPosition = vScreenPos;
+    oTexCoord = iTexCoord.yx;
+    oColour = frac( vWorldPos );
+}
+
+float4 mainFP( float4 iColor : COLOR, float2 iTexCoord : TEXCOORD, uniform float mDeform ) : COLOR
+//float4 mainFP( float4 iColor : COLOR ) : COLOR
+{
+//	return float4( iTexCoord, 0, 0 );
+//	return float4( 1, 0, 0, 1 );
+
+	float2 vCenter = float2( sin( mTime ), cos( mTime ) * 1.737f );
+	vCenter *= 0.5f;
+	vCenter *= 0.1f;
+	vCenter += 0.5f;
+	float2 vDiff = vCenter - iTexCoord;
+	float vMaxRange = 1;
+	float vStrength = length( vDiff ) / vMaxRange;
+	vStrength = 1 - min( vStrength, 1 );
+	vStrength *= 0.5f;
+	vStrength = pow( vStrength, 0.5f );
+	vStrength *= mDeform;
+	iTexCoord += vDiff * vStrength; 	
+
+    return tex2D( mTexture, iTexCoord );
+} 
