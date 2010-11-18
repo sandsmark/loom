@@ -25,26 +25,35 @@ cWaveform::cWaveform()
 	cQScene *vQScene = vQMainWindow->GetScene();
 	Ogre::SceneManager *vScene = vQScene->GetScene();
 
-	mBillboardSet = vScene->createBillboardSet( "MoMa.Waveform" );
-	mBillboardSet->setMaterialName( "MoMa.Waveform" );
-	mBillboardSet->setDefaultDimensions( 4, 1 );
-	mBillboardSet->setPointRenderingEnabled( false );
-	mBillboardSet->setAutoextend( true );
-	mBillboardSet->setAutoUpdate( true );
-	mBillboardSet->setVisible( true );
-	Ogre::SceneNode *vNode = vScene->getRootSceneNode()->createChildSceneNode( Ogre::Vector3( 0, 50, 0 ) );
-	vNode->attachObject( mBillboardSet );
+	for ( size_t i=0; i<2; i++ )
+	{
+		char Temp[ 256 ];
+		sprintf( Temp, "MoMa.Waveform.%d", i );
+		Ogre::BillboardSet *vBillboardSet = vScene->createBillboardSet( Temp );
+		vBillboardSet->setMaterialName( Temp );
+		vBillboardSet->setDefaultDimensions( 4, 1 );
+		vBillboardSet->setPointRenderingEnabled( false );
+		vBillboardSet->setAutoextend( true );
+		vBillboardSet->setAutoUpdate( true );
+		vBillboardSet->setVisible( true );
+		Ogre::SceneNode *vNode = vScene->getRootSceneNode()->createChildSceneNode( Ogre::Vector3( -100 + (int)i * 100, 50 + (int)20 * i, i * 100 ) );
+		vNode->attachObject( vBillboardSet );
+		mBillboardSet[i] = vBillboardSet;
+	}
 
 	mHeights.Set( new float[ mNumParts ] );
 	mTargetHeights.Set( new float[ mNumParts ] );
 
-	for ( size_t i=0; i<mNumParts; i++ )
+	for ( size_t b=0; b<2; b++ )
 	{
-		Ogre::Billboard *vBillboard = mBillboardSet->createBillboard( (int)i, 0, 0 );
-		float vHeight = ( sinf( i * 0.14f ) * 5.0f + 5.0f + Ogre::Math::RangeRandom( 0.5f, 5 ) ) * 2.0f;
-		vBillboard->setDimensions( 1, vHeight );
-		mHeights[i] = vHeight;
-		mTargetHeights[i] = Ogre::Math::RangeRandom( 0.5f, 15.0f );
+		for ( size_t i=0; i<mNumParts; i++ )
+		{
+			Ogre::Billboard *vBillboard = mBillboardSet[b]->createBillboard( (int)i, 0, 0 );
+			float vHeight = ( sinf( i * 0.14f ) * 5.0f + 5.0f + Ogre::Math::RangeRandom( 0.5f, 5 ) ) * 2.0f;
+			vBillboard->setDimensions( 1, vHeight );
+			mHeights[i] = vHeight;
+			mTargetHeights[i] = Ogre::Math::RangeRandom( 0.5f, 15.0f );
+		}
 	}
 
 	cOgreResponderOnRender::Get().AddListener( *this );
@@ -64,18 +73,27 @@ void cWaveform::Update( void )
 
 	size_t vSkip = (size_t)( vEllapsed * 500 );
 
+	float vMinX = FLT_MAX;
 	for ( size_t i=mNumParts; i-->0; )
 	{
-		Ogre::Billboard *vBillboard = mBillboardSet->getBillboard(i);
+		Ogre::Billboard *vBillboard = mBillboardSet[0]->getBillboard(i);
 		Ogre::Vector3 vPos = vBillboard->getPosition();
 		vPos.x -= -1.0f * vEllapsed;
+		vBillboard->setPosition( vPos );
+		if ( vPos.x < vMinX ) vMinX = vPos.x;
+	}
+
+	for ( size_t i=mNumParts; i-->0; )
+	{
+		Ogre::Billboard *vBillboard = mBillboardSet[0]->getBillboard(i);
+		Ogre::Vector3 vPos = vBillboard->getPosition();
 		if ( vPos.x > mNumParts )
 		{
-			vPos.x = 0;
+			vPos.x = vMinX - 1;
+			vMinX = vPos.x;
 			float vHeight = ( sinf( mNumParts + vTime * 0.001f * 0.14f ) * 5.0f + 5.0f + Ogre::Math::RangeRandom( 0.5f, 5 ) ) * 2.0f;
 			vBillboard->setDimensions( 1, vHeight );
 			mHeights[i] = vHeight;
-//			vBillboard->setDimensions( 1, 10.0f + Ogre::Math::RangeRandom( 0.5f, 5 ) * 3 );
 		}
 		if ( i >= vSkip )
 		{
@@ -83,20 +101,9 @@ void cWaveform::Update( void )
 		}
 		else
 		{
-//			mTargetHeights[i] = Ogre::Math::RangeRandom( 0.5f, 15.0f ) * 3;
 			mTargetHeights[i] = ( mMockInput * 15.0f + Ogre::Math::RangeRandom( -4.0f, 4.0f ) * mMockInput ) * 5; //3;
 		}
 		float vHeight = vBillboard->getOwnHeight();
-		/*
-		if ( fabsf( vHeight - mTargetHeights[i] ) < mInertia )
-		{
-			vHeight = mTargetHeights[i];
-		}
-		else
-		{
-			vHeight += ( mTargetHeights[i] < vHeight ) ? -mInertia : mInertia;
-		}
-		*/
 		vHeight = mHeights[i];
 		float vDiff = mTargetHeights[i] - vHeight;
 		float vInertia = mInertia;
@@ -104,8 +111,12 @@ void cWaveform::Update( void )
 		vInertia *= 0.998f;
 		float vAlpha = 1 - powf( 1 - vInertia, vEllapsed );
 		vHeight = vHeight + vDiff * vAlpha;
-		vBillboard->setDimensions( 1, vHeight );
-		vBillboard->setPosition( vPos );
+		for ( size_t b=0; b<2; b++ )
+		{
+			Ogre::Billboard *vBillboard = mBillboardSet[b]->getBillboard(i);
+			vBillboard->setDimensions( 1, vHeight );
+			vBillboard->setPosition( vPos );
+		}
 	}
 
 	mMockInput *= powf( 0.001f, vEllapsed );

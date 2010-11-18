@@ -6,6 +6,8 @@
 #include <Ogre/OgreBillboardSet.h>
 #include <MoMa/Entity/cPCreature.h>
 #include <MoMa/Entity/cCreature.h>
+#include <MoMa/Entity/cPCircle.h>
+#include <MoMa/Entity/cCircle.h>
 #include <MoMa/Entity/cWaveform.h>
 #include <OgreApp/Module/cModuleOgreApp.h>
 
@@ -39,11 +41,23 @@ void cModuleMoMa::Init( void )
 	cDispatcherHub::Get().Dispatch( _T("Ogre::cOgreResponderSetBGColour"), vIParam );
 
 	cPCreature *vPrototype = new cPCreature();
-	cCreature *vCreature = vPrototype->CreateInstance();
+	cCreature *vCreature;
+	vCreature = vPrototype->CreateInstance( Ogre::Vector3( -25,  20, 100 ) );
+	vCreature = vPrototype->CreateInstance( Ogre::Vector3(  25,  20, 100 ) );
+	vCreature = vPrototype->CreateInstance( Ogre::Vector3( -45,   0,  50 ) );
+	vCreature = vPrototype->CreateInstance( Ogre::Vector3(  45,   0,  50 ) );
+	vCreature = vPrototype->CreateInstance( Ogre::Vector3(   0, -20,   0 ) );
 	vCreature;
 
 	cWaveform *vWaveform = new cWaveform();
 	vWaveform;
+
+	cPCircle *vPCircle = new cPCircle();
+	for ( int i=0; i<6; i++ )
+	{
+		cCircle *vCircle = vPCircle->CreateInstance();
+		vCircle;
+	}
 	
 	mInitialized = true;
 }

@@ -7,6 +7,7 @@ using Loom::Core::cAutoPtr;
 namespace Ogre
 {
 	class BillboardSet;
+	class Vector3;
 };
 
 BEGIN_NAMESPACE( MoMa )
@@ -31,7 +32,7 @@ public:
 	cPCreature();
 	~cPCreature();
 
-	cCreature *CreateInstance( void );
+	cCreature *CreateInstance( const Ogre::Vector3 &iPosition );
 	Ogre::BillboardSet *GetBillboardSet( const eParts iPart ) const { return mBillboardSet[iPart]; }
 	size_t GetNumParts( void ) const { return mNumParts; }
 };

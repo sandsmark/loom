@@ -220,11 +220,27 @@
 				Name="Entity"
 				>
 				<File
+					RelativePath=".\src\Entity\cCircle.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Entity\cCircle.h"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Entity\cCreature.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\src\Entity\cCreature.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Entity\cPCircle.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Entity\cPCircle.h"
 					>
 				</File>
 				<File
@@ -270,6 +286,10 @@
 					>
 					<File
 						RelativePath=".\resources\materials\MoMa\basic.cg"
+						>
+					</File>
+					<File
+						RelativePath=".\resources\materials\MoMa\circle.cg"
 						>
 					</File>
 					<File

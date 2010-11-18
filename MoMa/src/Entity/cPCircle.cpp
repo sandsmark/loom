@@ -1,8 +1,8 @@
-#include <MoMa/Entity/cPCreature.h>
+#include <MoMa/Entity/cPCircle.h>
 #include <typeinfo>
 #include <Ogre/OgreBillboardSet.h>
 #include <Ogre/OgreSceneManager.h>
-#include <MoMa/Entity/cCreature.h>
+#include <MoMa/Entity/cCircle.h>
 #include <Core/Module/cModuleManager.h>
 #include <OgreApp/Module/cModuleOgreApp.h>
 #include <OgreApp/Qt/MainWindow/cQMainWindow.h>
@@ -15,8 +15,7 @@ using Loom::OgreApp::cQScene;
 using Loom::Core::cModuleManager;
 
 /************************************************************************/
-cPCreature::cPCreature()
-: mNumParts( 50 )
+cPCircle::cPCircle()
 /************************************************************************/
 {
 	cModuleOgreApp *vOgre = (cModuleOgreApp*)cModuleManager::Get().GetModule( _T("OgreApp") );
@@ -24,41 +23,29 @@ cPCreature::cPCreature()
 	cQScene *vQScene = vQMainWindow->GetScene();
 	Ogre::SceneManager *vScene = vQScene->GetScene();
 
-	for ( size_t i=0; i<PART_MAX; i++ )
-	{
-		char Temp[ 256 ];
-		sprintf( Temp, "MoMa.Creature.%d", i );
-		Ogre::BillboardSet *vBillboardSet = vScene->createBillboardSet( Temp );
-		Ogre::BillboardSet *vSet = vBillboardSet;
-		Ogre::String vFosFasz = Temp;
-		vSet->setMaterialName( vFosFasz );
-		vBillboardSet->setDefaultDimensions( 4, 1 );
-		vBillboardSet->setPointRenderingEnabled( false );
-		vBillboardSet->setAutoextend( true );
-		vBillboardSet->setAutoUpdate( true );
-		vBillboardSet->setVisible( true );
-		Ogre::SceneNode *vNode = vScene->getRootSceneNode()->createChildSceneNode( Ogre::Vector3( 0, 0, -10 ) );
-		vNode->attachObject( vBillboardSet );
+	mBillboardSet = vScene->createBillboardSet( "MoMa.Circle" );
+	mBillboardSet->setMaterialName( "MoMa.Circle" );
+	mBillboardSet->setDefaultDimensions( 4, 1 );
+	mBillboardSet->setPointRenderingEnabled( false );
+	mBillboardSet->setAutoextend( true );
+	mBillboardSet->setAutoUpdate( true );
+	mBillboardSet->setVisible( true );
+	vScene->getRootSceneNode()->attachObject( mBillboardSet );
 
-		mBillboardSet[i] = vBillboardSet;
-	}
 }
 
 /************************************************************************/
-cPCreature::~cPCreature()
+cPCircle::~cPCircle()
 /************************************************************************/
 {
-	for ( size_t i=0; i<PART_MAX; i++ )
-	{
-		delete mBillboardSet[i];
-	}
+	delete mBillboardSet;
 }
 
 /************************************************************************/
-cCreature *cPCreature::CreateInstance( const Ogre::Vector3 &iPosition )
+cCircle *cPCircle::CreateInstance( void )
 /************************************************************************/
 {
-	cCreature *vCreature = new cCreature( this, iPosition );
+	cCircle *vCircle = new cCircle( this );
 
-	return vCreature;
+	return vCircle;
 }

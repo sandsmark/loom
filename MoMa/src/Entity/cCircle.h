@@ -5,23 +5,22 @@
 namespace Ogre
 {
 	class Billboard;
-	class Vector3;
 };
 
 using Loom::Core::cArray;
 
 BEGIN_NAMESPACE( MoMa )
 
-class cPCreature;
+class cPCircle;
 
-class MOMA_API cCreature
+class MOMA_API cCircle
 {
 protected:
-	cPCreature *mPrototype;
+	cPCircle *mPrototype;
 	cArray<Ogre::Billboard*> mBillboards;
 
 public:
-	cCreature( cPCreature *iProto, const Ogre::Vector3 &iPosition );
+	cCircle( cPCircle *iProto );
 };
 
 END_NAMESPACE()

@@ -16,7 +16,8 @@ BEGIN_NAMESPACE( MoMa )
 class cWaveform : public IOgreListenerEvent
 {
 protected:
-	Ogre::BillboardSet *mBillboardSet;
+	Ogre::BillboardSet *mBillboardSet[2];
+
 	unsigned long mLastUpdate;
 	size_t mNumParts;
 	size_t mFirstPart;

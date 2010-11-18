@@ -50,7 +50,7 @@ DWORD cModuleNetwork::StartThread( LPVOID /*iParam*/ )
 	// Listen for message name and data and send with Dispatch
 	for ( ;; )
 	{
-
+#if 0		
 		// Test
 	//	std::wstring text = _T("Hello World");
 	//	cDispatcherHub::IParam vReceivedParam( (void*)text.c_str() );
@@ -59,6 +59,7 @@ DWORD cModuleNetwork::StartThread( LPVOID /*iParam*/ )
 
 		// Dispatch received message
 	//	cDispatcherHub::Get().Dispatch( vReceivedMessageName, vReceivedParam );
+#endif
 		Sleep( 5000 );
 	}
 }
