@@ -1,6 +1,6 @@
 #pragma once
 
-#include <mBrane.h>
+#include <node.h>
 #include <Core/Module/IModule.h>
 #include <Speech/Event/cSpeechResponders.h>
 using Loom::Core::IModule;
@@ -9,6 +9,17 @@ using Loom::Core::IModule;
 
 using	namespace	core;
 using	namespace	mBrane;
+
+#ifdef WINDOWS
+	#define DllExport   __declspec( dllexport )
+#else // WINDOWS
+	#define DllExport
+#endif // WINDOWS
+
+extern "C" {
+	DllExport char* WaitForEvent(uint32& type, uint32& dataSize, uint32 timeout);
+	DllExport bool ProcessEvent(uint32 type, char* data, uint32 dataSize);
+}
 
 BEGIN_NAMESPACE( MBrane )
 

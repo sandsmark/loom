@@ -10,6 +10,24 @@ SharedLibrary	SL;	//	will be initialized with the library loaded by the node; th
 
 using namespace Loom::MBrane;
 
+static char* test = NULL;
+
+char* WaitForEvent(uint32& type, uint32& dataSize, uint32 timeout) {
+	Thread::Sleep(timeout);
+	return NULL;
+}
+
+bool ProcessEvent(uint32 type, char* data, uint32 dataSize) {
+	if (!test) {
+		test = new char[1024];
+		strcpy(test, "Hello World");
+	}
+
+	return false;
+}
+
+
+
 /************************************************************************/
 cModulemBrane::cModulemBrane()
 : IModule( _T( "mBrane" ) )

@@ -1,11 +1,23 @@
 @echo off
 
-if NOT EXIST %1 goto :configFile
+if "%~1" == "" goto :configFile
+
+:userFile
+if EXIST %1 goto :readUserFile
+echo Config file '%1' does not exist
+goto :end
+
+:readUserFile
 echo Reading config file '%1'
 CALL %1
 goto :checkOgre
 
 :configFile
+if EXIST config.bat goto :readConfigFile
+echo Default config file 'config.bat' does not exist
+goto :end
+
+:readConfigFile
 echo Reading default config file 'config.bat'
 CALL config.bat
 
