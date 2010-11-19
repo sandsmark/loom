@@ -10,21 +10,83 @@ SharedLibrary	SL;	//	will be initialized with the library loaded by the node; th
 
 using namespace Loom::MBrane;
 
+static core::Mutex inQMutex;
+static core::Mutex outQMutex;
+static core::Semaphore inQSem(0, 10);
+static core::Semaphore outQSem(0, 10);
+
+static std::queue<char*> inQ;
+static std::queue<char*> outQ;
+
 static char* test = NULL;
 
-char* WaitForEvent(uint32& type, uint32& dataSize, uint32 timeout) {
-	Thread::Sleep(timeout);
-	return NULL;
-}
-
-bool ProcessEvent(uint32 type, char* data, uint32 dataSize) {
-	if (!test) {
-		test = new char[1024];
-		strcpy(test, "Hello World");
+// *****************************
+// API for external code
+// *****************************
+char* WaitForEvent(uint32 timeout) {
+	if (!outQMutex.acquire(timeout))
+		return NULL;
+	if (outQ.size() == 0) {
+		// wait for semaphore
+		outQMutex.release();
+		if (!outQSem.acquire(timeout))
+			return NULL;
+		if (!outQMutex.acquire(timeout))
+			return NULL;
+		if (outQ.size() == 0) {
+			outQMutex.release();
+			return NULL;
+		}
 	}
-
-	return false;
+	char* data = outQ.front();
+	outQ.pop();
+	outQMutex.release();
+	return data;
 }
+
+bool ProcessEvent(char* data) {
+	if (!inQMutex.acquire(100))
+		return false;
+	inQ.push(data);
+	inQSem.release();
+	inQMutex.release();
+	return true;
+}
+
+
+// *****************************
+// API for internal code
+// *****************************
+char* WaitForIncomingEvent(uint32 timeout) {
+	if (!inQMutex.acquire(timeout))
+		return NULL;
+	if (inQ.size() == 0) {
+		// wait for semaphore
+		inQMutex.release();
+		if (!inQSem.acquire(timeout))
+			return NULL;
+		if (!inQMutex.acquire(timeout))
+			return NULL;
+		if (inQ.size() == 0) {
+			inQMutex.release();
+			return NULL;
+		}
+	}
+	char* data = inQ.front();
+	inQ.pop();
+	inQMutex.release();
+	return data;
+}
+
+bool OutputEvent(char* data) {
+	if (!outQMutex.acquire(100))
+		return false;
+	outQ.push(data);
+	outQSem.release();
+	outQMutex.release();
+	return true;
+}
+
 
 
 
