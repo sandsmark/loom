@@ -26,20 +26,20 @@ void cModuleSpeech::Init( void )
 	mInitialized = true;
 	SpeechPitchIntegrator::StartSpeechPitchIntegrator();
 
-	//cLogger &vLogger = cLogger::Get();
-	//vLogger.Log( cLogger::LOG_INFO, _T( "Global" ), _T( "cModuleSpeech startup" ) );
+	cLogger &vLogger = cLogger::Get();
+	vLogger.Log( cLogger::LOG_INFO, _T( "Global" ), _T( "cModuleSpeech startup" ) );
 
-	//cSpeechResponderSay::Get().AddListener( *this );
+	cSpeechResponderSay::Get().AddListener( *this );
 
-	//HRESULT hr = E_FAIL;
-	//if (FAILED(hr = ::CoInitialize(NULL)))
-	//	return;
+	HRESULT hr = E_FAIL;
+	if (FAILED(hr = ::CoInitialize(NULL)))
+		return;
 
-	//hr = cpRecoCtxt.CoCreateInstance(CLSID_SpSharedRecoContext);
-	//if(FAILED(hr))
-	//	return;
+	hr = cpRecoCtxt.CoCreateInstance(CLSID_SpSharedRecoContext);
+	if(FAILED(hr))
+		return;
 
-	//hr = cpRecoCtxt->GetVoice(&cpVoice);
+	hr = cpRecoCtxt->GetVoice(&cpVoice);
 
 	//if (cpRecoCtxt && cpVoice &&
 	//	SUCCEEDED(hr = cpRecoCtxt->SetNotifyWin32Event()) &&
@@ -78,6 +78,9 @@ DWORD cModuleSpeech::StartThread( LPVOID arg )
 {
 
 	cModuleSpeech* _this = (cModuleSpeech*) arg;
+
+	_this->OnSay(_T("Pitch Tracker is running..."));
+
 	char str[1024];
 	int strC = 0;
 
