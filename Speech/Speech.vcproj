@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/FISpeech/common.h"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include"
+				AdditionalIncludeDirectories="../include;dependencies/win32/PitchTracker"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;SPEECH_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="0"
@@ -51,7 +51,7 @@
 				EnableEnhancedInstructionSet="2"
 				FloatingPointModel="2"
 				UsePrecompiledHeader="0"
-				WarningLevel="4"
+				WarningLevel="3"
 				WarnAsError="true"
 				DebugInformationFormat="4"
 				DisableSpecificWarnings="4244"
@@ -67,9 +67,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="PitchTracker_d.lib SpeechPitchIntegrator_d.lib"
 				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories=""
+				AdditionalLibraryDirectories="dependencies/win32/PitchTracker"
 				GenerateManifest="false"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -127,7 +128,7 @@
 				AdditionalOptions="/FISpeech/common.h"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="../include"
+				AdditionalIncludeDirectories="../include;dependencies/win32/PitchTracker"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SPEECH_EXPORTS"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="2"
@@ -151,7 +152,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="SpeechPitchIntegrator_d.dll"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="dependencies/win32/PitchTracker"
 				GenerateManifest="false"
 				GenerateDebugInformation="true"
 				SubSystem="2"

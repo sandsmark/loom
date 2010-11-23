@@ -12,6 +12,8 @@ using Loom::Core::IModule;
 #include <atlbase.h>
 #include "sphelper.h"
 
+#include "Module.h"
+
 BEGIN_NAMESPACE( Speech )
 
 class SPEECH_API cModuleSpeech : public IModule, public ISpeechEvent, public ISpeechListenerEvent
@@ -21,7 +23,6 @@ protected:
 	CComPtr<ISpRecoContext> cpRecoCtxt;
 	CComPtr<ISpRecoGrammar> cpGrammar;
 	CComPtr<ISpVoice> cpVoice;
-
 
 public:
 	cModuleSpeech();
