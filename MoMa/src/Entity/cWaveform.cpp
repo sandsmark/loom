@@ -15,9 +15,18 @@ using Loom::OgreApp::cQScene;
 using Loom::Core::cModuleManager;
 using Loom::OgreApp::cOgreResponderOnRender;
 
+BEGIN_RTTI( Loom::MoMa::cWaveform )
+	PROPERTY( mInertia )
+	PROPERTY( mFrequency )
+	PROPERTY( mSpeed )
+	PROPERTY( mInertiaDamping )
+	PROPERTY( mMockDamping )
+END_RTTI()
+
 /************************************************************************/
 cWaveform::cWaveform()
-: mNumParts( 128 ), mInertia( 0.1f )
+: mNumParts( 128 ), mInertia( 0.1f ), mFrequency( 0.14f ), mSpeed( 1 )
+, mInertiaDamping( 0.998f ), mMockDamping( 0.001f )
 /************************************************************************/
 {
 	cModuleOgreApp *vOgre = (cModuleOgreApp*)cModuleManager::Get().GetModule( _T("OgreApp") );
@@ -29,7 +38,7 @@ cWaveform::cWaveform()
 	{
 		char Temp[ 256 ];
 		sprintf( Temp, "MoMa.Waveform.%d", i );
-		Ogre::BillboardSet *vBillboardSet = vScene->createBillboardSet( Temp );
+		Ogre::BillboardSet *vBillboardSet = vScene->createBillboardSet(); // Temp );
 		vBillboardSet->setMaterialName( Temp );
 		vBillboardSet->setDefaultDimensions( 4, 1 );
 		vBillboardSet->setPointRenderingEnabled( false );
@@ -49,7 +58,7 @@ cWaveform::cWaveform()
 		for ( size_t i=0; i<mNumParts; i++ )
 		{
 			Ogre::Billboard *vBillboard = mBillboardSet[b]->createBillboard( (int)i, 0, 0 );
-			float vHeight = ( sinf( i * 0.14f ) * 5.0f + 5.0f + Ogre::Math::RangeRandom( 0.5f, 5 ) ) * 2.0f;
+			float vHeight = ( sinf( i * mFrequency ) * 5.0f + 5.0f + Ogre::Math::RangeRandom( 0.5f, 5 ) ) * 2.0f;
 			vBillboard->setDimensions( 1, vHeight );
 			mHeights[i] = vHeight;
 			mTargetHeights[i] = Ogre::Math::RangeRandom( 0.5f, 15.0f );
@@ -78,7 +87,7 @@ void cWaveform::Update( void )
 	{
 		Ogre::Billboard *vBillboard = mBillboardSet[0]->getBillboard(i);
 		Ogre::Vector3 vPos = vBillboard->getPosition();
-		vPos.x -= -1.0f * vEllapsed;
+		vPos.x -= -mSpeed * vEllapsed;
 		vBillboard->setPosition( vPos );
 		if ( vPos.x < vMinX ) vMinX = vPos.x;
 	}
@@ -91,7 +100,7 @@ void cWaveform::Update( void )
 		{
 			vPos.x = vMinX - 1;
 			vMinX = vPos.x;
-			float vHeight = ( sinf( mNumParts + vTime * 0.001f * 0.14f ) * 5.0f + 5.0f + Ogre::Math::RangeRandom( 0.5f, 5 ) ) * 2.0f;
+			float vHeight = ( sinf( mNumParts + vTime * 0.001f * mFrequency ) * 5.0f + 5.0f + Ogre::Math::RangeRandom( 0.5f, 5 ) ) * 2.0f;
 			vBillboard->setDimensions( 1, vHeight );
 			mHeights[i] = vHeight;
 		}
@@ -108,7 +117,7 @@ void cWaveform::Update( void )
 		float vDiff = mTargetHeights[i] - vHeight;
 		float vInertia = mInertia;
 		if ( vInertia > 1 ) vInertia = 1;
-		vInertia *= 0.998f;
+		vInertia *= mInertiaDamping;
 		float vAlpha = 1 - powf( 1 - vInertia, vEllapsed );
 		vHeight = vHeight + vDiff * vAlpha;
 		for ( size_t b=0; b<2; b++ )
@@ -119,7 +128,7 @@ void cWaveform::Update( void )
 		}
 	}
 
-	mMockInput *= powf( 0.001f, vEllapsed );
+	mMockInput *= powf( mMockDamping, vEllapsed );
 	mInertia -= vEllapsed * 10;
 	if ( mInertia < 0 ) mInertia = 0;
 //	if ( mMockInput > 0.1f && mInertia < 0.1f && Ogre::Math::RangeRandom( 0, 1 ) < 0.1f )

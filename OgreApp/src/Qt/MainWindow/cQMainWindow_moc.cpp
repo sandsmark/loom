@@ -1,8 +1,8 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'cQMainWindow.h'
 **
-** Created: Thu 18. Nov 10:02:55 2010
-**      by: The Qt Meta Object Compiler version 62 (Qt 4.7.0)
+** Created: Sat Nov 27 00:21:48 2010
+**      by: The Qt Meta Object Compiler version 62 (Qt 4.6.3)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -11,7 +11,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'cQMainWindow.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 62
-#error "This file was generated using the moc from 4.7.0. It"
+#error "This file was generated using the moc from 4.6.3. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -20,10 +20,10 @@ QT_BEGIN_MOC_NAMESPACE
 static const uint qt_meta_data_cQMainWindow[] = {
 
  // content:
-       5,       // revision
+       4,       // revision
        0,       // classname
        0,    0, // classinfo
-       6,   14, // methods
+       7,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -37,6 +37,7 @@ static const uint qt_meta_data_cQMainWindow[] = {
       59,   13,   13,   13, 0x0a,
       72,   13,   13,   13, 0x0a,
       83,   13,   13,   13, 0x0a,
+      98,   13,   13,   13, 0x0a,
 
        0        // eod
 };
@@ -44,7 +45,7 @@ static const uint qt_meta_data_cQMainWindow[] = {
 static const char qt_meta_stringdata_cQMainWindow[] = {
     "cQMainWindow\0\0OnSetBgColour()\0"
     "OnCreateBox()\0OnMoveCamera()\0OnMoveBox0()\0"
-    "OnIkTest()\0OnTestScript()\0"
+    "OnIkTest()\0OnTestScript()\0OnTestSerializer()\0"
 };
 
 const QMetaObject cQMainWindow::staticMetaObject = {
@@ -82,9 +83,10 @@ int cQMainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 3: OnMoveBox0(); break;
         case 4: OnIkTest(); break;
         case 5: OnTestScript(); break;
+        case 6: OnTestSerializer(); break;
         default: ;
         }
-        _id -= 6;
+        _id -= 7;
     }
     return _id;
 }

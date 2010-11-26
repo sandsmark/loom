@@ -37,6 +37,7 @@ public:
 		void OnMoveBox0();
 		void OnIkTest();
 		void OnTestScript();
+		void OnTestSerializer();
 };
 
 END_NAMESPACE()

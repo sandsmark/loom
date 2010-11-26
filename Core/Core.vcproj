@@ -314,6 +314,54 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="RTTI"
+				>
+				<File
+					RelativePath=".\src\RTTI\cClass.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\RTTI\cClass.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\RTTI\cClassRegistry.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\RTTI\cClassRegistry.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\RTTI\cObject.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\RTTI\cProperty.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\RTTI\IObject.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Serializer"
+				>
+				<File
+					RelativePath=".\src\Serializer\cSerializerXML.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Serializer\cSerializerXML.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Serializer\ISerializer.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"

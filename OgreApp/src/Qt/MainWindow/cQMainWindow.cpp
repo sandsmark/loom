@@ -1,8 +1,11 @@
 #include <OgreApp/Qt/MainWindow/cQMainWindow.h>
 #include <OgreApp/Qt/Ogre/cQScene.h>
 #include <OgreApp/Qt/Ogre/Event/cOgreResponders.h>
+#include <Core/Serializer/cSerializerXML.h>
+#include <fstream>
 
 using namespace Loom::OgreApp;
+using Loom::Core::cSerializerXML;
 
 /************************************************************************/
 cQMainWindow::cQMainWindow()
@@ -25,6 +28,7 @@ cQMainWindow::cQMainWindow()
 	vFileMenu->addAction( "Move Box0", this, SLOT( OnMoveBox0() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_4 ) );
 	vFileMenu->addAction( "IK test", this, SLOT( OnIkTest() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_5 ) );
 	vFileMenu->addAction( "Test Script", this, SLOT( OnTestScript() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_6 ) );
+	vFileMenu->addAction( "Test Serializer", this, SLOT( OnTestSerializer() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_7 ) );
 
 	// Subscribe for Ogre messages
 	cOgreResponderSetBGColour::Get().AddListener( *mScene );
@@ -182,4 +186,14 @@ void Loom::OgreApp::cQMainWindow::OnTestScript()
 //	cDispatcherHub::Get().Dispatch( _T("Scripting::cScriptingResponderRunScript"), vIParam );
 	cDispatcherHub::Get().Dispatch( _T("Scripting::cScriptingResponderRunNative"), vIParam );
 //	cDispatcherHub::Get().Dispatch( _T("Scripting::cScriptingResponderRunDll"), vIParam );
+}
+
+/************************************************************************/
+void Loom::OgreApp::cQMainWindow::OnTestSerializer()
+/************************************************************************/
+{
+	QFileDialog vFile;
+	std::wfstream *vStream = new std::wfstream( vFile.getOpenFileName().toLocal8Bit() );
+	cSerializerXML *vSerializer = new cSerializerXML( *vStream );
+	vSerializer->Deserialize();
 }

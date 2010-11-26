@@ -36,6 +36,16 @@ public:
 
 		return *this;
 	}
+
+	bool operator ==( const cString &iOther ) const
+	{
+		return ( _tcscmp( mData, iOther.mData ) == 0 );
+	}
+
+	bool operator !=( const cString &iOther ) const
+	{
+		return ( _tcscmp( mData, iOther.mData ) != 0 );
+	}
 };
 
 END_NAMESPACE()

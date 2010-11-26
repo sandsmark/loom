@@ -12,3 +12,6 @@
 #include <Core/Debug/cDebug.h>
 #include <Core/Debug/Logger/cLogger.h>
 #include <Core/Datatype/cAutoPtr.h>
+#include <Core/RTTI/cClass.h>
+#include <Core/RTTI/cObject.h>
+#include <Core/RTTI/cClassRegistry.h>

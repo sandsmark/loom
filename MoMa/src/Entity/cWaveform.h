@@ -5,6 +5,7 @@
 
 using Loom::OgreApp::IOgreListenerEvent;
 using Loom::Core::cAutoPtr;
+using Loom::Core::cObject;
 
 namespace Ogre
 {
@@ -13,7 +14,7 @@ namespace Ogre
 
 BEGIN_NAMESPACE( MoMa )
 
-class cWaveform : public IOgreListenerEvent
+class cWaveform : public IOgreListenerEvent, public cObject<cWaveform>
 {
 protected:
 	Ogre::BillboardSet *mBillboardSet[2];
@@ -23,9 +24,14 @@ protected:
 	size_t mFirstPart;
 	cAutoPtr<float> mHeights;
 	cAutoPtr<float> mTargetHeights;
-	float mInertia;
-
 	float mMockInput;
+
+public:
+	float mInertia;
+	float mFrequency;
+	float mSpeed;
+	float mInertiaDamping;
+	float mMockDamping;
 
 public:
 	cWaveform();

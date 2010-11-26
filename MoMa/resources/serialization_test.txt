@@ -1,0 +1,6 @@
+Loom::MoMa::cWaveform:
+	mInertia=0.1
+	mFrequency=0.14
+	mSpeed=1
+	mInertiaDamping=0.998
+	mMockDamping=0.001
