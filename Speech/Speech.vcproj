@@ -67,7 +67,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="PitchTracker_d.lib SpeechPitchIntegrator_d.lib"
+				AdditionalDependencies="PitchTracker.lib SpeechPitchIntegrator.lib"
 				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="dependencies/win32/PitchTracker"
@@ -97,7 +97,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy bin\Speech_d.dll ..\Weaver\bin\modules&#x0D;&#x0A;copy bin\Speech_d.pdb ..\Weaver\bin\modules&#x0D;&#x0A;"
+				CommandLine="copy bin\Speech_d.dll ..\Weaver\bin\modules&#x0D;&#x0A;copy bin\Speech_d.pdb ..\Weaver\bin\modules&#x0D;&#x0A;copy dependencies\win32\PitchTracker\SpeechPitchIntegrator.dll ..\Weaver\bin&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
