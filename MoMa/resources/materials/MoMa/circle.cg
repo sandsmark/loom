@@ -1,7 +1,7 @@
 sampler2D mTexture : TEXUNIT0;
 uniform float mTime;
 
-void main( float4 iPosition : POSITION, float2 iTexCoord : TEXCOORD,
+void main( float4 iPosition : POSITION, float2 iTexCoord : TEXCOORD, float4 iColor : COLOR,
 						  out float4 oPosition : POSITION,
 						  out float4 oColour   : COLOR,
 						  out float2 oTexCoord : TEXCOORD,
@@ -34,7 +34,8 @@ void main( float4 iPosition : POSITION, float2 iTexCoord : TEXCOORD,
     oTexCoord = iTexCoord.yx;
 //    oColour = frac( vWorldPos );
 	float vAlpha = sin( vTime * 1.37f ) * 0.5f + 0.5f;
-	oColour = float4( 1, 1, 1, vAlpha );
+//	oColour = float4( 1, 1, 1, vAlpha );
+	oColour = float4( iColor.rgb, vAlpha );
 }
 
 float4 mainFP( float4 iColor : COLOR, float2 iTexCoord : TEXCOORD, uniform float mDeform ) : COLOR

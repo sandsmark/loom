@@ -10,10 +10,15 @@
 #include <MoMa/Entity/cCircle.h>
 #include <MoMa/Entity/cWaveform.h>
 #include <OgreApp/Module/cModuleOgreApp.h>
+#include <Core/Serializer/cSerializerXML.h>
+#include <MoMa/Entity/cSpew.h>
+#include <strsafe.h>
+#include <sstream>
 
 using Loom::Core::cLogger;
 using Loom::Core::cDispatcherHub;
 using Loom::OgreApp::cModuleOgreApp;
+using Loom::Core::cSerializerXML;
 
 using namespace Loom::MoMa;
 
@@ -49,8 +54,8 @@ void cModuleMoMa::Init( void )
 	vCreature = vPrototype->CreateInstance( Ogre::Vector3(   0, -20,   0 ) );
 	vCreature;
 
-	cWaveform *vWaveform = new cWaveform();
-	vWaveform;
+//	cWaveform *vWaveform = new cWaveform();
+//	vWaveform;
 
 	cPCircle *vPCircle = new cPCircle();
 	for ( int i=0; i<6; i++ )
@@ -58,6 +63,31 @@ void cModuleMoMa::Init( void )
 		cCircle *vCircle = vPCircle->CreateInstance();
 		vCircle;
 	}
+
+	new cSpew( Ogre::Vector3( 25, 9, 100 ), Ogre::Vector3( 4, 0, 0 ) );
+	cSpew *vSpew = new cSpew( Ogre::Vector3( -25, 9, 100 ), Ogre::Vector3( -1, -4, 0 ) );
+	vSpew->mTurbulenceStrength = 4;
+
+	/*
+	cArray<cSpew::sNode> &vPoints = vSpew->mPoints;
+	for ( int i=0; i<40; i++ )
+	{
+		cSpew::sNode vNode;
+		vNode.Position = Ogre::Vector3( i, 0, 0 );
+		vNode.PrevLength = 1;
+		vNode.NextLength = 1;
+		vNode.Length = i;
+//		vNode.Velocity = Ogre::Vector3( Ogre::Math::RangeRandom( -1, 1 ), Ogre::Math::RangeRandom( -1, 1 ), Ogre::Math::RangeRandom( -1, 1 ) ) * 10;
+//		vNode.Velocity = Ogre::Vector3( 0, 0, 0 );
+		vNode.Velocity = Ogre::Vector3( Ogre::Math::RangeRandom( -1, 1 ), Ogre::Math::RangeRandom( -1, 1 ), 0 ) * 1;
+		if ( i == 10 )
+		{
+//			vNode.Velocity *= 10;
+			vNode.Velocity = Ogre::Vector3( 0, 1, 0 ) * 50;
+		}
+		vPoints.Add( vNode );
+	}
+	*/
 	
 	mInitialized = true;
 }

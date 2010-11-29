@@ -1,0 +1,36 @@
+sampler2D mTexture : TEXUNIT0;
+
+void main( float4 iPosition : POSITION0, float4 iDirection : TEXCOORD1, float4 iTex : TEXCOORD0,
+						  
+						  out float4 oPosition : POSITION,
+                          out float3 oTex      : TEXCOORD,
+
+						  uniform float4x4 mWorld,
+						  uniform float4x4 mView,
+						  uniform float4x4 mProj
+                        )
+{
+    oTex = iTex;
+    
+    float4 vWorldPos = mul( mWorld, iPosition );
+    float4 vViewPos  = mul( mView , vWorldPos );
+    
+    float3 vWorldDir = mul( mWorld, float4( iDirection.xyz, 0 ) ).xyz;
+    float3 vViewDir  = mul( mView , float4( vWorldDir, 0 ) ).xyz;
+    
+    float3 vViewNormal = normalize( cross( vViewDir, float3( 0, 0, -1 ) ) );
+    vViewPos.xyz += vViewNormal * ( iTex.y - 0.5f ) * 2 * iTex.z;
+//	vViewPos.y += ( iTex.y - 0.5f ) * 2 * 5;
+    
+	float4 vProjPos  = mul( mProj , vViewPos  );
+
+	oPosition = vProjPos;	
+	oTex = iTex.xyw;
+}
+
+float4 mainFP( float3 iTexCoord : TEXCOORD ) : COLOR
+{
+	float4 vColor = tex2D( mTexture, iTexCoord.xy );
+	vColor.a *= iTexCoord.z;
+    return vColor;
+}

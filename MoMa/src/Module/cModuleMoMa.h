@@ -2,6 +2,7 @@
 
 #include <Core/Module/IModule.h>
 using Loom::Core::IModule;
+using Loom::Core::cObject;
 
 #include <windows.h>
 

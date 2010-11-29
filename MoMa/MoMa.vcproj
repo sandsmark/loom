@@ -252,6 +252,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\Entity\cSpew.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Entity\cSpew.h"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Entity\cWaveform.cpp"
 					>
 				</File>
@@ -290,6 +298,10 @@
 					</File>
 					<File
 						RelativePath=".\resources\materials\MoMa\circle.cg"
+						>
+					</File>
+					<File
+						RelativePath=".\resources\materials\MoMa\spew.cg"
 						>
 					</File>
 					<File

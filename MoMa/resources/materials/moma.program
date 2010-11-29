@@ -55,7 +55,6 @@ vertex_program MoMa/CircleVP cg
 		param_named_auto mView VIEW_MATRIX
 		param_named_auto mProj PROJECTION_MATRIX
 		param_named_auto mTime time
-		param_named mPerturbance float 4.0
 	}	
 }
 
@@ -70,3 +69,24 @@ fragment_program MoMa/CircleFP cg
 //		param_named mDeform float 0.0
 	}
 }
+
+vertex_program MoMa/Spew cg
+{
+	source MoMa/spew.cg
+	entry_point main
+	profiles vp40 vp30 vs_3_0 vs_2_0 arbvp1
+
+	default_params
+	{
+		param_named_auto mWorld WORLD_MATRIX
+		param_named_auto mView VIEW_MATRIX
+		param_named_auto mProj PROJECTION_MATRIX
+	}	
+}
+
+fragment_program MoMa/SpewFP cg
+{
+	source MoMa/spew.cg
+	entry_point mainFP
+	profiles ps_2_0 arbfp1
+} 
