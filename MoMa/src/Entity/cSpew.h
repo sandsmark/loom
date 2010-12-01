@@ -38,6 +38,8 @@ protected:
 	Ogre::Vector3 mVelocity;
 	bool mEmitting;
 
+	DWORD mLastUpdate;
+
 	static int mId;
 
 	void CreateLines( void );
@@ -57,9 +59,12 @@ public:
 	// IOgreListenerEvent methods
 	virtual void OnRender( void );
 
+	// Tweak these!
 	float mDecay;
 	float mSpringStrength;
 	float mTurbulenceStrength;
+	float mTurbulenceScroll;
+	float mTurbulenceScale;
 };
 
 END_NAMESPACE()

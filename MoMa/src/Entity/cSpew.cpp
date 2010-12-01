@@ -25,7 +25,8 @@ int cSpew::mId = 0;
 /************************************************************************/
 cSpew::cSpew( const Ogre::Vector3 &iOrigin, const Ogre::Vector3 &iVelocity )
 : mOrigin( iOrigin ), mVelocity( iVelocity ), mEmitting( true )
-, mDecay( 1.0f ), mSpringStrength( 0.4f ), mTurbulenceStrength( 1 )
+, mDecay( 1.0f ), mSpringStrength( 0.4f ), mTurbulenceStrength( 3 )
+, mTurbulenceScroll( 0.001f ), mTurbulenceScale( 128.0f )
 /************************************************************************/
 {
 	CreateLines();
@@ -38,6 +39,8 @@ cSpew::cSpew( const Ogre::Vector3 &iOrigin, const Ogre::Vector3 &iVelocity )
 	mPoints.Add( vNode );
 
 	cOgreResponderOnRender::Get().AddListener( *this );
+
+	mLastUpdate = GetTickCount();
 }
 
 /************************************************************************/
@@ -110,6 +113,7 @@ void cSpew::Draw( void )
 		float vAlpha = mPoints[i].Time;
 		if ( vAlpha < 0 ) vAlpha = 0;
 		if ( vAlpha > 1 ) vAlpha = 1;
+		vAlpha = 1;
 
 		float vWidth = 2;
 		float vLength = mPoints[i].Length * ( 48.0f / 716.0f ) / vWidth / 2.0f;
@@ -164,8 +168,6 @@ void cSpew::OnRender( void )
 void cSpew::Update( void )
 /************************************************************************/
 {
-	static DWORD mLastUpdate = GetTickCount();
-
 	DWORD vTime = GetTickCount();
 	float vEllapsed = ( vTime - mLastUpdate ) * 0.001f;
 	mLastUpdate = vTime;
@@ -311,22 +313,18 @@ Ogre::Vector2 cSpew::GetNoise( int iX, int iY, int iSeed )
 Ogre::Vector3 cSpew::GetTurbulence( const Ogre::Vector3 &iPosition, float iPersistence )
 /************************************************************************/
 {	// Simple 2D perlin noise with 2 components
-	static DWORD mLastUpdate = GetTickCount();
-	static float mTick = 0;
-
 	DWORD vTime = GetTickCount();
 	float vEllapsed = ( vTime - mLastUpdate ) * 0.001f;
 	mLastUpdate = vTime;
-	mTick += vEllapsed * 0.1f;
 
 	Ogre::Vector3 vResult( 0, 0, 0 );
 	float vStrength = 1;
 	for ( int l=7; l-->0; )
 	{
 		int vPower = 1<<l;
-		Ogre::Vector3 vPos = iPosition * 128.0f / (float)vPower;
-		vPos.x += mTick;
-		vPos.y += mTick;
+		Ogre::Vector3 vPos = iPosition * mTurbulenceScale / (float)vPower;
+		vPos.x += vEllapsed * mTurbulenceScroll;
+		vPos.y += vEllapsed * mTurbulenceScroll;
 		int vX = (int)vPos.x;
 		int vY = (int)vPos.y;
 		Ogre::Vector2 tl = GetNoise( vX    , vY    , l ); 
