@@ -268,6 +268,30 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Controller"
+				>
+				<File
+					RelativePath=".\src\Controller\cController.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Controller\cController.h"
+					>
+				</File>
+				<Filter
+					Name="Event"
+					>
+					<File
+						RelativePath=".\src\Controller\Event\IControllerEvent.h"
+						>
+					</File>
+					<Filter
+						Name="Responders"
+						>
+					</Filter>
+				</Filter>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"

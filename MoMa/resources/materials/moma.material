@@ -37,7 +37,7 @@ material MoMa.Creature.1
 			param_named mPerturbance float 1
         }
         
-        fragment_program_ref MoMa/BasicFP
+        fragment_program_ref MoMa/EyeFP
         {
 			param_named mDeform float 1.0
         }
@@ -46,6 +46,7 @@ material MoMa.Creature.1
       {
         texture eye.png
         filtering trilinear
+        tex_address_mode clamp;
       }
       
       scene_blend src_alpha one_minus_src_alpha

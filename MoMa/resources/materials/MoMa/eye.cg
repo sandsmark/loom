@@ -1,0 +1,96 @@
+sampler2D mTexture : TEXUNIT0;
+uniform float mTime;
+
+void main( float4 iPosition : POSITION, float2 iTexCoord : TEXCOORD, float4 iColour : COLOR,
+						  out float4 oPosition : POSITION,
+						  out float4 oColour   : COLOR,
+						  out float2 oTexCoord : TEXCOORD,
+						  
+							uniform float4x4 mWorld,
+							uniform float4x4 mView,
+							uniform float4x4 mProj,
+							uniform float mPerturbance
+						  )
+{
+    float4 vWorldPos  = mul( mWorld, iPosition );
+    float4 vViewPos   = mul( mView , vWorldPos );
+    float4 vScreenPos = mul( mProj , vViewPos );
+    
+    float vTime = mTime + iColour.a * 6.28f;
+    
+//    vScreenPos.x += sin( vTime + vScreenPos.y + vScreenPos.x ) * cos( vTime * 1.43f + vScreenPos.y * 0.79f + vScreenPos.x * 1.44f ) * 4;
+    vScreenPos.x += sin( vTime + vScreenPos.y + vScreenPos.x ) * cos( vTime * 1.43f + vScreenPos.y * 0.79f + vScreenPos.x * 1.44f ) * mPerturbance;
+    
+    oPosition = vScreenPos;
+    oTexCoord = iTexCoord;
+    oColour = iColour; //frac( vWorldPos );
+}
+
+float4 mainFP( float4 iColor : COLOR, float2 iTexCoord : TEXCOORD, uniform float mDeform ) : COLOR
+//float4 mainFP( float4 iColor : COLOR ) : COLOR
+{
+//	return float4( iTexCoord, 0, 0 );
+//	return float4( 1, 0, 0, 1 );
+
+	/*
+    float vTime = mTime * iColor.b + iColor.a * 6.28f;
+    
+	float2 vCenter = float2( sin( vTime ), cos( vTime ) * 1.737f );
+	vCenter *= 0.5f;
+	vCenter *= 0.1f;
+	vCenter += 0.5f;
+	*/
+	
+	/*
+	float2 vCenter = iColor.xy - 0.5f;
+//	vCenter *= 0.1f;
+	vCenter += 0.5f;
+	
+	float2 vDiff = vCenter - iTexCoord;
+	float vMaxRange = 1;
+	float vStrength = length( vDiff ) / vMaxRange;
+	vStrength = 1 - min( vStrength, 1 );
+	vStrength *= 0.5f;
+	vStrength = pow( vStrength, 0.5f );
+	vStrength *= mDeform;
+	iTexCoord += vDiff * vStrength; 	
+	*/
+	
+	float3 vSphere = float3( iTexCoord * 2 - 1, 0 );
+	float vSum = ( vSphere.x * vSphere.x + vSphere.y * vSphere.y );
+	if ( vSum > 1 ) return float4( 0, 0, 0, 0 );
+	
+	vSphere.z = sqrt( 1 - vSum );
+	vSphere = normalize( vSphere );
+	
+	float2 vOffset = iColor.xy * 2 - 1;
+	
+	float2 vTex;
+	vTex.x = ( atan2( vSphere.z, vSphere.x ) + 1.57f ) / 6.28f + vOffset.x * 0.25f;
+	vTex.y = ( atan2( vSphere.y, vSphere.z ) + 3.14f ) / 6.28f + vOffset.y * 0.25f;
+//	vTex = vTex * 0.5f + 0.5f;
+//	vTex.x = asin( iTexCoord.x * 2 - 1 ) / 3.1415926535f + 0.5f;
+//	vTex.y = asin( iTexCoord.y * 2 - 1 ) / 3.1415926535f + 0.5f;
+
+	vTex = vTex - 0.5f;
+	vTex *= 3;
+	vTex += 0.5f;
+	
+	vTex.x = cos( vOffset.x ) * vSphere.x + sin( vOffset.x ) * vSphere.z;
+	vTex.y = cos( vOffset.y ) * vSphere.y + sin( vOffset.y ) * vSphere.z;
+
+	float z1 = cos( vOffset.x ) * vSphere.z - sin( vOffset.x ) * vSphere.x;
+	float z2 = cos( vOffset.y ) * z1 - sin( vOffset.y ) * vSphere.y;
+
+	if ( z2 < 0.02f ) return float4( 0, 0, 0, 0 );
+	
+	vTex *= 1.1f;
+	vTex = vTex * 0.5f + 0.5f;
+	
+	float4 vResult = tex2D( mTexture, vTex );
+//	vResult.a *= ( z2 + 1 ) * 0.5f;
+	
+//	vResult = float4( vTex, 0, 1 );
+	
+    return vResult;
+} 

@@ -27,6 +27,18 @@ fragment_program MoMa/BasicFP cg
 	}
 }
 
+fragment_program MoMa/EyeFP cg
+{
+	source MoMa/eye.cg
+	entry_point mainFP
+	profiles ps_2_0 arbfp1 
+	default_params
+	{
+		param_named_auto mTime time
+		param_named mDeform float 0.0
+	}
+}
+
 vertex_program MoMa/WaveformVP cg
 {
 	source MoMa/waveform.cg

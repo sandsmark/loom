@@ -16,7 +16,7 @@ using Loom::Core::cModuleManager;
 
 /************************************************************************/
 cPCreature::cPCreature()
-: mNumParts( 50 )
+: mNumParts( 100 )
 /************************************************************************/
 {
 	cModuleOgreApp *vOgre = (cModuleOgreApp*)cModuleManager::Get().GetModule( _T("OgreApp") );
