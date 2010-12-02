@@ -98,7 +98,7 @@ DWORD cController::StartThread( LPVOID iParam )
 void Loom::MoMa::cController::CreateWaveform()
 /************************************************************************/
 {
-	// TODO
+	new cWaveform();
 }
 
 /************************************************************************/
