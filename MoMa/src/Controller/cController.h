@@ -2,7 +2,7 @@
 
 #include <windows.h>
 #include <Speech/Event/ISpeechListenerEvent.h>
-
+#include <Speech/Event/cSpeechResponders.h>
 using Loom::Speech::ISpeechListenerEvent;
 
 BEGIN_NAMESPACE( MoMa )
