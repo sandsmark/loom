@@ -70,7 +70,8 @@ bin\junction.exe include\Config    Config\src      >nul
 bin\junction.exe include\Core      Core\src        >nul
 bin\junction.exe include\MoMa      MoMa\src        >nul
 bin\junction.exe include\Network   Network\src     >nul
-bin\junction.exe include\mBrane    mBrane\src     >nul
+bin\junction.exe include\Psyclone  Psyclone\src    >nul
+bin\junction.exe include\mBrane    mBrane\src      >nul
 bin\junction.exe include\Scripting Scripting\src   >nul
 bin\junction.exe include\Speech    Speech\src      >nul
 bin\junction.exe include\OgreApp   OgreApp\src     >nul
