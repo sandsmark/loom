@@ -53,6 +53,8 @@ public:	// TODO: For test only
 public:
 	cSpew( const Ogre::Vector3 &iOrigin, const Ogre::Vector3 &iVelocity );
 
+	void Init( void );
+
 	void Update( void );
 	void StopEmitting( void );
 

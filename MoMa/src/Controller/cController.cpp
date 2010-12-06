@@ -139,14 +139,12 @@ void Loom::MoMa::cController::CreateCreatures()
 void Loom::MoMa::cController::OnHeard( const std::wstring &text )
 /************************************************************************/
 {
-	/*
 	cSpew *bSpew = new cSpew( Ogre::Vector3( 25, 9, 100 ), Ogre::Vector3( 10, 0, -10 ) );	
 	bSpew->mTurbulenceStrength = 25;
 	bSpew->mDecay = 10;
 	bSpew->mSpringStrength = 10;
 	bSpew->mTurbulenceScale = 10;
 	bSpew->mTurbulenceScroll = 10;
-	*/
 }
 
 /************************************************************************/
@@ -157,7 +155,7 @@ void Loom::MoMa::cController::Destroy( void )
 	{
 		SAFE_DELETE( mCreatures[i] );
 	}
-	}
+}
 
 /************************************************************************/
 void Loom::MoMa::cController::Update( void )

@@ -24,9 +24,16 @@ int cSpew::mId = 0;
 
 /************************************************************************/
 cSpew::cSpew( const Ogre::Vector3 &iOrigin, const Ogre::Vector3 &iVelocity )
-: mOrigin( iOrigin ), mVelocity( iVelocity ), mEmitting( true )
+: mLines( NULL ), mOrigin( iOrigin ), mVelocity( iVelocity ), mEmitting( true )
 , mDecay( 1.0f ), mSpringStrength( 0.4f ), mTurbulenceStrength( 3 )
 , mTurbulenceScroll( 0.001f ), mTurbulenceScale( 128.0f )
+/************************************************************************/
+{
+	cOgreResponderOnRender::Get().AddListener( *this );
+}
+
+/************************************************************************/
+void cSpew::Init( void )
 /************************************************************************/
 {
 	CreateLines();
@@ -37,8 +44,6 @@ cSpew::cSpew( const Ogre::Vector3 &iOrigin, const Ogre::Vector3 &iVelocity )
 	vNode.Velocity = mVelocity;
 	vNode.Time = -1;
 	mPoints.Add( vNode );
-
-	cOgreResponderOnRender::Get().AddListener( *this );
 
 	mLastUpdate = GetTickCount();
 }
@@ -158,6 +163,11 @@ void cSpew::Draw( void )
 void cSpew::OnRender( void )
 /************************************************************************/
 {
+	if ( mLines.isNull() )
+	{
+		Init();
+	}
+
 	Update();
 	Draw();
 
