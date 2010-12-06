@@ -24,7 +24,7 @@ void cModuleSpeech::Init( void )
 /************************************************************************/
 {
 	mInitialized = true;
-	SpeechPitchIntegrator::StartSpeechPitchIntegrator();
+//	SpeechPitchIntegrator::StartSpeechPitchIntegrator();
 
 	cLogger &vLogger = cLogger::Get();
 	vLogger.Log( cLogger::LOG_INFO, _T( "Global" ), _T( "cModuleSpeech startup" ) );
