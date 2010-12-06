@@ -40,7 +40,6 @@ void cModulePsyclone::Init( void )
 		printf("Could not connect to Psyclone...\n");
 		delete(plug);
 		plug = NULL;
-		return;
 	}
 
 	mThread = CreateThread( NULL, 0, StartThread, this, 0, NULL );
