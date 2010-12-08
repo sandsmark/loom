@@ -44,7 +44,9 @@ void cController::Init( void )
 	vParam.Colour.r = vParam.Colour.g = vParam.Colour.b = vParam.Colour.a = 0;
 	cDispatcherHub::IParam vIParam( (void*)&vParam );
 	cDispatcherHub::Get().Dispatch( _T("Ogre::cOgreResponderSetBGColour"), vIParam );
-	Speech::cSpeechResponderHeard::Get().AddListener( *this );
+	// Events
+	Psyclone::cPsycloneSpeechOn::Get().AddListener( *this );
+//	Speech::cSpeechResponderSay::Get().AddListener( *this );
 	// Create stuff
 	CreateCircles();
 	CreateWaveform();
@@ -78,7 +80,7 @@ void cController::Init( void )
 	hSpew->mSpringStrength = 1;
 	cSpew *iSpew = new cSpew( Ogre::Vector3( 25, 20, 100 ), Ogre::Vector3( 8, -4, 5 ) );
 		iSpew->mTurbulenceStrength = 4;
-		*/
+		
 
 	cSpew *bSpew = new cSpew( Ogre::Vector3( 25, 9, 100 ), Ogre::Vector3( 10, 0, -10 ) );	
 	bSpew->mTurbulenceStrength = 25;
@@ -86,7 +88,7 @@ void cController::Init( void )
 	bSpew->mSpringStrength = 10;
 	bSpew->mTurbulenceScale = 10;
 	bSpew->mTurbulenceScroll = 10;
-
+*/
 	mThread = CreateThread( NULL, 0, StartThread, this, 0, NULL );
 }
 
@@ -94,6 +96,7 @@ void cController::Init( void )
 DWORD cController::StartThread( LPVOID iParam )
 /************************************************************************/
 {
+	srand ( time(NULL) );
 	cController *vController = (cController*)iParam;
 	while ( true )
 	{
@@ -136,16 +139,30 @@ void Loom::MoMa::cController::CreateCreatures()
 }
 
 /************************************************************************/
-void Loom::MoMa::cController::OnHeard( const std::wstring &text )
+void Loom::MoMa::cController::OnSpeechOn( const std::wstring &text )
 /************************************************************************/
 {
-	cSpew *bSpew = new cSpew( Ogre::Vector3( 25, 9, 100 ), Ogre::Vector3( 10, 0, -10 ) );	
-	bSpew->mTurbulenceStrength = 25;
-	bSpew->mDecay = 10;
-	bSpew->mSpringStrength = 10;
-	bSpew->mTurbulenceScale = 10;
-	bSpew->mTurbulenceScroll = 10;
+	
+	int x = rand() % 20 - 10;
+	int z = rand() % 20 - 10;
+	int a = rand() % 20;
+	int b = rand() % 20;
+	int c = rand() % 20;
+	WCHAR character = text[text.size()-1];
+	Ogre::Vector3 location = Ogre::Vector3( 25, 9, 100 );
+	if (character == '2')
+		location = Ogre::Vector3( 0, -25, 0 );
+	else if (character == '3')
+		location = Ogre::Vector3( -45, -9, 50 );
+	cSpew *bSpew = new cSpew( location, Ogre::Vector3( x, 0, z ) );	
+	bSpew->mTurbulenceStrength = 5;
+	bSpew->mDecay = 5;
+	bSpew->mSpringStrength = a;
+	bSpew->mTurbulenceScale = b;
+	bSpew->mTurbulenceScroll = c;
+	
 }
+
 
 /************************************************************************/
 void Loom::MoMa::cController::Destroy( void )

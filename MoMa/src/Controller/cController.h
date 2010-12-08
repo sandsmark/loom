@@ -1,15 +1,16 @@
 #pragma once
 
 #include <windows.h>
-#include <Speech/Event/ISpeechListenerEvent.h>
-#include <Speech/Event/cSpeechResponders.h>
-using Loom::Speech::ISpeechListenerEvent;
+#include <Psyclone\Event\IPsycloneSpeechOnEvent.h>
+#include <Psyclone\Event\Responders\cPsycloneSpeechOn.h>
+using Loom::Psyclone::IPsycloneSpeechOnEvent;
+//using Loom::Speech::ISpeechEvent;
 
 BEGIN_NAMESPACE( MoMa )
 
 class cCreature;
 
-class cController : public ISpeechListenerEvent
+class cController : public IPsycloneSpeechOnEvent
 {
 protected:
 	HANDLE mThread;
@@ -34,7 +35,7 @@ public:
 	void Run( void );
 
 	// ISpeechListenerEvent
-	virtual void OnHeard( const std::wstring &text );
+	virtual void OnSpeechOn( const std::wstring &text );	
 };
 
 END_NAMESPACE()
