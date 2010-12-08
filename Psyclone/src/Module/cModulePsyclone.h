@@ -3,6 +3,7 @@
 #include "CppAIRPlug.h"
 #include <Core/Module/IModule.h>
 #include <Speech/Event/cSpeechResponders.h>
+#include <Psyclone/Event/cPsycloneResponders.h>
 using Loom::Core::IModule;
 
 #include <windows.h>
@@ -11,7 +12,7 @@ using	namespace	cmlabs;
 
 BEGIN_NAMESPACE( Psyclone )
 
-class PSYCLONE_API cModulePsyclone : public IModule, public Speech::ISpeechListenerEvent
+class PSYCLONE_API cModulePsyclone : public IModule, public Speech::ISpeechListenerEvent, public Psyclone::cPsycloneSpeechOn
 {
 protected:
 	HANDLE mThread;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="Psyclone"
 	ProjectGUID="{CDB168B9-42D6-4413-8055-31E2B542CAF0}"
 	RootNamespace="Psyclone"
@@ -219,6 +219,30 @@
 					RelativePath=".\src\Module\cModulePsyclone.h"
 					>
 				</File>
+			</Filter>
+			<Filter
+				Name="Event"
+				>
+				<File
+					RelativePath=".\src\Event\cPsycloneResponders.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Event\IPsycloneSpeechOnEvent.h"
+					>
+				</File>
+				<Filter
+					Name="Responders"
+					>
+					<File
+						RelativePath=".\src\Event\Responders\cPsycloneSpeechOn.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Event\Responders\IPsycloneSpeechOnResponder.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter
