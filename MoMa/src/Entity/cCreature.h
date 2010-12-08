@@ -28,10 +28,14 @@ protected:
 	Ogre::Vector3 mEyeTarget;
 	unsigned long mLastUpdate;
 
+	float mDistortionStrength;
+	float mDistortionTarget;
+
 public:
 	cCreature( cPCreature *iProto, const Ogre::Vector3 &iPosition );
 
 	void RotateEye( float iYaw, float iPitch );
+	void SetDistortionStrength( float iStrength );
 
 	// IOgreListenerEvent methods
 	virtual void OnRender( void );

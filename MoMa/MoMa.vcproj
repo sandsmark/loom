@@ -325,6 +325,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\resources\materials\MoMa\eye.cg"
+						>
+					</File>
+					<File
 						RelativePath=".\resources\materials\MoMa\spew.cg"
 						>
 					</File>

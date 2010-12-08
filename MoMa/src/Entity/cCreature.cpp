@@ -94,10 +94,12 @@ cCreature::cCreature( cPCreature *iProto, const Ogre::Vector3 &iPosition )
 		Ogre::Vector3 vPosition = iPosition + Ogre::Vector3( 0, -( -5 + 7 ), -0.1f );
 		Ogre::Billboard *vBillboard = vEyeSet->createBillboard( vPosition );
 		vBillboard->setDimensions( 15, 15 );
+//		vBillboard->setDimensions( 55, 55 );
 //		vBillboard->setColour( Ogre::ColourValue( 1, 1, Ogre::Math::RangeRandom( 0.5f, 1 ), Ogre::Math::RangeRandom( 0, 1 ) ) );
 		vBillboard->setColour( Ogre::ColourValue( 0.5f, 0.5f, 0, 0 ) );
 		mEyeTarget = mEyeOffset = Ogre::Vector3( 0, 0, 0 );
 		mEyeBillboard = vBillboard;
+		mDistortionStrength = mDistortionTarget = 0;
 	}
 
 	mLastUpdate = GetTickCount();
@@ -117,6 +119,14 @@ void Loom::MoMa::cCreature::RotateEye( float iYaw, float iPitch )
 }
 
 /************************************************************************/
+void Loom::MoMa::cCreature::SetDistortionStrength( float iStrength )
+/************************************************************************/
+{
+	mDistortionStrength = mDistortionTarget;
+	mDistortionTarget = iStrength;
+}
+
+/************************************************************************/
 void Loom::MoMa::cCreature::OnRender( void )
 /************************************************************************/
 {
@@ -129,6 +139,9 @@ void Loom::MoMa::cCreature::OnRender( void )
 	if ( vAlpha > 1 ) vAlpha = 1;
 	mEyeOffset += vDiff * vAlpha;
 
-	mEyeBillboard->setColour( Ogre::ColourValue( mEyeOffset.x * 0.5f + 0.5f, mEyeOffset.y * 0.5f + 0.5f, 0, 0 ) );
+	float vDistDiff = mDistortionTarget - mDistortionStrength;
+	mDistortionStrength += vDistDiff * vAlpha;
+
+	mEyeBillboard->setColour( Ogre::ColourValue( mEyeOffset.x * 0.5f + 0.5f, mEyeOffset.y * 0.5f + 0.5f, mDistortionStrength / 2.0f, 0 ) );
 }
 

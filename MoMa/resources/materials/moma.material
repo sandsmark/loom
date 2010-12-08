@@ -32,7 +32,7 @@ material MoMa.Creature.1
   {
     pass
     {
-        vertex_program_ref MoMa/Basic
+        vertex_program_ref MoMa/Eye
         {
 			param_named mPerturbance float 1
         }
@@ -46,7 +46,8 @@ material MoMa.Creature.1
       {
         texture eye.png
         filtering trilinear
-        tex_address_mode clamp;
+        tex_address_mode border
+        tex_border_colour 0 0 0 0
       }
       
       scene_blend src_alpha one_minus_src_alpha
