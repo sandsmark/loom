@@ -13,7 +13,7 @@ using Loom::OgreApp::cOgreResponderOnRender;
 /************************************************************************/
 cCreature::cCreature( cPCreature *iProto, const Ogre::Vector3 &iPosition )
 : mPrototype( iProto )
-, mEyeSpeed( 8.0f )
+, mEyeSpeed( 8.0f ), mTransientSize( 10 ), mTransientStrength( 0.5f )
 /************************************************************************/
 {
 	int vNumParts = mPrototype->GetNumParts();
@@ -29,6 +29,7 @@ cCreature::cCreature( cPCreature *iProto, const Ogre::Vector3 &iPosition )
 		Ogre::Billboard *vBillboard = vBodySet->createBillboard( vPosition );
 		vBillboard->setDimensions( ( vAlpha * 8.0f + 12.0f ) * 3, 1.5f );
 		mBillboards.Add( vBillboard );
+		mBillboardSizes.Add( Ogre::Vector2( vBillboard->getOwnWidth(), vBillboard->getOwnHeight() ) );
 	}
 	for ( int i=1; i<vNumParts/14; i++ )
 	{	// Head part
@@ -37,6 +38,7 @@ cCreature::cCreature( cPCreature *iProto, const Ogre::Vector3 &iPosition )
 		Ogre::Billboard *vBillboard = vBodySet->createBillboard( vPosition );
 		vBillboard->setDimensions( ( vAlpha * 1.0f + 19.0f ) * 3, 1.5f );
 		mBillboards.Add( vBillboard );
+		mBillboardSizes.Add( Ogre::Vector2( vBillboard->getOwnWidth(), vBillboard->getOwnHeight() ) );
 	}
 	for ( int i=vNumParts/14; i<=vNumParts/10; i++ )
 	{	// Head part
@@ -45,6 +47,7 @@ cCreature::cCreature( cPCreature *iProto, const Ogre::Vector3 &iPosition )
 		Ogre::Billboard *vBillboard = vBodySet->createBillboard( vPosition );
 		vBillboard->setDimensions( ( sinf( vAlpha ) * 10.0f + 10.0f ) * 3, 1.5f );
 		mBillboards.Add( vBillboard );
+		mBillboardSizes.Add( Ogre::Vector2( vBillboard->getOwnWidth(), vBillboard->getOwnHeight() ) );
 	}
 
 	// Upper body part
@@ -57,6 +60,7 @@ cCreature::cCreature( cPCreature *iProto, const Ogre::Vector3 &iPosition )
 		Ogre::Billboard *vBillboard = vBodySet->createBillboard( vPosition );
 		vBillboard->setDimensions( ( sinf( vAlpha ) * 2.0f + 2.0f + 6.0f ) * 3, 0.8f );
 		mBillboards.Add( vBillboard );
+		mBillboardSizes.Add( Ogre::Vector2( vBillboard->getOwnWidth(), vBillboard->getOwnHeight() ) );
 	}
 
 	// Mid body part
@@ -71,6 +75,7 @@ cCreature::cCreature( cPCreature *iProto, const Ogre::Vector3 &iPosition )
 		Ogre::Billboard *vBillboard = vBodySet->createBillboard( vPosition );
 		vBillboard->setDimensions( ( sinf( vAlpha ) * 2.0f + sinf( vAlpha2 ) * 8.0f + 3.5f + 5.0f ) * 3, 0.8f );
 		mBillboards.Add( vBillboard );
+		mBillboardSizes.Add( Ogre::Vector2( vBillboard->getOwnWidth(), vBillboard->getOwnHeight() ) );
 	}
 
 	// Lower body part
@@ -86,6 +91,7 @@ cCreature::cCreature( cPCreature *iProto, const Ogre::Vector3 &iPosition )
 		Ogre::Billboard *vBillboard = vBodySet->createBillboard( vPosition );
 		vBillboard->setDimensions( ( sinf( vAlpha ) * 6.5f * sinf( vAlpha2 ) ) * 3, 0.7f );
 		mBillboards.Add( vBillboard );
+		mBillboardSizes.Add( Ogre::Vector2( vBillboard->getOwnWidth(), vBillboard->getOwnHeight() ) );
 	}
 
 	// Eye
@@ -97,9 +103,11 @@ cCreature::cCreature( cPCreature *iProto, const Ogre::Vector3 &iPosition )
 //		vBillboard->setDimensions( 55, 55 );
 //		vBillboard->setColour( Ogre::ColourValue( 1, 1, Ogre::Math::RangeRandom( 0.5f, 1 ), Ogre::Math::RangeRandom( 0, 1 ) ) );
 		vBillboard->setColour( Ogre::ColourValue( 0.5f, 0.5f, 0, 0 ) );
-		mEyeTarget = mEyeOffset = Ogre::Vector3( 0, 0, 0 );
+		mEyeOffset.Init( Ogre::Vector3( 0, 0, 0 ) );
+		mEyeDistortion.Init( 0 );
+		mEyeSize.Init( 1 );
+		mBlink.Init( 0 );
 		mEyeBillboard = vBillboard;
-		mDistortionStrength = mDistortionTarget = 0;
 	}
 
 	mLastUpdate = GetTickCount();
@@ -108,22 +116,27 @@ cCreature::cCreature( cPCreature *iProto, const Ogre::Vector3 &iPosition )
 }
 
 /************************************************************************/
-void Loom::MoMa::cCreature::RotateEye( float iYaw, float iPitch )
+void Loom::MoMa::cCreature::SetEyeRotation( const float iYaw, const float iPitch )
 /************************************************************************/
 {
-	mEyeOffset = mEyeTarget;
-	mEyeTarget = Ogre::Vector3( 0, 0, -1 );
+	Ogre::Vector3 vTarget( 0, 0, -1 );
 	Ogre::Matrix3 vRotation;
 	vRotation.FromEulerAnglesXYZ( Ogre::Radian( iPitch ), Ogre::Radian( iYaw ), Ogre::Radian( 0 ) );
-	mEyeTarget = vRotation * mEyeTarget;
+	mEyeOffset.SetTarget( vRotation * vTarget );
 }
 
 /************************************************************************/
-void Loom::MoMa::cCreature::SetDistortionStrength( float iStrength )
+void Loom::MoMa::cCreature::SetEyeDistortion( const float iStrength )
 /************************************************************************/
 {
-	mDistortionStrength = mDistortionTarget;
-	mDistortionTarget = iStrength;
+	mEyeDistortion.SetTarget( iStrength );
+}
+
+/************************************************************************/
+void Loom::MoMa::cCreature::SetEyeSize( const float iSize )
+/************************************************************************/
+{
+	mEyeSize.SetTarget( iSize );
 }
 
 /************************************************************************/
@@ -134,14 +147,61 @@ void Loom::MoMa::cCreature::OnRender( void )
 	float vEllapsed = ( vTime - mLastUpdate ) * 0.001f;
 	mLastUpdate = vTime;
 
-	Ogre::Vector3 vDiff = mEyeTarget - mEyeOffset;
-	float vAlpha = vEllapsed * mEyeSpeed;
-	if ( vAlpha > 1 ) vAlpha = 1;
-	mEyeOffset += vDiff * vAlpha;
+	mEyeOffset.SetSpeed( mEyeSpeed );
+	mEyeDistortion.SetSpeed( mEyeSpeed );
+	mEyeSize.SetSpeed( mEyeSpeed );
 
-	float vDistDiff = mDistortionTarget - mDistortionStrength;
-	mDistortionStrength += vDistDiff * vAlpha;
+	mEyeOffset.Update( vEllapsed );
+	mEyeDistortion.Update( vEllapsed );
+	mEyeSize.Update( vEllapsed );
+	mBlink.Update( vEllapsed );
 
-	mEyeBillboard->setColour( Ogre::ColourValue( mEyeOffset.x * 0.5f + 0.5f, mEyeOffset.y * 0.5f + 0.5f, mDistortionStrength / 2.0f, 0 ) );
+	float vBlink = 1 - sinf( mBlink.GetValue() * M_PI );
+	mEyeBillboard->setColour( Ogre::ColourValue( mEyeOffset.GetValue().x * 0.5f + 0.5f, mEyeOffset.GetValue().y * 0.5f + 0.5f, mEyeDistortion.GetValue() / 2.0f, vBlink ) );
+	mEyeBillboard->setDimensions( 15 * mEyeSize.GetValue(), 15 * mEyeSize.GetValue() );
+
+	UpdateTransients( vEllapsed );
+}
+
+/************************************************************************/
+void cCreature::UpdateTransients( const float iEllapsed )
+/************************************************************************/
+{
+	mTransient.Update( iEllapsed );
+	float vTransient = mTransient.GetValue();
+
+	int vStart = (int)( vTransient - mTransientSize );
+	int vEnd   = (int)( vTransient + mTransientSize );
+
+	if ( vStart >= (int)mBillboards.GetSize() ) return;
+	if ( vEnd < 0 ) return;
+
+	if ( vStart < 0 ) vStart = 0;
+	if ( vEnd >= (int)mBillboards.GetSize() ) vEnd = (int)mBillboards.GetSize() - 1;
+
+	for ( size_t i=0; i<mBillboards.GetSize(); i++ )
+	{
+		float vStrength = 1 - ( fabsf( (float)i - vTransient ) / mTransientSize );
+		if ( vStrength < 0 ) vStrength = 0;
+		mBillboards[i]->setDimensions( mBillboardSizes[i].x * ( 1 + vStrength * mTransientStrength ), mBillboardSizes[i].y * ( 1 + vStrength * mTransientStrength ) );
+	}
+}
+
+/************************************************************************/
+void Loom::MoMa::cCreature::StartTransient( const float iSpeed )
+/************************************************************************/
+{
+	mTransient.Init     ( ( iSpeed < 0 ) ? -mTransientSize : mPrototype->GetNumParts() + mTransientSize );
+	mTransient.SetTarget( ( iSpeed > 0 ) ? -mTransientSize : mPrototype->GetNumParts() + mTransientSize );
+	mTransient.SetSpeed ( fabsf( iSpeed ) );
+}
+
+/************************************************************************/
+void Loom::MoMa::cCreature::Blink( const float iSpeed )
+/************************************************************************/
+{
+	mBlink.Init( 0 );
+	mBlink.SetTarget( 1 );
+	mBlink.SetSpeed( iSpeed );
 }
 

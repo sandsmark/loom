@@ -81,8 +81,13 @@ float4 mainFP( float4 iColor : COLOR, float2 iTexCoord : TEXCOORD0, float3 iRota
 	float2 vTex = iTexCoord;
 	vTex  = MapToSphere( vTex, iRotation.xy );
 	vTex += Distort( iTexCoord, iRotation.z );
+	
+	vTex.y = vTex.y * 2 - 1;
+	vTex.y /= iColor.a;
+	vTex.y = vTex.y * 0.5f + 0.5f;
 		
 	float4 vResult = tex2D( mTexture, vTex );
+//	vResult.a *= iColor.a;
 	
     return vResult;
 } 

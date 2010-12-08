@@ -362,6 +362,14 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Spline"
+				>
+				<File
+					RelativePath=".\src\Spline\cMotion.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"
