@@ -30,7 +30,7 @@ protected:
 	cMotion<Ogre::Vector3> mEyeOffset;
 	cMotion<float> mEyeDistortion;
 	cMotion<float> mEyeSize;
-	cMotion<float> mTransient;
+	cArray< cMotion<float>* > mTransients;
 	cMotion<float> mBlink;
 
 	unsigned long mLastUpdate;

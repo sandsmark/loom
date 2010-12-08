@@ -131,11 +131,11 @@ void Loom::MoMa::cController::CreateCreatures()
 /************************************************************************/
 {
 	cPCreature *vPrototype = new cPCreature();
-	mCreatures.Add( vPrototype->CreateInstance( Ogre::Vector3( -50,  20, 100 ) ) );
-	mCreatures.Add( vPrototype->CreateInstance( Ogre::Vector3(  50,  20, 100 ) ) );
+//	mCreatures.Add( vPrototype->CreateInstance( Ogre::Vector3( -50,  20, 100 ) ) );
+//	mCreatures.Add( vPrototype->CreateInstance( Ogre::Vector3(  50,  20, 100 ) ) );
 	mCreatures.Add( vPrototype->CreateInstance( Ogre::Vector3( -90,   0,  50 ) ) );
-	mCreatures.Add( vPrototype->CreateInstance( Ogre::Vector3(  90,   0,  50 ) ) );
-	mCreatures.Add( vPrototype->CreateInstance( Ogre::Vector3(   0, -20,   0 ) ) );
+//	mCreatures.Add( vPrototype->CreateInstance( Ogre::Vector3(  90,   0,  50 ) ) );
+//	mCreatures.Add( vPrototype->CreateInstance( Ogre::Vector3(   0, -20,   0 ) ) );
 }
 
 /************************************************************************/
@@ -162,7 +162,7 @@ void Loom::MoMa::cController::OnSpeechOn( const std::wstring &text )
 	bSpew->mTurbulenceScroll = c;
 	
 
-	mCreatures[4]->StartTransient( 8.0f );
+//	mCreatures[0]->StartTransient( 8.0f );
 }
 
 
@@ -183,28 +183,43 @@ void Loom::MoMa::cController::Update( void )
 		Sleep( ( rand() % 1500 ) + 500 );
 
 	int vIndex = rand() % mCreatures.GetSize();
-	switch ( rand() % 5 )
+	if ( vIndex == 0 )
 	{
-	case 0:
-		mCreatures[vIndex]->SetEyeRotation( 0, 0 );
-		break;
-	case 1:
-		mCreatures[vIndex]->SetEyeRotation( -M_PI_2, 0 );
-		break;
-	case 2:
-		mCreatures[vIndex]->SetEyeRotation(  M_PI_2, 0 );
-		break;
-	case 3:
-		mCreatures[vIndex]->SetEyeRotation( 0, -M_PI_2 );
-		break;
-	case 4:
-		mCreatures[vIndex]->SetEyeRotation( 0,  M_PI_2 );
-		break;
+		switch ( rand() % 5 )
+		{
+		case 0:
+			mCreatures[vIndex]->SetEyeRotation( 0, 0 );
+			break;
+		case 1:
+			mCreatures[vIndex]->SetEyeRotation( -M_PI_2, 0 );
+			break;
+		case 2:
+			mCreatures[vIndex]->SetEyeRotation(  M_PI_2, 0 );
+			break;
+		case 3:
+			mCreatures[vIndex]->SetEyeRotation( 0, -M_PI_2 );
+			break;
+		case 4:
+			mCreatures[vIndex]->SetEyeRotation( 0,  M_PI_2 );
+			break;
+		}
+	}
+
+	if ( rand() % 10 < 5 )
+	{
+		mCreatures[0]->StartTransient(  2.0f );
+	}
+	if ( rand() % 10 < 5 )
+	{
+		mCreatures[0]->StartTransient( -2.0f );
 	}
 
 	if ( ( rand() % 10 ) < 5 )
 	{
 		int vIndex = rand() % mCreatures.GetSize();
-		mCreatures[vIndex]->Blink( 8 );
+		if ( vIndex == 0 )
+		{
+			mCreatures[vIndex]->Blink( 8 );
+		}
 	}
 }

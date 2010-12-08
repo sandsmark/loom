@@ -158,7 +158,7 @@ void Loom::MoMa::cCreature::OnRender( void )
 
 	float vBlink = 1 - sinf( mBlink.GetValue() * M_PI );
 	mEyeBillboard->setColour( Ogre::ColourValue( mEyeOffset.GetValue().x * 0.5f + 0.5f, mEyeOffset.GetValue().y * 0.5f + 0.5f, mEyeDistortion.GetValue() / 2.0f, vBlink ) );
-	mEyeBillboard->setDimensions( 15 * mEyeSize.GetValue(), 15 * mEyeSize.GetValue() );
+	mEyeBillboard->setDimensions( 19 * mEyeSize.GetValue(), 19 * mEyeSize.GetValue() );
 
 	UpdateTransients( vEllapsed );
 }
@@ -167,23 +167,31 @@ void Loom::MoMa::cCreature::OnRender( void )
 void cCreature::UpdateTransients( const float iEllapsed )
 /************************************************************************/
 {
-	mTransient.Update( iEllapsed );
-	float vTransient = mTransient.GetValue();
-
-	int vStart = (int)( vTransient - mTransientSize );
-	int vEnd   = (int)( vTransient + mTransientSize );
-
-	if ( vStart >= (int)mBillboards.GetSize() ) return;
-	if ( vEnd < 0 ) return;
-
-	if ( vStart < 0 ) vStart = 0;
-	if ( vEnd >= (int)mBillboards.GetSize() ) vEnd = (int)mBillboards.GetSize() - 1;
-
-	for ( size_t i=0; i<mBillboards.GetSize(); i++ )
+	for ( size_t t=0; t<mTransients.GetSize(); t++ )
 	{
-		float vStrength = 1 - ( fabsf( (float)i - vTransient ) / mTransientSize );
-		if ( vStrength < 0 ) vStrength = 0;
-		mBillboards[i]->setDimensions( mBillboardSizes[i].x * ( 1 + vStrength * mTransientStrength ), mBillboardSizes[i].y * ( 1 + vStrength * mTransientStrength ) );
+		cMotion<float> *vTransientMotion = mTransients[t];
+
+		vTransientMotion->Update( iEllapsed );
+		if ( fabsf( vTransientMotion->GetTarget() - vTransientMotion->GetValue() ) < 0.01f )
+		{
+			mTransients.erase( mTransients.begin() + t );
+			t--;
+			delete vTransientMotion;
+			continue;
+		}
+		float vTransient = vTransientMotion->GetValue();
+
+		for ( size_t i=0; i<mBillboards.GetSize(); i++ )
+		{
+			float vStrength = 1 - ( fabsf( (float)i - vTransient ) / mTransientSize );
+			if ( vStrength < 0 ) vStrength = 0;
+			float vWidth = mBillboards[i]->getOwnWidth();
+			float vNewWidth = mBillboardSizes[i].x * ( 1 + vStrength * mTransientStrength );
+			if ( t == 0 || vNewWidth > vWidth )
+			{
+				mBillboards[i]->setDimensions( mBillboardSizes[i].x * ( 1 + vStrength * mTransientStrength ), mBillboardSizes[i].y * ( 1 + vStrength * mTransientStrength ) );
+			}
+		}
 	}
 }
 
@@ -191,9 +199,12 @@ void cCreature::UpdateTransients( const float iEllapsed )
 void Loom::MoMa::cCreature::StartTransient( const float iSpeed )
 /************************************************************************/
 {
-	mTransient.Init     ( ( iSpeed < 0 ) ? -mTransientSize : mPrototype->GetNumParts() + mTransientSize );
-	mTransient.SetTarget( ( iSpeed > 0 ) ? -mTransientSize : mPrototype->GetNumParts() + mTransientSize );
-	mTransient.SetSpeed ( fabsf( iSpeed ) );
+	cMotion<float> *vTransient = new cMotion<float>();
+	vTransient->Init     ( ( iSpeed < 0 ) ? -mTransientSize : mBillboards.GetSize() + mTransientSize );
+	vTransient->SetTarget( ( iSpeed > 0 ) ? -mTransientSize : mBillboards.GetSize() + mTransientSize );
+	vTransient->SetSpeed ( fabsf( iSpeed ) );
+
+	mTransients.Add( vTransient );
 }
 
 /************************************************************************/

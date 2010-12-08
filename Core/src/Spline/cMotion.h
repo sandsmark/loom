@@ -38,6 +38,7 @@ public:
 	}
 
 	const iType &GetValue( void ) const { return mValue; }
+	const iType &GetTarget( void ) const { return mTarget; }
 };
 
 END_NAMESPACE()
