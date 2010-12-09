@@ -4,7 +4,8 @@ uniform float mTime;
 void main( float4 iPosition : POSITION, float2 iTexCoord : TEXCOORD, float4 iColour : COLOR,
 						  out float4 oPosition : POSITION,
 						  out float4 oColour   : COLOR,
-						  out float2 oTexCoord : TEXCOORD,
+						  out float2 oTexCoord : TEXCOORD0,
+						  out float2 oPos      : TEXCOORD1,
 						  
 							uniform float4x4 mWorld,
 							uniform float4x4 mView,
@@ -15,24 +16,40 @@ void main( float4 iPosition : POSITION, float2 iTexCoord : TEXCOORD, float4 iCol
     float4 vWorldPos  = mul( mWorld, iPosition );
     float4 vViewPos   = mul( mView , vWorldPos );
     float4 vScreenPos = mul( mProj , vViewPos );
-    
+        
     float vTime = mTime + iColour.a * 6.28f;
     
 //    vScreenPos.x += sin( vTime + vScreenPos.y + vScreenPos.x ) * cos( vTime * 1.43f + vScreenPos.y * 0.79f + vScreenPos.x * 1.44f ) * 4;
     vScreenPos.x += sin( vTime + vScreenPos.y + vScreenPos.x ) * cos( vTime * 1.43f + vScreenPos.y * 0.79f + vScreenPos.x * 1.44f ) * mPerturbance;
+    
+    oPos = vScreenPos.xy / vScreenPos.w;
     
     oPosition = vScreenPos;
     oTexCoord = iTexCoord;
     oColour = iColour; //frac( vWorldPos );
 }
 
-float4 mainFP( float4 iColor : COLOR, float2 iTexCoord : TEXCOORD, uniform float mDeform ) : COLOR
+float2 Distort( float2 iTexCoord, float iStrength )
+{
+	float2 vCoord = iTexCoord; // * 2 - 1;
+	float vLength = length( vCoord );
+	if ( length( vCoord ) > 0.99f ) return float2( 0, 0 ); //iTexCoord;
+
+	vLength = pow( vLength, iStrength );
+	float2 vNewCoord = normalize( vCoord ) * vLength;
+
+	return vNewCoord - vCoord;
+}
+
+float4 mainFP( float4 iColor : COLOR, float2 iTexCoord : TEXCOORD0, float2 iPos, uniform float mDeform ) : COLOR
 //float4 mainFP( float4 iColor : COLOR ) : COLOR
 {
 //	return float4( iTexCoord, 0, 0 );
 //	return float4( 1, 0, 0, 1 );
 
-    float vTime = mTime * iColor.b + iColor.a * 6.28f;
+//    float vTime = mTime * iColor.b + iColor.a * 6.28f;
+/*
+    float vTime = mTime + iColor.a * 6.28f;
     
 	float2 vCenter = float2( sin( vTime ), cos( vTime ) * 1.737f );
 	vCenter *= 0.5f;
@@ -45,7 +62,18 @@ float4 mainFP( float4 iColor : COLOR, float2 iTexCoord : TEXCOORD, uniform float
 	vStrength *= 0.5f;
 	vStrength = pow( vStrength, 0.5f );
 	vStrength *= mDeform;
-	iTexCoord += vDiff * vStrength; 	
+*/
+	float2 vTex = iTexCoord; // + ( vDiff * vStrength );
+	vTex.y = ( vTex.y * 2 - 1 ) * 5;
+	vTex.y = vTex.y * 0.5f + 0.5f;
 
-    return tex2D( mTexture, iTexCoord );
+	float2 vOffset = Distort( iPos * float2( 4, 2.5 ) + iColor.xy * 4 - 2, 1 + iColor.z * 4 );
+	vTex.y -= vOffset.y * 4;
+	if ( vTex.y < 0 || vTex.y > 1 ) discard;
+
+	float4 vResult = tex2D( mTexture, vTex );
+
+//	return float4( vTex, 0, 1 );
+
+    return vResult;
 } 

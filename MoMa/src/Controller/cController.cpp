@@ -251,6 +251,9 @@ void Loom::MoMa::cController::Update( void )
 {
 		Sleep( ( rand() % 1500 ) + 500 );
 
+	mCreatures[0]->SetHeadDistortionPosition( Ogre::Vector2( Ogre::Math::RangeRandom( -1, 1 ), Ogre::Math::RangeRandom( -1, 1 ) ) );
+	mCreatures[0]->SetHeadDistortionStrength( Ogre::Math::RangeRandom( 0, 1 ) );
+
 	int vIndex = rand() % mCreatures.GetSize();
 
 	

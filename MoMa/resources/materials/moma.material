@@ -17,6 +17,8 @@ material MoMa.Creature.0
       {
         texture body.png
         filtering trilinear
+//        tex_address_mode border
+//        tex_border_colour 0 0 0 0
       }
       
       scene_blend src_alpha one_minus_src_alpha

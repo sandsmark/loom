@@ -2,6 +2,7 @@
 
 #include <Core/Container/cArray.h>
 #include <OgreApp/Qt/Ogre/Event/IOgreListenerEvent.h>
+#include <Ogre/OgreVector2.h>
 #include <Ogre/OgreVector3.h>
 #include <Core/Spline/cMotion.h>
 
@@ -23,6 +24,9 @@ class MOMA_API cCreature : public IOgreListenerEvent
 {
 protected:
 	cPCreature *mPrototype;
+
+	Ogre::Vector3 mPosition;
+
 	cArray<Ogre::Billboard*> mBillboards;
 	cArray<Ogre::Vector2> mBillboardSizes;
 	Ogre::Billboard *mEyeBillboard;
@@ -32,6 +36,8 @@ protected:
 	cMotion<float> mEyeSize;
 	cArray< cMotion<float>* > mTransients;
 	cMotion<float> mBlink;
+	cMotion<Ogre::Vector2> mHeadOffset;
+	cMotion<float> mHeadDistortion;
 
 	unsigned long mLastUpdate;
 
@@ -46,6 +52,8 @@ public:
 	void SetEyeDistortion( const float iStrength );
 	void SetEyeSize( const float iSize );
 	void Blink( const float iSpeed );
+	void SetHeadDistortionPosition( const Ogre::Vector2 &iPosition );
+	void SetHeadDistortionStrength( const float iStrength );
 
 	void StartTransient( const float iSpeed );
 
@@ -53,6 +61,7 @@ public:
 	virtual void OnRender( void );
 
 	float mEyeSpeed;
+	float mHeadSpeed;
 	float mTransientSize;
 	float mTransientStrength;
 };
