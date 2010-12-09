@@ -122,7 +122,21 @@ void Loom::MoMa::cCreature::SetEyeRotation( const float iYaw, const float iPitch
 	Ogre::Vector3 vTarget( 0, 0, -1 );
 	Ogre::Matrix3 vRotation;
 	vRotation.FromEulerAnglesXYZ( Ogre::Radian( iPitch ), Ogre::Radian( iYaw ), Ogre::Radian( 0 ) );
-	mEyeOffset.SetTarget( vRotation * vTarget );
+	mEyeOffset.SetTarget( vRotation * vTarget );	
+}
+
+/************************************************************************/
+void Loom::MoMa::cCreature::SetEyeTarget( Ogre::Vector3 vTarget)
+/************************************************************************/
+{
+	mEyeOffset.SetTarget( vTarget );	
+}
+
+/************************************************************************/
+const Ogre::Vector3 Loom::MoMa::cCreature::GetEyeTarget(  )
+/************************************************************************/
+{
+	return mEyeOffset.GetTarget();	
 }
 
 /************************************************************************/

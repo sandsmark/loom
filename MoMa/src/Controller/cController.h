@@ -1,6 +1,7 @@
 #pragma once
 
 #include <windows.h>
+#include <Ogre/OgreVector3.h>
 #include <Psyclone\Event\IPsycloneSpeechOnEvent.h>
 #include <Psyclone\Event\Responders\cPsycloneSpeechOn.h>
 using Loom::Psyclone::IPsycloneSpeechOnEvent;
@@ -27,7 +28,10 @@ protected:
 	void Update( void );
 
 	static DWORD WINAPI StartThread( LPVOID iParam );
-
+	bool characterTurn;
+	bool userTurn;
+	bool doBlink;
+	Ogre::Vector3 prevEyeTarget;
 public:
 	cController();
 	~cController();

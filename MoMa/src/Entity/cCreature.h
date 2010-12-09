@@ -41,6 +41,8 @@ public:
 	cCreature( cPCreature *iProto, const Ogre::Vector3 &iPosition );
 
 	void SetEyeRotation( const float iYaw, const float iPitch );
+	const Ogre::Vector3 GetEyeTarget();
+	void SetEyeTarget(Ogre::Vector3 vTarget);
 	void SetEyeDistortion( const float iStrength );
 	void SetEyeSize( const float iSize );
 	void Blink( const float iSpeed );
