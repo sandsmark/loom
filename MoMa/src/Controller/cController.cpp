@@ -319,7 +319,7 @@ void Loom::MoMa::cController::Update( void )
 		int look = rand() % 10;
 		if (look < 7)  //80% straight
 		{
-			//mCreatures[vIndex]->SetEyeRotation( 0, 0 );
+			mCreatures[vIndex]->SetEyeRotation( 0, 0 );
 		}
 		else
 		{
