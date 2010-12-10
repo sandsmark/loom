@@ -249,10 +249,10 @@ void cCreature::UpdateTransients( const float iEllapsed )
 			if ( vStrength < 0 ) vStrength = 0;
 			float vWidth = mBillboards[i]->getOwnWidth();
 			float vNewWidth = mBillboardSizes[i].x * ( 1 + vStrength * mTransientStrength );
-			if ( t == 0 || vNewWidth > vWidth )
+			if ( vNewWidth > vWidth )
 			{
 //				mBillboards[i]->setDimensions( mBillboardSizes[i].x * ( 1 + vStrength * mTransientStrength ), mBillboardSizes[i].y * ( 1 + vStrength * mTransientStrength ) );
-				mBillboards[i]->setDimensions( mBillboardSizes[i].x * ( 1 + vStrength * mTransientStrength ), mBillboardSizes[i].y * ( 1 + vStrength * mTransientStrength ) * 2 );
+				mBillboards[i]->setDimensions( mBillboardSizes[i].x * ( 1 + vStrength * mTransientStrength ), mBillboardSizes[i].y * ( 1 + vStrength * mTransientStrength ) * 5 );
 			}
 		}
 	}
