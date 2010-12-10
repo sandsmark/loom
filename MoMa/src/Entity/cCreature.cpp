@@ -225,7 +225,8 @@ void cCreature::UpdateTransients( const float iEllapsed )
 
 	for ( size_t i=0; i<mBillboards.GetSize(); i++ )
 	{
-		mBillboards[i]->setDimensions( mBillboardSizes[i].x, mBillboardSizes[i].y * 5 );
+		mBillboards[i]->setDimensions( mBillboardSizes[i].x, mBillboardSizes[i].y );
+//		mBillboards[i]->setDimensions( mBillboardSizes[i].x, mBillboardSizes[i].y * 5 );
 		mBillboards[i]->setColour( Ogre::ColourValue( vProjPos.x, vProjPos.y, mHeadDistortion.GetValue(), 0 ) );
 	}
 
@@ -251,8 +252,8 @@ void cCreature::UpdateTransients( const float iEllapsed )
 			float vNewWidth = mBillboardSizes[i].x * ( 1 + vStrength * mTransientStrength );
 			if ( vNewWidth > vWidth )
 			{
-//				mBillboards[i]->setDimensions( mBillboardSizes[i].x * ( 1 + vStrength * mTransientStrength ), mBillboardSizes[i].y * ( 1 + vStrength * mTransientStrength ) );
-				mBillboards[i]->setDimensions( mBillboardSizes[i].x * ( 1 + vStrength * mTransientStrength ), mBillboardSizes[i].y * ( 1 + vStrength * mTransientStrength ) * 5 );
+				mBillboards[i]->setDimensions( mBillboardSizes[i].x * ( 1 + vStrength * mTransientStrength ), mBillboardSizes[i].y * ( 1 + vStrength * mTransientStrength ) );
+//				mBillboards[i]->setDimensions( mBillboardSizes[i].x * ( 1 + vStrength * mTransientStrength ), mBillboardSizes[i].y * ( 1 + vStrength * mTransientStrength ) * 5 );
 			}
 		}
 	}
@@ -282,13 +283,17 @@ void Loom::MoMa::cCreature::Blink( const float iSpeed )
 /************************************************************************/
 void Loom::MoMa::cCreature::SetHeadDistortionPosition( const Ogre::Vector2 &iPosition )
 /************************************************************************/
-{
+{	// Temporarily disabled
+/*
 	mHeadOffset.SetTarget( iPosition );
+*/
 }
 
 /************************************************************************/
 void Loom::MoMa::cCreature::SetHeadDistortionStrength( const float iStrength )
 /************************************************************************/
-{
+{	// Temporarily disabled
+/*
 	mHeadDistortion.SetTarget( iStrength );
+*/
 }
