@@ -28,10 +28,13 @@ protected:
 	void Update( void );
 
 	static DWORD WINAPI StartThread( LPVOID iParam );
-	bool characterTurn;
-	bool userTurn;
-	bool doBlink;
-	Ogre::Vector3 prevEyeTarget;
+	bool bCharacterTurn;
+	bool bUserTurn;
+	bool bDoBlink;
+	bool bDoEyeGrow;
+	DWORD lMoveEyeTimer;
+	DWORD lLookAwaytimer;
+	Ogre::Vector3 vPrevEyeTarget;
 public:
 	cController();
 	~cController();

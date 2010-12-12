@@ -46,52 +46,18 @@ void cController::Init( void )
 	cDispatcherHub::Get().Dispatch( _T("Ogre::cOgreResponderSetBGColour"), vIParam );
 	// Events
 	Psyclone::cPsycloneSpeechOn::Get().AddListener( *this );
-	userTurn = false;
-	characterTurn = false;
-	doBlink = false;
-//	Speech::cSpeechResponderSay::Get().AddListener( *this );
+
+	bUserTurn = false;
+	bCharacterTurn = false;
+	bDoBlink = false;
+	bDoEyeGrow = false;
+	lMoveEyeTimer = 0;
+	lLookAwaytimer = 0;
 	// Create stuff
 	//CreateCircles();
 	//CreateWaveform();
 	CreateCreatures();
 
-	// Test spew
-	/*
-	new cSpew( Ogre::Vector3( 25, 9, 100 ), Ogre::Vector3( 4, 0, 0 ) );
-	cSpew *vSpew = new cSpew( Ogre::Vector3( -25, 9, 100 ), Ogre::Vector3( -1, -4, 0 ) );
-	vSpew->mTurbulenceStrength = 4;
-	
-
-	cSpew *vxSpew = new cSpew( Ogre::Vector3( 45, 9, 50 ), Ogre::Vector3( -1, 0, -1 ) );
-	vxSpew->mTurbulenceStrength = 2;
-	vxSpew->mDecay = 2;
-	new cSpew( Ogre::Vector3( -45,   0,  50 ), Ogre::Vector3( -1, 0, -3 ) );
-	cSpew *gSpew = new cSpew( Ogre::Vector3( -25, 9, 100 ), Ogre::Vector3( -5, -4, -10 ) );
-	gSpew->mTurbulenceStrength = 2;
-	new cSpew( Ogre::Vector3( -25, 9, 100 ), Ogre::Vector3( 4, -4, 7 ) );
-
-	new cSpew( Ogre::Vector3( 45,   0,  50 ), Ogre::Vector3( -6, 8, 0 ) );
-
-	new cSpew( Ogre::Vector3( 0, -20,   0 ), Ogre::Vector3( -3, 6, -5 ) );
-
-	new cSpew( Ogre::Vector3( 0, -20,   0 ), Ogre::Vector3( 5, 0, 10 ) );
-
-	new cSpew( Ogre::Vector3( 25,  20, 100 ), Ogre::Vector3( -7, 4, 10 ) );
-
-	cSpew *hSpew = new cSpew( Ogre::Vector3( -45, 9, 50 ), Ogre::Vector3( 5, 0, 5 ) );
-	hSpew->mTurbulenceStrength = 3;
-	hSpew->mSpringStrength = 1;
-	cSpew *iSpew = new cSpew( Ogre::Vector3( 25, 20, 100 ), Ogre::Vector3( 8, -4, 5 ) );
-		iSpew->mTurbulenceStrength = 4;
-		
-
-	cSpew *bSpew = new cSpew( Ogre::Vector3( 25, 9, 100 ), Ogre::Vector3( 10, 0, -10 ) );	
-	bSpew->mTurbulenceStrength = 25;
-	bSpew->mDecay = 10;
-	bSpew->mSpringStrength = 10;
-	bSpew->mTurbulenceScale = 10;
-	bSpew->mTurbulenceScroll = 10;
-*/
 	mThread = CreateThread( NULL, 0, StartThread, this, 0, NULL );
 }
 
@@ -154,7 +120,7 @@ void Loom::MoMa::cController::OnSpeechOn( const std::wstring &text )
 		//30° to the side
 		mCreatures[0]->Blink( 20);
 		mCreatures[0]->SetEyeRotation( M_PI/6, 0 );
-		doBlink = true;
+		bDoBlink = true;
 	}
 	if (text.compare(L"DiP.I-have-turn") == 0)
 	{	
@@ -182,36 +148,29 @@ void Loom::MoMa::cController::OnSpeechOn( const std::wstring &text )
 		{
 			if (type.compare(L"On") == 0)
 			{		
-				characterTurn = true;					
-				prevEyeTarget = mCreatures[0]->GetEyeTarget();								
+				bCharacterTurn = true;					
+				vPrevEyeTarget = mCreatures[0]->GetEyeTarget();								
 				mCreatures[0]->SetEyeRotation( 0, 0 );		
 				mCreatures[0]->StartTransient( -2.0f );
 			}
 			else
 			{
-				characterTurn = false;
+				bCharacterTurn = false;
 				mCreatures[0]->SetEyeRotation( 0, 0 );
 			}
 		} else  // person
 		{
 			if (type.compare(L"On") == 0)
 			{		
-				userTurn = true;		
+				bUserTurn = true;		
 			}
 			else
 			{
-				userTurn = false;			
+				bUserTurn = false;			
 			}
 		}
 	}
 		
-	//mCreatures[4]->StartTransient( 4.0f );		
-	//		mCreatures[0]->SetEyeRotation( 0, 0 );
-	//		mCreatures[0]->StartTransient( 2.0f );		
-	//mCreatures[0]->SetEyeDistortion(1.0f);
-	//mCreatures[0]->SetEyeSize( 2.0f);
-	//transient strength and size
-
 	/*
 	int x = rand() % 20 - 10;
 	int z = rand() % 20 - 10;
@@ -251,13 +210,25 @@ void Loom::MoMa::cController::Update( void )
 {
 		Sleep( ( rand() % 1500 ) + 500 );
 
+		/*
 	mCreatures[0]->SetHeadDistortionPosition( Ogre::Vector2( Ogre::Math::RangeRandom( -1, 1 ), Ogre::Math::RangeRandom( -1, 1 ) ) );
 	mCreatures[0]->SetHeadDistortionStrength( Ogre::Math::RangeRandom( 0, 1 ) );
+	
+	if (bDoEyeGrow)
+	{
+	float grow = 1.0 - (rand() % 7 / 100.0);
+	mCreatures[vIndex]->SetEyeSize(mCreatures[vIndex]->GetEyeSize()*grow);
+	}
 
+
+	if (rand() % 20)
+	{
+		float d = rand()%10 / 10.0;
+		mCreatures[0]->SetEyeDistortion(d);
+	}
 	int vIndex = rand() % mCreatures.GetSize();
-
-	
-	
+*/	
+	//random blink
 	if ( ( rand() % 10 ) < 8 )
 	{
 		int vIndex = rand() % mCreatures.GetSize();
@@ -265,67 +236,78 @@ void Loom::MoMa::cController::Update( void )
 		{
 			mCreatures[vIndex]->Blink( 8 );
 		}
+		mCreatures[vIndex]->SetEyeSize(1.0f);
+		mCreatures[0]->SetEyeDistortion(0.0f);
+		bDoEyeGrow = false;
+		if (rand() % 2 == 1)
+			bDoEyeGrow = true;
 	}
 
-
-	if (doBlink)
+	//take turn blink
+	if (bDoBlink)
 	{
 		if (mCreatures[0]->GetEyeTarget().x == 0.0)
-			mCreatures[vIndex]->SetEyeTarget(prevEyeTarget);
+			mCreatures[vIndex]->SetEyeTarget(vPrevEyeTarget);
 		mCreatures[vIndex]->Blink( 20 );
 		if (rand() % 2 == 0)
-			doBlink = false;
+			bDoBlink = false;		
 	}
 
-	if (characterTurn)
+	if (bCharacterTurn)
 	{
 		float speed = (float)((rand() % 10) - 5);
-		//if ( ( rand() % 10 ) < 12 )
 		mCreatures[0]->StartTransient( speed );
 
 		//random eye movement
 		//10% straight, 90% wander		
-		int look = rand() % 20;
-		if (look < 1)  //80% straight
-		{
-			mCreatures[vIndex]->SetEyeRotation( 0, 0 );
-		}
-		else
-		{
-			float yaw = pow(2.0,rand() % 4 + 1);
-			float pitch = pow(2.0,rand() % 5 + 2);
-			switch (rand() % 4)
+		if (lMoveEyeTimer < GetTickCount())
+		{		
+			lMoveEyeTimer = GetTickCount() + 3000;
+			if (rand() % 10 == 0)  //10% straight
 			{
-			case 0:
-				mCreatures[vIndex]->SetEyeRotation( -M_PI/yaw, 0 );			
-				break;
-			case 1:
-				mCreatures[vIndex]->SetEyeRotation( -M_PI/yaw, -M_PI/pitch );			
-				break;
-			case 2:
-				mCreatures[vIndex]->SetEyeRotation( M_PI/yaw, 0 );			
-				break;
-			case 3:
-				mCreatures[vIndex]->SetEyeRotation( M_PI/yaw, -M_PI/pitch );			
-				break;
+				mCreatures[vIndex]->SetEyeRotation( 0, 0 );
 			}
+			else
+			{
+				float yaw = pow(2.0,rand() % 5 + 2);
+				float pitch = pow(2.0,rand() % 5 + 2);
+				switch (rand() % 4)
+				{
+				case 0:
+					mCreatures[vIndex]->SetEyeRotation( -M_PI/yaw, 0 );			
+					break;
+				case 1:
+					mCreatures[vIndex]->SetEyeRotation( -M_PI/yaw, -M_PI/pitch );			
+					break;
+				case 2:
+					mCreatures[vIndex]->SetEyeRotation( M_PI/yaw, 0 );			
+					break;
+				case 3:
+					mCreatures[vIndex]->SetEyeRotation( M_PI/yaw, -M_PI/pitch );			
+					break;
+				}
 
-		}		
-	
-
+			}		
+		
+		}
 	}
 
-	if (!characterTurn)
+	if (!bCharacterTurn)
 	{
 		//random eye movement
-		//80% straight, 20% 10-20° to the side	
-		int look = rand() % 10;
-		if (look < 7)  //80% straight
+		//80% straight, 20% 10-20° to the side			
+		if (lLookAwaytimer != 0 && lLookAwaytimer < GetTickCount())
+		{
+			mCreatures[vIndex]->SetEyeRotation( 0, 0 );
+			lLookAwaytimer = 0;
+		}
+		else if (rand() % 10 < 7)  //80% straight
 		{
 			mCreatures[vIndex]->SetEyeRotation( 0, 0 );
 		}
 		else
 		{
+			lLookAwaytimer = GetTickCount() + 200;
 			//float yaw = pow(2.0,rand() % 5 + 1);
 			float yaw = rand() % 7 + 1;
 			//float pitch = pow(2.0,rand() % 6 + 3);
@@ -343,11 +325,7 @@ void Loom::MoMa::cController::Update( void )
 			case 3:
 			//		mCreatures[vIndex]->SetEyeRotation( M_PI/yaw, -M_PI/pitch );			
 					break;
-			}
-
-
-		
-		}		
-	
+			}		
+		}			
 	}
 }
