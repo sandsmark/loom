@@ -86,7 +86,8 @@ cCreature::cCreature( cPCreature *iProto, const Ogre::Vector3 &iPosition )
 		float vAlpha2 = (float)(vIndex) / (float)( 5* vNumParts / 10 - 3 * vNumParts / 10 + 1 ) * M_PI;
 		Ogre::Vector3 vPosition = iPosition + Ogre::Vector3( 0, -( vStart + vIndex * 0.7f ), 0 );
 		Ogre::Billboard *vBillboard = vBodySet->createBillboard( vPosition );
-		vBillboard->setDimensions( ( sinf( vAlpha ) * 2.0f + sinf( vAlpha2 ) * 8.0f + 3.5f + 5.0f ) * 3, 0.8f );
+//		vBillboard->setDimensions( ( sinf( vAlpha ) * 2.0f + sinf( vAlpha2 ) * 8.0f + 3.5f + 5.0f ) * 3, 0.8f );
+		vBillboard->setDimensions( ( sinf( vAlpha ) * 2.0f + sinf( vAlpha2 ) * 8.0f + 3.5f + 5.0f ) * 3 * 0.9f, 0.8f );
 		mBillboards.Add( vBillboard );
 		mBillboardSizes.Add( Ogre::Vector2( vBillboard->getOwnWidth(), vBillboard->getOwnHeight() ) );
 	}
