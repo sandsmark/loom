@@ -214,11 +214,7 @@ void Loom::MoMa::cController::Update( void )
 	mCreatures[0]->SetHeadDistortionPosition( Ogre::Vector2( Ogre::Math::RangeRandom( -1, 1 ), Ogre::Math::RangeRandom( -1, 1 ) ) );
 	mCreatures[0]->SetHeadDistortionStrength( Ogre::Math::RangeRandom( 0, 1 ) );
 	
-	if (bDoEyeGrow)
-	{
-	float grow = 1.0 - (rand() % 7 / 100.0);
-	mCreatures[vIndex]->SetEyeSize(mCreatures[vIndex]->GetEyeSize()*grow);
-	}
+	
 
 
 	if (rand() % 20)
@@ -226,8 +222,16 @@ void Loom::MoMa::cController::Update( void )
 		float d = rand()%10 / 10.0;
 		mCreatures[0]->SetEyeDistortion(d);
 	}
+
+*/
 	int vIndex = rand() % mCreatures.GetSize();
-*/	
+	if (bDoEyeGrow)
+	{
+		float grow = 1.0 - (rand() % 7 / 100.0);
+		mCreatures[vIndex]->SetEyeSize(mCreatures[vIndex]->GetEyeSize()*grow);
+	}
+	mCreatures[0]->SetEyeDistortion(0.0f);
+	
 	//random blink
 	if ( ( rand() % 10 ) < 8 )
 	{

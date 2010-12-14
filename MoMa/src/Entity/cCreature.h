@@ -51,6 +51,7 @@ public:
 	void SetEyeTarget(Ogre::Vector3 vTarget);
 	void SetEyeDistortion( const float iStrength );
 	void SetEyeSize( const float iSize );
+	float GetEyeSize( );
 	void Blink( const float iSpeed );
 	void SetHeadDistortionPosition( const Ogre::Vector2 &iPosition );
 	void SetHeadDistortionStrength( const float iStrength );
