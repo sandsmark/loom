@@ -2,6 +2,7 @@
 #include <Core/Debug/Logger/cLogger.h>
 #include <Core/Event/cDispatcherHub.h>
 #include <Speech/Event/cSpeechResponders.h>
+#include <module.h>
 
 using Loom::Core::cLogger;
 using Loom::Core::cDispatcherHub;

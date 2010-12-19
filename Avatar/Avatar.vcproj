@@ -263,6 +263,14 @@
 					Name="Responders"
 					>
 					<File
+						RelativePath=".\src\Event\Responders\cAvatarResponderGetEffectorPosition.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Event\Responders\cAvatarResponderGetEffectorRotation.h"
+						>
+					</File>
+					<File
 						RelativePath=".\src\Event\Responders\cAvatarResponderSetEffectorPosition.h"
 						>
 					</File>

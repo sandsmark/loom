@@ -62,6 +62,7 @@ public:
 	virtual void OnSetBackgroundColour( const Ogre::ColourValue &iColour );
 	virtual void OnCreateBox( const Ogre::String &iName, const Ogre::Vector3 &iPosition, const Ogre::Vector3 &iSize );
 	virtual void OnSetPosition( const Ogre::String &iName, const Ogre::Vector3 &iPosition );
+	virtual void OnGetPosition( const Ogre::String &iName, Ogre::Vector3 &oPosition );
 };
 
 END_NAMESPACE()

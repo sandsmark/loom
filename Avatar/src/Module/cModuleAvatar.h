@@ -12,6 +12,8 @@ class AVATAR_API cModuleAvatar : public IModule
 protected:
 	HANDLE mThread;
 
+	void CreateEnvironment( void );
+
 public:
 	cModuleAvatar();
 

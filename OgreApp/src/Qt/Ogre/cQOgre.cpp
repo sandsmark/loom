@@ -231,3 +231,25 @@ void Loom::OgreApp::cQOgre::OnSetPosition( const Ogre::String &iName, const Ogre
 
 	vEntity->getParentNode()->setPosition( iPosition );
 }
+
+/************************************************************************/
+void Loom::OgreApp::cQOgre::OnGetPosition( const Ogre::String &iName, Ogre::Vector3 &oPosition )
+/************************************************************************/
+{
+	if ( mScene->hasCamera( iName ) )
+	{
+		oPosition = mScene->getCamera( iName )->getPosition();
+		return;
+	}
+
+	Ogre::Entity *vEntity = mScene->getEntity( iName );
+
+	if ( !vEntity )
+	{
+		TCHAR vTemp[ 256 ];
+		StringCchPrintf( vTemp, 256, _T("Unknown entity: %S"), iName );	// TODO: Use %s if not in unicode
+		cLogger::Get().Log( cLogger::LOG_WARNING, _T("Global"), vTemp );
+	}
+
+	oPosition = vEntity->getParentNode()->getPosition();
+}

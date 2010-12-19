@@ -22,13 +22,11 @@ using Loom::Core::cModuleManager;
 using Loom::Avatar::cAvatarResponderSetEffectorPosition;
 
 /************************************************************************/
-cOgreAvatar::cOgreAvatar()
+cOgreAvatar::cOgreAvatar( const Ogre::String &iName )
 /************************************************************************/
 {
-	CreateEntity();
+	CreateEntity( iName );
 	CreateIkChain();
-
-	mCalibration = Ogre::Matrix3::IDENTITY;
 
 	// Subscribe for Avatar messages
 	cAvatarResponderSetEffectorPosition::Get().AddListener( *this );
@@ -38,7 +36,7 @@ cOgreAvatar::cOgreAvatar()
 }
 
 /************************************************************************/
-void Loom::Avatar::cOgreAvatar::CreateEntity()
+void Loom::Avatar::cOgreAvatar::CreateEntity( const Ogre::String &iName )
 /************************************************************************/
 {
 	cModuleOgreApp *vOgre = (cModuleOgreApp*)cModuleManager::Get().GetModule( _T("OgreApp") );
@@ -46,17 +44,8 @@ void Loom::Avatar::cOgreAvatar::CreateEntity()
 	cQScene *vQScene = vQMainWindow->GetScene();
 	Ogre::SceneManager *vScene = vQScene->GetScene();
 
-	// Create spotlight
-	Ogre::Light* vLightSpot1;
-	vLightSpot1 = vScene->createLight("SpotLight1");
-	vLightSpot1->setType(Ogre::Light::LT_SPOTLIGHT);
-	//	vLightSpot1->setPosition(-900, 750, 375);
-	vLightSpot1->setDirection(0.79, -0.38, 0.48);
-	vLightSpot1->setPosition(-790, 380, -480);
-	vLightSpot1->setDiffuseColour(0.5, 0.5, 0.5);
-
 	// Create humanoid
-	mEntity = vScene->createEntity( "SuperHumanoid", "models/SuperHumanoid.mesh" );
+	mEntity = vScene->createEntity( iName, "models/SuperHumanoid.mesh" );
 //	mNode = vScene->getRootSceneNode()->createChildSceneNode( Ogre::Vector3( 100, 340, -100 ) );
 	Ogre::Quaternion vRotation;
 	vRotation.FromAngleAxis( Ogre::Radian( Ogre::Math::PI ), Ogre::Vector3( 0, 1, 0 ) );
@@ -198,4 +187,39 @@ void Loom::Avatar::cOgreAvatar::OnSetEffectorRotation( const eEffector iEffector
 /************************************************************************/
 {
 	SetEffectorRotation( iEffector, iRotation );
+}
+
+/************************************************************************/
+void Loom::Avatar::cOgreAvatar::SetScale( const Ogre::Vector3 &iScale )
+/************************************************************************/
+{
+	mNode->setScale( iScale );
+}
+
+/************************************************************************/
+void Loom::Avatar::cOgreAvatar::OnGetEffectorPosition( const eEffector iEffector, Ogre::Vector3 &oPosition )
+/************************************************************************/
+{
+	oPosition = GetEffectorPosition( iEffector );
+}
+
+/************************************************************************/
+void Loom::Avatar::cOgreAvatar::OnGetEffectorRotation( const eEffector iEffector, Ogre::Quaternion &oRotation )
+/************************************************************************/
+{
+	oRotation = GetEffectorRotation( iEffector );
+}
+
+/************************************************************************/
+void Loom::Avatar::cOgreAvatar::SetPosition( const Ogre::Vector3 &iPosition )
+/************************************************************************/
+{
+	mNode->setPosition( iPosition );
+}
+
+/************************************************************************/
+void Loom::Avatar::cOgreAvatar::SetRotation( const Ogre::Quaternion &iRotation )
+/************************************************************************/
+{
+	mNode->setOrientation( iRotation );
 }

@@ -259,6 +259,10 @@
 								>
 							</File>
 							<File
+								RelativePath=".\src\Qt\Ogre\Event\Responders\cOgreResponderGetPosition.h"
+								>
+							</File>
+							<File
 								RelativePath=".\src\Qt\Ogre\Event\Responders\cOgreResponderOnRender.h"
 								>
 							</File>
