@@ -25,6 +25,8 @@ protected:
 	QMenuBar *mMenuBar;
 	QDockWidget *mDebugDock;
 	QTextEdit *mDebugWindow;
+	QDockWidget *mOutputDock;
+	QTextEdit *mOutputWindow;
 
 public:
 	cQMainWindow();

@@ -35,6 +35,7 @@ protected:
     Ogre::Viewport *mViewport;
     Ogre::SceneManager *mScene;
 	QTextEdit *mDebugPanel;
+	QTextEdit *mOutputPanel;
 
     bool InitRoot( void );
     bool InitWindow( void );
@@ -61,6 +62,7 @@ public:
     virtual QSize minimumSizeHint(void) const { return QSize( 128, 128 ); }    
 
 	void SetDebugPanel( QTextEdit *iDebugPanel ) { mDebugPanel = iDebugPanel; }
+	void SetOutputPanel( QTextEdit *iOutputPanel ) { mOutputPanel = iOutputPanel; }
 
 	// IOgreEvent methods
 	virtual void OnSetBackgroundColour( const Ogre::ColourValue &iColour );
@@ -68,6 +70,7 @@ public:
 	virtual void OnSetPosition( const Ogre::String &iName, const Ogre::Vector3 &iPosition );
 	virtual void OnGetPosition( const Ogre::String &iName, Ogre::Vector3 &oPosition );
 	virtual void OnDebugLog( const cString &iText );
+	virtual void OnOutput( const cString &iText );
 };
 
 END_NAMESPACE()

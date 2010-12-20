@@ -40,20 +40,32 @@ cQMainWindow::cQMainWindow()
 	mDebugDock->show();
 	mScene->SetDebugPanel( mDebugWindow );
 
+	mOutputWindow = new QTextEdit();
+	mOutputWindow->setDisabled( true );
+	mOutputDock = new QDockWidget( this );
+	mOutputDock->setWidget( mOutputWindow );
+	mOutputDock->show();
+	mScene->SetOutputPanel( mOutputWindow );
+
 	// Subscribe for Ogre messages
 	cOgreResponderSetBGColour::Get().AddListener( *mScene );
 	cOgreResponderCreateBox::Get().AddListener( *mScene );
 	cOgreResponderSetPosition::Get().AddListener( *mScene );
 	cOgreResponderDebugLog::Get().AddListener( *mScene );
+	cOgreResponderOutput::Get().AddListener( *mScene );
 
 	cLogger::Get().AddWriter( _T( "OgreAppLog" ), new cLogWriterOgreApp( cLogger::LOG_DEBUG ) );
 	cLogger::Get().Log( cLogger::LOG_DEBUG, _T( "OgreAppLog" ), _T( "OgreApp log test" ) );
+
+	cDispatcherHub::Get().Dispatch( _T("Ogre::cOgreResponderOutput"), _T("OgreApp output test" ) );
 }
 
 /************************************************************************/
 cQMainWindow::~cQMainWindow()
 /************************************************************************/
 {
+	SAFE_DELETE( mOutputDock );
+	SAFE_DELETE( mOutputWindow );
 	SAFE_DELETE( mDebugDock );
 	SAFE_DELETE( mDebugWindow );
 	SAFE_DELETE( mScene );

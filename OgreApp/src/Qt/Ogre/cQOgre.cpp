@@ -268,3 +268,13 @@ void Loom::OgreApp::cQOgre::OnDebugLog( const cString &iText )
 	OutputDebugString( iText.ToCString() );
 	OutputDebugString( _T("\n") );
 }
+
+/************************************************************************/
+void Loom::OgreApp::cQOgre::OnOutput( const cString &iText )
+/************************************************************************/
+{
+	if ( mOutputPanel )
+	{
+		mOutputPanel->append( QString::fromUtf16( (const ushort*)iText.ToCString() ) );
+	}
+}
