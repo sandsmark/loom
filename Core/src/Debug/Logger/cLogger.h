@@ -30,6 +30,7 @@ protected:
 
 public:
 	void AddWriter( const cString &iName, ILogWriter *iWriter );
+	void ReplaceWriter( const cString &iName, ILogWriter *iWriter );
 	void Log( const eSeverity iSeverity, const cString &iName, const cString &iMessage );
 
 	// cSingleton methods

@@ -16,6 +16,13 @@ void cLogger::AddWriter( const cString &iName, ILogWriter *iWriter )
 }
 
 /************************************************************************/
+void cLogger::ReplaceWriter( const cString &iName, ILogWriter *iWriter )
+/************************************************************************/
+{
+	mWriters[ iName ] = iWriter;
+}
+
+/************************************************************************/
 void cLogger::Log( const eSeverity iSeverity, const cString &iName, const cString &iMessage )
 /************************************************************************/
 {
