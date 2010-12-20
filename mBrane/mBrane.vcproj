@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/FImBrane/common.h"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include;dependencies\win32\mBrane\mBrane;dependencies\win32\mBrane\CoreLibrary;dependencies\win32\mBrane\Core"
+				AdditionalIncludeDirectories="../include;./dependencies\win32\mBrane\mBrane;dependencies\win32\mBrane\CoreLibrary;dependencies\win32\mBrane\Core"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;MBRANE_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="0"
