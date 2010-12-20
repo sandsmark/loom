@@ -95,6 +95,7 @@ mkdir Weaver\dependencies\win32   2>nul
 echo Creating external links...
 
 bin\junction.exe Avatar\dependencies\win32\Ogre   %OGRE_PATH%   >nul
+bin\junction.exe Avatar\dependencies\win32\Qt     %QT_PATH%     >nul
 bin\junction.exe Config\dependencies\win32\Qt     %QT_PATH%     >nul
 bin\junction.exe MoMa\dependencies\win32\Ogre     %OGRE_PATH%   >nul
 bin\junction.exe MoMa\dependencies\win32\Qt       %QT_PATH%     >nul
