@@ -259,6 +259,10 @@
 								>
 							</File>
 							<File
+								RelativePath=".\src\Qt\Ogre\Event\Responders\cOgreResponderDebugLog.h"
+								>
+							</File>
+							<File
 								RelativePath=".\src\Qt\Ogre\Event\Responders\cOgreResponderGetPosition.h"
 								>
 							</File>
@@ -312,6 +316,18 @@
 						>
 					</File>
 				</Filter>
+			</Filter>
+			<Filter
+				Name="Logger"
+				>
+				<File
+					RelativePath=".\src\Logger\cLogWriterOgreApp.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Logger\cLogWriterOgreApp.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter

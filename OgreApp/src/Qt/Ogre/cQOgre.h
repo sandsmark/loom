@@ -10,6 +10,7 @@
 #include <QtOpenGL/QGLWidget>
 #include <OgreApp/Qt/Ogre/Event/IOgreEvent.h>
 #include <Ogre/OgreString.h>
+#include <QtGui/QTextEdit.h>
 
 namespace Ogre
 {
@@ -33,6 +34,7 @@ protected:
     Ogre::Camera *mCamera;
     Ogre::Viewport *mViewport;
     Ogre::SceneManager *mScene;
+	QTextEdit *mDebugPanel;
 
     bool InitRoot( void );
     bool InitWindow( void );
@@ -58,11 +60,14 @@ public:
     
     virtual QSize minimumSizeHint(void) const { return QSize( 128, 128 ); }    
 
+	void SetDebugPanel( QTextEdit *iDebugPanel ) { mDebugPanel = iDebugPanel; }
+
 	// IOgreEvent methods
 	virtual void OnSetBackgroundColour( const Ogre::ColourValue &iColour );
 	virtual void OnCreateBox( const Ogre::String &iName, const Ogre::Vector3 &iPosition, const Ogre::Vector3 &iSize );
 	virtual void OnSetPosition( const Ogre::String &iName, const Ogre::Vector3 &iPosition );
 	virtual void OnGetPosition( const Ogre::String &iName, Ogre::Vector3 &oPosition );
+	virtual void OnDebugLog( const cString &iText );
 };
 
 END_NAMESPACE()

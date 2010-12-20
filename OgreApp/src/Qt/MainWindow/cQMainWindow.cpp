@@ -1,11 +1,14 @@
 #include <OgreApp/Qt/MainWindow/cQMainWindow.h>
 #include <OgreApp/Qt/Ogre/cQScene.h>
 #include <OgreApp/Qt/Ogre/Event/cOgreResponders.h>
+#include <OgreApp/Logger/cLogWriterOgreApp.h>
+#include <Core/Debug/Logger/cLogger.h>
 #include <Core/Serializer/cSerializerXML.h>
 #include <fstream>
 
 using namespace Loom::OgreApp;
 using Loom::Core::cSerializerXML;
+using Loom::Core::cLogger;
 
 /************************************************************************/
 cQMainWindow::cQMainWindow()
@@ -30,16 +33,29 @@ cQMainWindow::cQMainWindow()
 	vFileMenu->addAction( "Test Script", this, SLOT( OnTestScript() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_6 ) );
 	vFileMenu->addAction( "Test Serializer", this, SLOT( OnTestSerializer() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_7 ) );
 
+	mDebugWindow = new QTextEdit();
+	mDebugWindow->setDisabled( true );
+	mDebugDock = new QDockWidget( this );
+	mDebugDock->setWidget( mDebugWindow );
+	mDebugDock->show();
+	mScene->SetDebugPanel( mDebugWindow );
+
 	// Subscribe for Ogre messages
 	cOgreResponderSetBGColour::Get().AddListener( *mScene );
 	cOgreResponderCreateBox::Get().AddListener( *mScene );
 	cOgreResponderSetPosition::Get().AddListener( *mScene );
+	cOgreResponderDebugLog::Get().AddListener( *mScene );
+
+	cLogger::Get().AddWriter( _T( "OgreAppLog" ), new cLogWriterOgreApp( cLogger::LOG_DEBUG ) );
+	cLogger::Get().Log( cLogger::LOG_DEBUG, _T( "OgreAppLog" ), _T( "OgreApp log test" ) );
 }
 
 /************************************************************************/
 cQMainWindow::~cQMainWindow()
 /************************************************************************/
 {
+	SAFE_DELETE( mDebugDock );
+	SAFE_DELETE( mDebugWindow );
 	SAFE_DELETE( mScene );
 	SAFE_DELETE( mMenuBar );
 }

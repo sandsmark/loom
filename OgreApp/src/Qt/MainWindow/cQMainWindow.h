@@ -23,6 +23,8 @@ protected:
 protected:
 	cQScene    *mScene;
 	QMenuBar *mMenuBar;
+	QDockWidget *mDebugDock;
+	QTextEdit *mDebugWindow;
 
 public:
 	cQMainWindow();

@@ -15,6 +15,7 @@
 #include <OgreApp/Qt/Ogre/cQOgre.h>
 #include <Core/Debug/Logger/cLogger.h>
 #include <QtGui/qevent.h>
+#include <QtGui/QTextEdit.h>
 #ifdef Q_WS_MAC
 	#include <OpenGL/OpenGL.h>
 #else
@@ -33,7 +34,7 @@ using Loom::Core::cLogger;
 
 /**********************************************************************/
 cQOgre::cQOgre( QWidget *iParent )
-: QGLWidget( iParent ), mWindow( NULL ), mViewport( NULL )
+: QGLWidget( iParent ), mWindow( NULL ), mViewport( NULL ), mDebugPanel( NULL )
 /**********************************************************************/
 {
     resize( 128, 128 );
@@ -252,4 +253,18 @@ void Loom::OgreApp::cQOgre::OnGetPosition( const Ogre::String &iName, Ogre::Vect
 	}
 
 	oPosition = vEntity->getParentNode()->getPosition();
+}
+
+/************************************************************************/
+void Loom::OgreApp::cQOgre::OnDebugLog( const cString &iText )
+/************************************************************************/
+{
+	if ( mDebugPanel )
+	{
+		mDebugPanel->append( QString::fromUtf16( (const ushort*)iText.ToCString() ) );
+	}
+
+
+	OutputDebugString( iText.ToCString() );
+	OutputDebugString( _T("\n") );
 }
