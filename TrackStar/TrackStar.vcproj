@@ -213,10 +213,6 @@
 				Name="Module"
 				>
 				<File
-					RelativePath=".\src\Module\ATC3DG.h"
-					>
-				</File>
-				<File
 					RelativePath=".\src\Module\cModuleTrackStar.cpp"
 					>
 				</File>

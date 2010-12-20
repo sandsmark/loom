@@ -46,10 +46,18 @@ void cModuleTrackStar::OnHeard( const std::wstring &text )
 DWORD cModuleTrackStar::StartThread( LPVOID /*iParam*/ )
 /************************************************************************/
 {
+	//std::wfstream *vStream = new std::wfstream( "myfile.conf" );
+	//cSerializerXML *vSerializer = new cSerializerXML( *vStream );
+	//MyObject* obj = vSerializer->Deserialize();
+
+	//const cClass &iClass = iObject->GetRTTI();
+	//mStream<<iClass.GetName().ToCString()<<":\n";
+
 	// Do listening and routing here
 	// Listen for message name and data and send with Dispatch
 	for ( ;; )
 	{
+
 #if 0		
 		// Test
 	//	std::wstring text = _T("Hello World");
