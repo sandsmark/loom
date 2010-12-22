@@ -72,6 +72,17 @@ public:
 	void SolveForTargetYInv(Ogre::Vector3 Target, double Pitch, double Yaw, double Roll);
 	void SolveForTargetXInv(Ogre::Vector3 Target);
 	void SolveForTargetXInv(Ogre::Vector3 Target, double Pitch, double Yaw, double Roll);
+
+	void Solve(const Ogre::Vector3 &iPos)
+	{
+		SolveForTargetZInv(iPos);
+		UpdateOgreSkeletonZ();	
+		SolveForTargetYInv(iPos);
+		UpdateOgreSkeletonY();	
+		SolveForTargetXInv(iPos);			
+		UpdateOgreSkeletonX();	
+	}
+		
 	// Update Ogre skeleton
 	void UpdateOgreSkeleton();
 	void UpdateOgreSkeletonZ();

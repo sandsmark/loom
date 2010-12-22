@@ -1,7 +1,10 @@
 #pragma once
 
 #include <Avatar/Event/IAvatarEvent.h>
+#include <OgreApp/Qt/Ogre/Event/IOgreListenerEvent.h>
 #include <Ogre/OgreMatrix3.h>
+
+using Loom::OgreApp::IOgreListenerEvent;
 
 namespace Ogre
 {
@@ -17,7 +20,9 @@ class IKChain;
 
 BEGIN_NAMESPACE( Avatar )
 
-class AVATAR_API cOgreAvatar : public IAvatarEvent
+class IController;
+
+class AVATAR_API cOgreAvatar : public IAvatarEvent, public IOgreListenerEvent 
 {
 protected:
 	enum eCalibrationState
@@ -33,7 +38,10 @@ protected:
 	Ogre::Entity *mEntity;
 	Ogre::SkeletonInstance *mSkeleton;
 	Ogre::SceneNode *mNode;
-	IKChain* mIKChain;
+	IKChain* mIKChainLeft;
+	IKChain* mIKChainRight;
+	Ogre::Vector3 mEffectorPositions[ EFFECTOR_MAX ];
+	IController *mController;
 
 	void CreateEntity( const Ogre::String &iName );
 	void CreateIkChain();
@@ -52,6 +60,10 @@ public:
 	void SetRotation( const Ogre::Quaternion &iRotation );
 	void SetScale( const Ogre::Vector3 &iScale );
 
+	void SetController( IController *iController );
+	void ResetBones( void );
+	const Ogre::Vector3 &GetPosition( void ) const;
+
 	// IAvatarEvent
 	virtual void OnGetEffectorPosition( const eEffector iEffector, Ogre::Vector3 &oPosition );
 	virtual void OnGetEffectorRotation( const eEffector iEffector, Ogre::Quaternion &oRotation );
@@ -60,6 +72,9 @@ public:
 
 	// ISpeechListenerEvent
 	virtual void OnHeard( const std::wstring &text );
+
+	// IOgreListenerEvent methods
+	virtual void OnRender( void );
 
 };
 

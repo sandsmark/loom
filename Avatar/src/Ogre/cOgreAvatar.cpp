@@ -12,6 +12,8 @@
 #include <OgreApp/Qt/Ogre/cQScene.h>
 #include <Avatar/IKChain/IKChain.h>
 #include <Avatar/Event/cAvatarResponder.h>
+#include <Avatar/Controller/IController.h>
+#include <OgreApp/Qt/Ogre/Event/Responders/cOgreResponderOnRender.h>
 
 using namespace Loom::Avatar;
 using Loom::OgreApp::cModuleOgreApp;
@@ -20,9 +22,11 @@ using Loom::OgreApp::cQOgre;
 using Loom::OgreApp::cQScene;
 using Loom::Core::cModuleManager;
 using Loom::Avatar::cAvatarResponderSetEffectorPosition;
+using Loom::OgreApp::cOgreResponderOnRender;
 
 /************************************************************************/
 cOgreAvatar::cOgreAvatar( const Ogre::String &iName )
+: mController( NULL )
 /************************************************************************/
 {
 	CreateEntity( iName );
@@ -32,7 +36,11 @@ cOgreAvatar::cOgreAvatar( const Ogre::String &iName )
 	cAvatarResponderSetEffectorPosition::Get().AddListener( *this );
 	cAvatarResponderSetEffectorRotation::Get().AddListener( *this );
 
-	SetEffectorPosition( EFFECTOR_LEFT_HAND, Ogre::Vector3( 0, -100, 0 ) );
+	// Subscribe for Ogre rendering message
+	cOgreResponderOnRender::Get().AddListener( *this );
+
+	SetEffectorPosition( EFFECTOR_LEFT_HAND , Ogre::Vector3( -100, 100, 0 ) );
+	SetEffectorPosition( EFFECTOR_RIGHT_HAND, Ogre::Vector3(  100, 100, 0 ) );
 }
 
 /************************************************************************/
@@ -53,7 +61,7 @@ void Loom::Avatar::cOgreAvatar::CreateEntity( const Ogre::String &iName )
 	mNode->setScale( 0.5f, 0.5f, 0.5f );
 	mEntity->setMaterialName( "Avatar/Humanoid" );
 	mEntity->setCastShadows( true );
-	mEntity->setDisplaySkeleton( true );
+	mEntity->setDisplaySkeleton( false );
 
 	mNode->attachObject( mEntity );
 }
@@ -62,63 +70,122 @@ void Loom::Avatar::cOgreAvatar::CreateEntity( const Ogre::String &iName )
 void Loom::Avatar::cOgreAvatar::CreateIkChain()
 /************************************************************************/
 {
-	// Create IK chain manually
-	mIKChain = new IKChain(mNode);
-	mSkeleton = mEntity->getSkeleton();
-	Ogre::Bone* vBone = mSkeleton->getBone("TailBone");
-	mIKChain->PushOgreBone(vBone);
-	vBone = mSkeleton->getBone("Spine_1");
-	mIKChain->PushOgreBone(vBone);
-	vBone = mSkeleton->getBone("Spine_2");
-	mIKChain->PushOgreBone(vBone);
-	vBone = mSkeleton->getBone("ShoulderLeft");
-	mIKChain->PushOgreBone(vBone);
-	vBone = mSkeleton->getBone("ArmUpperLeft");
-	mIKChain->PushOgreBone(vBone);
-	vBone = mSkeleton->getBone("ArmLowerLeft");
-	mIKChain->PushOgreBone(vBone);
-	vBone = mSkeleton->getBone("HandLeft");
-	mIKChain->PushOgreBone(vBone);
+	// Left IK chain
+	{
+		mIKChainLeft = new IKChain(mNode);
+		mSkeleton = mEntity->getSkeleton();
+		Ogre::Bone* vBone = mSkeleton->getBone("TailBone");
+		mIKChainLeft->PushOgreBone(vBone);
+		vBone = mSkeleton->getBone("Spine_1");
+		mIKChainLeft->PushOgreBone(vBone);
+		vBone = mSkeleton->getBone("Spine_2");
+		mIKChainLeft->PushOgreBone(vBone);
+		vBone = mSkeleton->getBone("ShoulderLeft");
+		mIKChainLeft->PushOgreBone(vBone);
+		vBone = mSkeleton->getBone("ArmUpperLeft");
+		mIKChainLeft->PushOgreBone(vBone);
+		vBone = mSkeleton->getBone("ArmLowerLeft");
+		mIKChainLeft->PushOgreBone(vBone);
+		vBone = mSkeleton->getBone("HandLeft");
+		mIKChainLeft->PushOgreBone(vBone);
 
-	// Lower Spine
-	IKJoint* vBase = mIKChain->GetJointAtDepth(1);
-	vBase->SetJointAngleSymmetric(Ogre::Math::PI/16);
-	vBase->SetWeight(0.1);
-	// Upper Spine
-	vBase = mIKChain->GetJointAtDepth(2); 
-	vBase->SetJointAngleSymmetric(Ogre::Math::PI/16);
-	vBase->SetWeight(0.1);
-	// Shoulder
-	vBase = mIKChain->GetJointAtDepth(3); //rs
-	vBase->SetJointAngleSymmetric(0);
-	vBase->SetWeight(0.1);
-	// Upper arm
-	vBase = mIKChain->GetJointAtDepth(4); //ua
-	vBase->SetMinJointAngleX(0);
-	vBase->SetMaxJointAngleX(0);
-	// Lower Arm
-	vBase = mIKChain->GetJointAtDepth(5); //la
-	vBase->SetMinJointAngleX(0);
-	vBase->SetMaxJointAngleX(0);
+		// Lower Spine
+		IKJoint* vBase = mIKChainLeft->GetJointAtDepth(1);
+		vBase->SetJointAngleSymmetric(Ogre::Math::PI/16);
+		vBase->SetWeight(0.1);
+		// Upper Spine
+		vBase = mIKChainLeft->GetJointAtDepth(2); 
+		vBase->SetJointAngleSymmetric(Ogre::Math::PI/16);
+		vBase->SetWeight(0.1);
+		// Shoulder
+		vBase = mIKChainLeft->GetJointAtDepth(3); //rs
+		vBase->SetJointAngleSymmetric(0);
+		vBase->SetWeight(0.1);
+		// Upper arm
+		vBase = mIKChainLeft->GetJointAtDepth(4); //ua
+		vBase->SetMinJointAngleX(0);
+		vBase->SetMaxJointAngleX(0);
+		// Lower Arm
+		vBase = mIKChainLeft->GetJointAtDepth(5); //la
+		vBase->SetMinJointAngleX(0);
+		vBase->SetMaxJointAngleX(0);
+	}
+
+	// Right IK chain
+	{
+		mIKChainRight = new IKChain(mNode);
+		mSkeleton = mEntity->getSkeleton();
+		Ogre::Bone* vBone = mSkeleton->getBone("TailBone");
+		mIKChainRight->PushOgreBone(vBone);
+		vBone = mSkeleton->getBone("Spine_1");
+		mIKChainRight->PushOgreBone(vBone);
+		vBone = mSkeleton->getBone("Spine_2");
+		mIKChainRight->PushOgreBone(vBone);
+		vBone = mSkeleton->getBone("ShoulderRight");
+		mIKChainRight->PushOgreBone(vBone);
+		vBone = mSkeleton->getBone("UpperArmRight");
+		mIKChainRight->PushOgreBone(vBone);
+		vBone = mSkeleton->getBone("LowerArmRight");
+		mIKChainRight->PushOgreBone(vBone);
+		vBone = mSkeleton->getBone("HandRight");
+		mIKChainRight->PushOgreBone(vBone);
+
+		// Lower Spine
+		IKJoint* vBase = mIKChainRight->GetJointAtDepth(1);
+		vBase->SetJointAngleSymmetric(Ogre::Math::PI/16);
+		vBase->SetWeight(0.1);
+		// Upper Spine
+		vBase = mIKChainRight->GetJointAtDepth(2); 
+		vBase->SetJointAngleSymmetric(Ogre::Math::PI/16);
+		vBase->SetWeight(0.1);
+		// Shoulder
+		vBase = mIKChainRight->GetJointAtDepth(3); //rs
+		vBase->SetJointAngleSymmetric(0);
+		vBase->SetWeight(0.1);
+		// Upper arm
+		vBase = mIKChainRight->GetJointAtDepth(4); //ua
+		vBase->SetMinJointAngleX(0);
+		vBase->SetMaxJointAngleX(0);
+		// Lower Arm
+		vBase = mIKChainRight->GetJointAtDepth(5); //la
+		vBase->SetMinJointAngleX(0);
+		vBase->SetMaxJointAngleX(0);
+	}
 }
 
 /************************************************************************/
 void Loom::Avatar::cOgreAvatar::SetEffectorPosition( const eEffector iEffector, const Ogre::Vector3 &iPos )
 /************************************************************************/
 {
-	mIKChain->SolveForTargetZInv(iPos);
-	mIKChain->UpdateOgreSkeletonZ();	
-	mIKChain->SolveForTargetYInv(iPos);
-	mIKChain->UpdateOgreSkeletonY();	
-	mIKChain->SolveForTargetXInv(iPos);			
-	mIKChain->UpdateOgreSkeletonX();	
+	mEffectorPositions[ iEffector ] = iPos;
+
+	/*
+	for ( int i=0; i<10; i++ )
+	{
+		mIKChainLeft->Solve( mEffectorPositions[ EFFECTOR_LEFT_HAND ] );
+		mIKChainRight->Solve( mEffectorPositions[ EFFECTOR_RIGHT_HAND ] );
+	}
+	*/
+
+	switch ( iEffector )
+	{
+	case EFFECTOR_LEFT_HAND:
+//		mIKChainRight->Solve( mEffectorPositions[ EFFECTOR_RIGHT_HAND ] );
+		mIKChainLeft->Solve( mEffectorPositions[ EFFECTOR_LEFT_HAND ] );
+		break;
+	case EFFECTOR_RIGHT_HAND:
+//		mIKChainLeft->Solve( mEffectorPositions[ EFFECTOR_LEFT_HAND ] );
+		mIKChainRight->Solve( mEffectorPositions[ EFFECTOR_RIGHT_HAND ] );
+		break;
+	}
+
 }
 
 /************************************************************************/
 const Ogre::Vector3 Loom::Avatar::cOgreAvatar::GetEffectorPosition( const eEffector iEffector )
 /************************************************************************/
 {
-	return mIKChain->GetEffectorPosition();
+	return mIKChainLeft->GetEffectorPosition();
 }
 
 /************************************************************************/
@@ -222,4 +289,36 @@ void Loom::Avatar::cOgreAvatar::SetRotation( const Ogre::Quaternion &iRotation )
 /************************************************************************/
 {
 	mNode->setOrientation( iRotation );
+}
+
+/************************************************************************/
+void Loom::Avatar::cOgreAvatar::SetController( IController *iController )
+/************************************************************************/
+{
+	mController = iController;
+	mController->Init( this );
+}
+
+/************************************************************************/
+void Loom::Avatar::cOgreAvatar::ResetBones( void )
+/************************************************************************/
+{
+	mSkeleton->reset(false);
+}
+
+/************************************************************************/
+const Ogre::Vector3 & Loom::Avatar::cOgreAvatar::GetPosition( void ) const
+/************************************************************************/
+{
+//	return mSkeleton->getRootBone()->getPosition();
+	return mNode->getPosition();
+}
+
+/************************************************************************/
+void cOgreAvatar::OnRender( void )
+/************************************************************************/
+{
+	if ( !mController ) return;
+
+	mController->Update();
 }

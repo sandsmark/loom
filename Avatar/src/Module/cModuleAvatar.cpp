@@ -8,6 +8,7 @@
 #include <Avatar/Ogre/cOgreAvatar.h>
 #include <Speech/Speech.h>
 #include <Speech/Module/cModuleSpeech.h>
+#include <Avatar/Controller/cControllerTest.h>
 
 #pragma warning( push )
 #pragma warning( disable: 4995 )	// warning C4995: 'vsprintf': name was marked as #pragma deprecated
@@ -62,10 +63,11 @@ void cModuleAvatar::Init( void )
 	CreateEnvironment();
 
  	cOgreAvatar *vAvatar1 = new cOgreAvatar( "Avatar1" );
-	vAvatar1;
+	vAvatar1->SetController( new cControllerTest );
 	cOgreAvatar *vAvatar2 = new cOgreAvatar( "Avatar2" );
 	vAvatar2->SetPosition( Ogre::Vector3( 0, 0, -50 ) );
 	vAvatar2->SetRotation( Ogre::Quaternion( Ogre::Radian( 0 ), Ogre::Vector3( 0, 1, 0 ) ) );
+	vAvatar2->SetController( new cControllerTest );
 
 	mInitialized = true;
 }
