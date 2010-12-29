@@ -9,6 +9,8 @@
 #include <Speech/Speech.h>
 #include <Speech/Module/cModuleSpeech.h>
 #include <Avatar/Controller/cControllerTest.h>
+#include <Core/Serializer/cSerializerXML.h>
+#include <Avatar/Config/cConfig.h>
 
 #pragma warning( push )
 #pragma warning( disable: 4995 )	// warning C4995: 'vsprintf': name was marked as #pragma deprecated
@@ -33,12 +35,13 @@ using Loom::OgreApp::cQMainWindow;
 using Loom::OgreApp::cQOgre;
 using Loom::OgreApp::cQScene;
 using Loom::Core::cModuleManager;
+using Loom::Core::cSerializerXML;
 
 using namespace Loom::Avatar;
 
 /************************************************************************/
 cModuleAvatar::cModuleAvatar()
-: IModule( _T( "Avatar" ) )
+: IModule( _T( "Avatar" ) ), mConfig( NULL )
 /************************************************************************/
 {
 	mDependencies.Add( cModuleOgreApp::GetName() );
@@ -60,14 +63,39 @@ void cModuleAvatar::Init( void )
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation( vPath + "models/", "FileSystem" );
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation( vPath + "textures/", "FileSystem" );
 
+	// Load config
+	std::wfstream *vStream = new std::wfstream();
+	vStream->open( "resources/config/avatar.cfg", std::ios_base::in | std::ios_base::binary );
+	if ( vStream->is_open() )
+	{	// Open existing config
+		cSerializerXML *vSerializer = new cSerializerXML( *vStream );
+		mConfig = (cConfig*)vSerializer->Deserialize();
+	}
+	else
+	{	// Create default config
+		delete vStream;
+		vStream = new std::wfstream();
+		vStream->open( "resources/config/avatar.cfg", std::ios_base::out | std::ios_base::binary );
+		cSerializerXML *vSerializer = new cSerializerXML( *vStream );
+		mConfig = new cConfig();
+		vSerializer->Serialize( mConfig );
+	}
+	vStream->close();
+	delete vStream;
+
 	CreateEnvironment();
 
  	cOgreAvatar *vAvatar1 = new cOgreAvatar( "Avatar1" );
 	vAvatar1->SetController( new cControllerTest );
-	cOgreAvatar *vAvatar2 = new cOgreAvatar( "Avatar2" );
-	vAvatar2->SetPosition( Ogre::Vector3( 0, 0, -50 ) );
-	vAvatar2->SetRotation( Ogre::Quaternion( Ogre::Radian( 0 ), Ogre::Vector3( 0, 1, 0 ) ) );
-	vAvatar2->SetController( new cControllerTest );
+	vAvatar1->SetPosition( mConfig->Position );
+	vAvatar1->SetRotation( Ogre::Quaternion( Ogre::Degree( mConfig->Orientation ), Ogre::Vector3( 0, 1, 0 ) ) );
+	if ( !mConfig->SingleAvatar )
+	{
+		cOgreAvatar *vAvatar2 = new cOgreAvatar( "Avatar2" );
+		vAvatar2->SetPosition( Ogre::Vector3( 0, 0, -50 ) );
+		vAvatar2->SetRotation( Ogre::Quaternion( Ogre::Radian( 0 ), Ogre::Vector3( 0, 1, 0 ) ) );
+		vAvatar2->SetController( new cControllerTest );
+	}
 
 	mInitialized = true;
 }

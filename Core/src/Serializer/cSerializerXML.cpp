@@ -84,6 +84,16 @@ void CORE_API Loom::Core::ISerializer::Write<float>( const float *iValue )
 
 /************************************************************************/
 template<>
+void CORE_API Loom::Core::ISerializer::Write<bool>( const bool *iValue )
+/************************************************************************/
+{
+	cSerializerXML *vSerializer = (cSerializerXML*)this;
+	boolalpha( vSerializer->mStream );
+	vSerializer->mStream<<(*iValue)<<"\n";
+}
+
+/************************************************************************/
+template<>
 CORE_API void Loom::Core::ISerializer::Read<int>( int &iTarget )
 /************************************************************************/
 {
@@ -99,3 +109,14 @@ CORE_API void Loom::Core::ISerializer::Read<float>( float &iTarget )
 	cSerializerXML *vSerializer = (cSerializerXML*)this;
 	vSerializer->mStream>>iTarget;
 }
+
+/************************************************************************/
+template<>
+CORE_API void Loom::Core::ISerializer::Read<bool>( bool &iTarget )
+/************************************************************************/
+{
+	cSerializerXML *vSerializer = (cSerializerXML*)this;
+	boolalpha( vSerializer->mStream );
+	vSerializer->mStream>>iTarget;
+}
+

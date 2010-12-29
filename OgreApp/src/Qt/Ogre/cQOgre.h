@@ -26,7 +26,6 @@ BEGIN_NAMESPACE( OgreApp )
 class OGREAPP_API cQOgre : public QGLWidget, public IOgreEvent
 {
 //    Q_OBJECT
-    
 protected:
     // Ogre stuff
     Ogre::Root *mRoot;
@@ -71,6 +70,8 @@ public:
 	virtual void OnGetPosition( const Ogre::String &iName, Ogre::Vector3 &oPosition );
 	virtual void OnDebugLog( const cString &iText );
 	virtual void OnOutput( const cString &iText );
+	virtual void OnSetTexture( const Ogre::String &iName, void *iTextureData, unsigned long iSize );
+	virtual void OnMoveTo( const Ogre::String &iName, const Ogre::Vector3 &iPosition, float iSpeed );
 };
 
 END_NAMESPACE()

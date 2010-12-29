@@ -5,6 +5,7 @@
 #include <Core/Debug/Logger/cLogger.h>
 #include <Core/Serializer/cSerializerXML.h>
 #include <fstream>
+#include <io.h>
 
 using namespace Loom::OgreApp;
 using Loom::Core::cSerializerXML;
@@ -32,6 +33,7 @@ cQMainWindow::cQMainWindow()
 	vFileMenu->addAction( "IK test", this, SLOT( OnIkTest() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_5 ) );
 	vFileMenu->addAction( "Test Script", this, SLOT( OnTestScript() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_6 ) );
 	vFileMenu->addAction( "Test Serializer", this, SLOT( OnTestSerializer() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_7 ) );
+	vFileMenu->addAction( "Set Material", this, SLOT( OnSetMaterial() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_8 ) );
 
 	mDebugWindow = new QTextEdit();
 	mDebugWindow->setDisabled( true );
@@ -53,6 +55,8 @@ cQMainWindow::cQMainWindow()
 	cOgreResponderSetPosition::Get().AddListener( *mScene );
 	cOgreResponderDebugLog::Get().AddListener( *mScene );
 	cOgreResponderOutput::Get().AddListener( *mScene );
+	cOgreResponderSetTexture::Get().AddListener( *mScene );
+	cOgreResponderMoveTo::Get().AddListener( *mScene );
 
 	cLogger::Get().AddWriter( _T( "OgreAppLog" ), new cLogWriterOgreApp( cLogger::LOG_DEBUG ) );
 	cLogger::Get().Log( cLogger::LOG_DEBUG, _T( "OgreAppLog" ), _T( "OgreApp log test" ) );
@@ -145,17 +149,19 @@ void cQMainWindow::OnMoveBox0()
 {
 	struct sTemp
 	{
+		float Speed;
 		Ogre::Vector3 Pos;
 		char Name[256];
 	};
 	sTemp vTemp;
+	vTemp.Speed = 10;
 	vTemp.Pos.x = Ogre::Math::RangeRandom( -50, 50 );
 	vTemp.Pos.y = Ogre::Math::RangeRandom( -50, 50 );
 	vTemp.Pos.z = Ogre::Math::RangeRandom( -50, 50 );
 	strcpy( vTemp.Name, "Box0" );
 	cDispatcherHub::IParam vIParam( (void*)&vTemp );
 
-	cDispatcherHub::Get().Dispatch( cOgreResponderSetPosition::Get().GetEventName(), vIParam );
+	cDispatcherHub::Get().Dispatch( cOgreResponderMoveTo::Get().GetEventName(), vIParam );
 }
 
 
@@ -224,4 +230,21 @@ void Loom::OgreApp::cQMainWindow::OnTestSerializer()
 	std::wfstream *vStream = new std::wfstream( vFile.getOpenFileName().toLocal8Bit() );
 	cSerializerXML *vSerializer = new cSerializerXML( *vStream );
 	vSerializer->Deserialize();
+}
+
+/************************************************************************/
+void Loom::OgreApp::cQMainWindow::OnSetMaterial()
+/************************************************************************/
+{
+	FILE *f = fopen( "resources/materials/texture_test.jpg", "rb" );
+	size_t vSize = filelength( f->_file );
+	char *vTemp = new char[ 5 + 4 + vSize ];
+	strcpy( vTemp, "Box0" );
+	*(unsigned long*)( vTemp + 5 ) = vSize;
+	fread( vTemp + 9, vSize, 1, f );
+	fclose( f );
+	cDispatcherHub::IParam vIParam( (void*)vTemp );
+
+	cDispatcherHub::Get().Dispatch( cOgreResponderSetTexture::Get().GetEventName(), vIParam );
+	delete [] vTemp;
 }

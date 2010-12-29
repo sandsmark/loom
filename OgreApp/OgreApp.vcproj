@@ -267,6 +267,10 @@
 								>
 							</File>
 							<File
+								RelativePath=".\src\Qt\Ogre\Event\Responders\cOgreResponderMoveTo.h"
+								>
+							</File>
+							<File
 								RelativePath=".\src\Qt\Ogre\Event\Responders\cOgreResponderOnRender.h"
 								>
 							</File>
@@ -280,6 +284,10 @@
 							</File>
 							<File
 								RelativePath=".\src\Qt\Ogre\Event\Responders\cOgreResponderSetPosition.h"
+								>
+							</File>
+							<File
+								RelativePath=".\src\Qt\Ogre\Event\Responders\cOgreResponderSetTexture.h"
 								>
 							</File>
 							<File
@@ -330,6 +338,14 @@
 				</File>
 				<File
 					RelativePath=".\src\Logger\cLogWriterOgreApp.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Serializer"
+				>
+				<File
+					RelativePath=".\src\Serializer\XMLSerializerDatatypes.cpp"
 					>
 				</File>
 			</Filter>

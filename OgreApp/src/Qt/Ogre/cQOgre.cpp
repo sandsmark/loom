@@ -278,3 +278,53 @@ void Loom::OgreApp::cQOgre::OnOutput( const cString &iText )
 		mOutputPanel->append( QString::fromUtf16( (const ushort*)iText.ToCString() ) );
 	}
 }
+
+/************************************************************************/
+void Loom::OgreApp::cQOgre::OnSetTexture( const Ogre::String &iName, void *iTextureData, unsigned long iSize )
+/************************************************************************/
+{
+	Ogre::Entity *vEntity = mScene->getEntity( iName );
+
+	if ( !vEntity )
+	{
+		TCHAR vTemp[ 256 ];
+		StringCchPrintf( vTemp, 256, _T("Unknown entity: %S"), iName );	// TODO: Use %s if not in unicode
+		cLogger::Get().Log( cLogger::LOG_WARNING, _T("Global"), vTemp );
+		return;
+	}
+
+	Ogre::MemoryDataStream *vStream = new Ogre::MemoryDataStream( iTextureData, iSize );
+	Ogre::DataStreamPtr vStreamPtr;
+	vStreamPtr.bind( vStream );
+	Ogre::Image vImage;
+	vImage.load( vStreamPtr );
+	static int vCount = 0;
+	char vTemp[ 256 ];
+	sprintf( vTemp, "NetworkImage%08d", vCount++ );
+	Ogre::TextureManager::getSingleton().loadImage( vTemp, "General", vImage );
+
+	bool vSubEntity = true;
+	Ogre::String vMaterialName = vEntity->getSubEntity(0)->getMaterialName();
+	if ( vMaterialName.empty() )
+	{
+		vSubEntity = false;
+		vEntity->getMesh()->getSubMesh(0)->getMaterialName();
+	}
+	Ogre::MaterialPtr vMaterial = ((Ogre::MaterialPtr)(Ogre::MaterialManager::getSingleton().getByName( vMaterialName )))->clone( vTemp );
+	vMaterial->getTechnique(0)->getPass(0)->getTextureUnitState(0)->setTextureName( vTemp );
+	if ( vSubEntity )
+	{
+		vEntity->getSubEntity(0)->setMaterialName( vTemp );
+	}
+	else
+	{
+		vEntity->getMesh()->getSubMesh(0)->setMaterialName( vTemp );
+	}
+}
+
+/************************************************************************/
+void Loom::OgreApp::cQOgre::OnMoveTo( const Ogre::String &iName, const Ogre::Vector3 &iPosition, float iSpeed )
+/************************************************************************/
+{
+	OnSetPosition( iName, iPosition );
+}

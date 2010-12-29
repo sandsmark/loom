@@ -1,6 +1,10 @@
+#pragma warning( disable: 4995 )	// #pragma deprecated
+
 #include <OgreApp/Qt/Ogre/cQScene.h>
 #include <Core/Event/cDispatcherHub.h>
+#include <strsafe.h>
 #include <OgreApp/Qt/Ogre/Event/Responders/cOgreResponderOnRender.h>
+#include <Core/Debug/Logger/cLogger.h>
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -18,6 +22,7 @@
 using namespace Loom::OgreApp;
 using Loom::Core::cDispatcherHub;
 using Loom::OgreApp::cOgreResponderOnRender;
+using Loom::Core::cLogger;
 
 /************************************************************************/
 cQScene::cQScene( QWidget *iParent )
@@ -79,7 +84,12 @@ void cQScene::RenderFrame( void )
 //    ASSERTTXT( mWindow, "Main window is invalid" );
 //    ASSERTTXT( mCamera, "Main camera is invalid" );
 
-	UpdateCamera();
+	DWORD vTime = GetTickCount();
+	float vEllapsed = ( vTime - mLastUpdate ) * 0.001f;
+	mLastUpdate = vTime;
+
+	UpdateCamera( vEllapsed );
+	UpdateAnims( vEllapsed );
 
     update();
 }
@@ -120,16 +130,12 @@ void Loom::OgreApp::cQScene::wheelEvent( QWheelEvent *iEvent )
 }
 
 /**********************************************************************/
-void Loom::OgreApp::cQScene::UpdateCamera( void )
+void Loom::OgreApp::cQScene::UpdateCamera( const float iEllapsed )
 /**********************************************************************/
 {
-	DWORD vTime = GetTickCount();
-	float vEllapsed = ( vTime - mLastUpdate ) * 0.001f;
-	mLastUpdate = vTime;
-
-	mCameraVelocity *= powf( 0.1f, vEllapsed  );
-	mCameraAngularVelocity *= powf( 0.1f, vEllapsed );
-	mCameraAngle += mCameraAngularVelocity * vEllapsed * 10;
+	mCameraVelocity *= powf( 0.1f, iEllapsed  );
+	mCameraAngularVelocity *= powf( 0.1f, iEllapsed );
+	mCameraAngle += mCameraAngularVelocity * iEllapsed * 10;
 	if ( mCameraAngle.y < 0 ) mCameraAngle.y = 0;
 	if ( mCameraAngle.y > M_PI_4 ) mCameraAngle.y = M_PI_4;
 	mCameraAngle.x = fmodf( mCameraAngle.x, M_PI * 2 );
@@ -147,19 +153,19 @@ void Loom::OgreApp::cQScene::UpdateCamera( void )
 
 	if ( mKeyStates[KEY_LEFT] )
 	{
-		mCameraTarget -= mCamera->getRight() * vEllapsed * 42;
+		mCameraTarget -= mCamera->getRight() * iEllapsed * 42;
 	}
 	if ( mKeyStates[KEY_RIGHT] )
 	{
-		mCameraTarget += mCamera->getRight() * vEllapsed * 42;
+		mCameraTarget += mCamera->getRight() * iEllapsed * 42;
 	}
 	if ( mKeyStates[KEY_UP] )
 	{
-		mCameraTarget += mCamera->getUp() * vEllapsed * 42;
+		mCameraTarget += mCamera->getUp() * iEllapsed * 42;
 	}
 	if ( mKeyStates[KEY_DOWN] )
 	{
-		mCameraTarget -= mCamera->getUp() * vEllapsed * 42;
+		mCameraTarget -= mCamera->getUp() * iEllapsed * 42;
 	}
 }
 
@@ -214,6 +220,31 @@ void Loom::OgreApp::cQScene::keyReleaseEvent( QKeyEvent *iEvent )
 }
 
 /**********************************************************************/
+void Loom::OgreApp::cQScene::UpdateAnims( const float iEllapsed )
+/**********************************************************************/
+{
+	for ( size_t i=0; i<mAnims.size(); i++ )
+	{
+		sAnim *vAnim = mAnims[i];
+		cMotion<Ogre::Vector3> *vMotion = vAnim->Motion;
+
+		vMotion->Update( iEllapsed );
+		if ( ( vMotion->GetTarget() - vMotion->GetValue() ).squaredLength() < 0.01f )
+		{	// Anim done
+			mAnims.erase( mAnims.begin() + i );
+			i--;
+			delete vAnim;
+			continue;
+		}
+
+		Ogre::Vector3 vPosition = vMotion->GetValue();
+
+		if ( vAnim->Entity ) vAnim->Entity->getParentNode()->setPosition( vPosition );
+		if ( vAnim->Camera ) vAnim->Camera->setPosition( vPosition );
+	}
+}
+
+/**********************************************************************/
 void cQScene::Rotate( const float iDX, const float iDY )
 /**********************************************************************/
 {
@@ -242,3 +273,39 @@ void cQScene::Zoom( const float iDelta )
 	*/
 	mZoom *= powf( 2, iDelta );
 }
+
+/************************************************************************/
+void cQScene::OnMoveTo( const Ogre::String &iName, const Ogre::Vector3 &iPosition, float iSpeed )
+/************************************************************************/
+{
+	if ( mScene->hasCamera( iName ) )
+	{
+		sAnim *vAnim = new sAnim();
+		vAnim->Camera = mScene->getCamera( iName );
+		vAnim->Motion = new cMotion<Ogre::Vector3>();
+		vAnim->Motion->Init( vAnim->Camera->getPosition() );
+		vAnim->Motion->SetSpeed( iSpeed );
+		vAnim->Motion->SetTarget( iPosition );
+		mAnims.Add( vAnim );
+		return;
+	}
+
+	Ogre::Entity *vEntity = mScene->getEntity( iName );
+
+	if ( !vEntity )
+	{
+		TCHAR vTemp[ 256 ];
+		StringCchPrintf( vTemp, 256, _T("Unknown entity: %S"), iName );	// TODO: Use %s if not in unicode
+		cLogger::Get().Log( cLogger::LOG_WARNING, _T("Global"), vTemp );
+		return;
+	}
+
+	sAnim *vAnim = new sAnim();
+	vAnim->Entity = vEntity;
+	vAnim->Motion = new cMotion<Ogre::Vector3>();
+	vAnim->Motion->Init( vEntity->getParentNode()->getPosition() );
+	vAnim->Motion->SetSpeed( iSpeed );
+	vAnim->Motion->SetTarget( iPosition );
+	mAnims.Add( vAnim );
+}
+

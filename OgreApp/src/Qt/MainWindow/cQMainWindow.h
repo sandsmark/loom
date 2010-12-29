@@ -42,6 +42,7 @@ public:
 		void OnIkTest();
 		void OnTestScript();
 		void OnTestSerializer();
+		void OnSetMaterial();
 };
 
 END_NAMESPACE()

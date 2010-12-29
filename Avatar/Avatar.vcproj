@@ -304,6 +304,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Config"
+				>
+				<File
+					RelativePath=".\src\Config\cConfig.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Config\cConfig.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"

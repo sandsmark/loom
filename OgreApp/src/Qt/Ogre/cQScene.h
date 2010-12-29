@@ -2,6 +2,9 @@
 #include <OgreApp/Qt/Ogre/cQOgre.h>
 #include <Ogre/OgreVector2.h>
 #include <Ogre/OgreVector3.h>
+#include <Core/Spline/cMotion.h>
+
+using Loom::Core::cMotion;
 
 BEGIN_NAMESPACE( OgreApp )
 
@@ -18,7 +21,20 @@ protected:
 	};
 
 protected:
+	struct sAnim
+	{
+		Ogre::Entity *Entity;
+		Ogre::Camera *Camera;
+		cMotion<Ogre::Vector3> *Motion;
+
+		sAnim() : Entity( NULL ), Camera( NULL ), Motion( NULL ) {}
+		~sAnim() { SAFE_DELETE( Motion ); }
+	};
+
+protected:
 	bool mKeyStates[KEY_NUM];
+	cArray< sAnim* > mAnims;
+
 
 	// Camera controls ( TODO: Create external class for camera handling )
 	QPoint mLastMousePos;
@@ -32,7 +48,8 @@ protected:
 	void Rotate( const float iDX, const float iDY );
 	void Move( const float iDX, const float iDY );
 	void Zoom( const float iDelta );
-	void UpdateCamera( void );
+	void UpdateCamera( const float iEllapsed );
+	void UpdateAnims( const float iEllapsed );
 
 	virtual bool InitResources( void );
 	virtual bool InitPost( void );
@@ -41,6 +58,8 @@ public:
 	cQScene( QWidget *iParent = NULL );
 
 	virtual void RenderFrame( void );
+
+	virtual void OnMoveTo( const Ogre::String &iName, const Ogre::Vector3 &iPosition, float iSpeed );
 
 	// QWidget methods
 	virtual void mousePressEvent( QMouseEvent *iEvent );

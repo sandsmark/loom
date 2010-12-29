@@ -108,6 +108,27 @@ public:
 			(vListener->*iFunction)( vParam1, vParam2, vParam3 );
 		}
 	}
+
+	template< typename iParamType1, typename iParamType2, typename iParamType3 >
+	void Dispatch( typename cTypeWrapper3<const iParamType1&,iParamType2,iParamType3>::tFunction iFunction, const iParamType1 &vParam1, iParamType2 vParam2, iParamType3 vParam3 )
+	{
+		for ( size_t i=0; i<mListeners.GetSize(); i++ )
+		{
+			iType *vListener = mListeners[i];
+			(vListener->*iFunction)( vParam1, vParam2, vParam3 );
+		}
+	}
+
+	template< typename iParamType1, typename iParamType2, typename iParamType3 >
+	void Dispatch( typename cTypeWrapper3<const iParamType1&,const iParamType2&,iParamType3>::tFunction iFunction, const iParamType1 &vParam1, const iParamType2 &vParam2, iParamType3 vParam3 )
+	{
+		for ( size_t i=0; i<mListeners.GetSize(); i++ )
+		{
+			iType *vListener = mListeners[i];
+			(vListener->*iFunction)( vParam1, vParam2, vParam3 );
+		}
+	}
+
 };
 
 END_NAMESPACE()

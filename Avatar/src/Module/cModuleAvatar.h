@@ -7,10 +7,13 @@ using Loom::Core::IModule;
 
 BEGIN_NAMESPACE( Avatar )
 
+class cConfig;
+
 class AVATAR_API cModuleAvatar : public IModule
 {
 protected:
 	HANDLE mThread;
+	cConfig *mConfig;
 
 	void CreateEnvironment( void );
 
