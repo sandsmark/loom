@@ -20,3 +20,20 @@ material CubeMaterial
     }
   }
 }
+
+material OgreApp.Lines
+{
+  technique
+  {
+    pass
+    {
+        vertex_program_ref OgreApp/Line
+        {
+        }
+        
+        fragment_program_ref OgreApp/LineFP
+        {
+        }        
+    }
+  }
+}

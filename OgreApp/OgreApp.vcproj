@@ -255,11 +255,27 @@
 							Name="Responders"
 							>
 							<File
+								RelativePath=".\src\Qt\Ogre\Event\Responders\cOgreResponderAddLine.h"
+								>
+							</File>
+							<File
+								RelativePath=".\src\Qt\Ogre\Event\Responders\cOgreResponderClearLines.h"
+								>
+							</File>
+							<File
 								RelativePath=".\src\Qt\Ogre\Event\Responders\cOgreResponderCreateBox.h"
 								>
 							</File>
 							<File
 								RelativePath=".\src\Qt\Ogre\Event\Responders\cOgreResponderDebugLog.h"
+								>
+							</File>
+							<File
+								RelativePath=".\src\Qt\Ogre\Event\Responders\cOgreResponderGetBoundingBox.h"
+								>
+							</File>
+							<File
+								RelativePath=".\src\Qt\Ogre\Event\Responders\cOgreResponderGetEntities.h"
 								>
 							</File>
 							<File
@@ -386,6 +402,14 @@
 					RelativePath=".\resources\materials\default.program"
 					>
 				</File>
+				<Filter
+					Name="OgreApp"
+					>
+					<File
+						RelativePath=".\resources\materials\OgreApp\line.cg"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 	</Files>

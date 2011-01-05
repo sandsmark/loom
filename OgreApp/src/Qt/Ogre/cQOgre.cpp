@@ -29,6 +29,9 @@
 #include <Ogre/Ogre.h>
 #pragma warning( pop )
 
+#include <Ogre/OgreSceneManager.h>
+#include <Ogre/OgreMovableObject.h>
+
 using namespace Loom::OgreApp;
 using Loom::Core::cLogger;
 
@@ -146,6 +149,7 @@ void cQOgre::initializeGL()
     InitWindow();
     InitResources();
     InitScene();
+	InitLines();
     InitPost();
 }
 
@@ -327,4 +331,115 @@ void Loom::OgreApp::cQOgre::OnMoveTo( const Ogre::String &iName, const Ogre::Vec
 /************************************************************************/
 {
 	OnSetPosition( iName, iPosition );
+}
+
+/************************************************************************/
+void Loom::OgreApp::cQOgre::OnGetEntities( cArray<Ogre::String> &oNames )
+/************************************************************************/
+{
+	Ogre::SceneManager::MovableObjectIterator vIterator = mScene->getMovableObjectIterator("Entity");
+	while ( vIterator.hasMoreElements() )
+	{
+		Ogre::MovableObject *vObject = vIterator.getNext();
+		oNames.Add( vObject->getName() );
+	}
+}
+
+/************************************************************************/
+void Loom::OgreApp::cQOgre::OnGetBoundingBox( const Ogre::String &iName, Ogre::AxisAlignedBox &oBounds )
+/************************************************************************/
+{
+	Ogre::Entity *vEntity = mScene->getEntity( iName );
+
+	if ( !vEntity )
+	{
+		TCHAR vTemp[ 256 ];
+		StringCchPrintf( vTemp, 256, _T("Unknown entity: %S"), iName );	// TODO: Use %s if not in unicode
+		cLogger::Get().Log( cLogger::LOG_WARNING, _T("Global"), vTemp );
+	}
+
+	oBounds = vEntity->getBoundingBox();
+}
+
+/************************************************************************/
+void Loom::OgreApp::cQOgre::InitLines( void )
+/************************************************************************/
+{
+	mLines = Ogre::MeshManager::getSingleton().createManual( "OgreApp.Lines", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME );
+
+	// Create mesh for textured lines
+	Ogre::SubMesh *vSub = mLines->createSubMesh();
+	vSub->operationType = Ogre::RenderOperation::OT_LINE_LIST;
+	vSub->setMaterialName( "OgreApp.Lines" );
+	vSub->useSharedVertices = false;
+	vSub->vertexData = new Ogre::VertexData;
+	vSub->indexData  = new Ogre::IndexData;
+	vSub->vertexData->vertexDeclaration->addElement( 0,  0, Ogre::VET_FLOAT3, Ogre::VES_POSITION );
+	vSub->vertexData->vertexDeclaration->addElement( 0, 12, Ogre::VET_COLOUR_ARGB, Ogre::VES_DIFFUSE );
+
+	//    const int vMaxNumLines = 30000 * 5;
+	const int vMaxNumLines = 30000;
+	Ogre::HardwareVertexBufferSharedPtr vVertices = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer( vSub->vertexData->vertexDeclaration->getVertexSize( 0 ), vMaxNumLines * 2, Ogre::HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY );
+	Ogre::HardwareIndexBufferSharedPtr  vIndices  = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer ( Ogre::HardwareIndexBuffer::IT_32BIT, vMaxNumLines * 2 * sizeof( Ogre::ulong ), Ogre::HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY );
+
+	vSub->vertexData->vertexBufferBinding->setBinding( 0, vVertices );
+	vSub->vertexData->vertexStart = 0;
+	vSub->vertexData->vertexCount = 0;
+
+	vSub->indexData->indexBuffer = vIndices;
+
+	mLines->_setBounds( Ogre::AxisAlignedBox( -1000, -1000, -1000, 1000, 1000, 1000 ) );
+	mLines->_setBoundingSphereRadius( 2000 );
+
+	Ogre::Entity *vSpewsEntity = mScene->createEntity( "OgreApp.Lines", "OgreApp.Lines" );
+	Ogre::SceneNode *vNode = mScene->getRootSceneNode()->createChildSceneNode( Ogre::Vector3( 0, 0, 0 ) );
+	vNode->attachObject( vSpewsEntity );
+}
+
+/************************************************************************/
+void Loom::OgreApp::cQOgre::ClearLines( void )
+/************************************************************************/
+{
+	Ogre::SubMesh *vSub = mLines->getSubMesh( 0 );
+	vSub->vertexData->vertexCount = 0;
+	vSub->indexData->indexCount = 0;
+}
+
+/************************************************************************/
+void Loom::OgreApp::cQOgre::AddLine( const Ogre::Vector3 &iFrom, const Ogre::Vector3 &iTo, const Ogre::ColourValue &iColour )
+/************************************************************************/
+{
+	Ogre::SubMesh *vSub = mLines->getSubMesh( 0 );
+	size_t vNumVertices = vSub->vertexData->vertexCount;
+
+	// Fill vertices
+	Ogre::HardwareVertexBufferSharedPtr vVertices = vSub->vertexData->vertexBufferBinding->getBuffer(0);
+	sLineVertex *vVtx = (sLineVertex*)( vVertices->lock( vVertices->getVertexSize() * vSub->vertexData->vertexCount, vVertices->getVertexSize() * 2, Ogre::HardwareBuffer::HBL_NO_OVERWRITE ) );
+	vVtx->Pos = iFrom; vVtx->Col = iColour.getAsARGB(); vVtx++;
+	vVtx->Pos = iTo;   vVtx->Col = iColour.getAsARGB(); vVtx++;
+	vVertices->unlock();
+
+	// Fill indices
+	Ogre::HardwareIndexBufferSharedPtr vIndices = vSub->indexData->indexBuffer;
+	Ogre::ulong *vIdx = (Ogre::ulong*)( vIndices->lock( vSub->indexData->indexCount * sizeof( Ogre::ulong ), sizeof( Ogre::ulong ) * 2, Ogre::HardwareBuffer::HBL_NO_OVERWRITE ) );
+	*vIdx++ = vNumVertices + 0;
+	*vIdx++ = vNumVertices + 1;
+	vIndices->unlock();
+
+	vSub->vertexData->vertexCount += 2;
+	vSub->indexData->indexCount   += 2;
+}
+
+/************************************************************************/
+void Loom::OgreApp::cQOgre::OnClearLines( void )
+/************************************************************************/
+{
+	ClearLines();
+}
+
+/************************************************************************/
+void Loom::OgreApp::cQOgre::OnAddLine( const Ogre::Vector3 &iFrom, const Ogre::Vector3 &iTo, const Ogre::ColourValue &iColour /*= Ogre::ColourValue::White */ )
+/************************************************************************/
+{
+	AddLine( iFrom, iTo, iColour );
 }

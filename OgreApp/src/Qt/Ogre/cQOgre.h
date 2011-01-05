@@ -11,6 +11,7 @@
 #include <OgreApp/Qt/Ogre/Event/IOgreEvent.h>
 #include <Ogre/OgreString.h>
 #include <QtGui/QTextEdit.h>
+#include <Ogre/OgreMesh.h>
 
 namespace Ogre
 {
@@ -27,6 +28,13 @@ class OGREAPP_API cQOgre : public QGLWidget, public IOgreEvent
 {
 //    Q_OBJECT
 protected:
+	struct sLineVertex
+	{
+		Ogre::Vector3     Pos;
+		DWORD             Col;
+	};
+
+protected:
     // Ogre stuff
     Ogre::Root *mRoot;
     Ogre::RenderWindow *mWindow;
@@ -35,11 +43,13 @@ protected:
     Ogre::SceneManager *mScene;
 	QTextEdit *mDebugPanel;
 	QTextEdit *mOutputPanel;
+	Ogre::MeshPtr mLines;
 
     bool InitRoot( void );
     bool InitWindow( void );
     virtual bool InitResources( void ) { return true; }
     bool InitScene( void );
+	void InitLines( void );
     virtual bool InitPost( void ) { return true; }
     
 public:
@@ -63,6 +73,9 @@ public:
 	void SetDebugPanel( QTextEdit *iDebugPanel ) { mDebugPanel = iDebugPanel; }
 	void SetOutputPanel( QTextEdit *iOutputPanel ) { mOutputPanel = iOutputPanel; }
 
+	void ClearLines( void );
+	void AddLine( const Ogre::Vector3 &iFrom, const Ogre::Vector3 &iTo, const Ogre::ColourValue &iColour = Ogre::ColourValue::White );
+
 	// IOgreEvent methods
 	virtual void OnSetBackgroundColour( const Ogre::ColourValue &iColour );
 	virtual void OnCreateBox( const Ogre::String &iName, const Ogre::Vector3 &iPosition, const Ogre::Vector3 &iSize );
@@ -72,6 +85,10 @@ public:
 	virtual void OnOutput( const cString &iText );
 	virtual void OnSetTexture( const Ogre::String &iName, void *iTextureData, unsigned long iSize );
 	virtual void OnMoveTo( const Ogre::String &iName, const Ogre::Vector3 &iPosition, float iSpeed );
+	virtual void OnGetEntities( cArray<Ogre::String> &oNames );
+	virtual void OnGetBoundingBox( const Ogre::String &iName, Ogre::AxisAlignedBox &oBounds );
+	virtual void OnClearLines( void );
+	virtual void OnAddLine( const Ogre::Vector3 &iFrom, const Ogre::Vector3 &iTo, const Ogre::ColourValue &iColour = Ogre::ColourValue::White );
 };
 
 END_NAMESPACE()

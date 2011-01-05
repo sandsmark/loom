@@ -7,6 +7,9 @@
 #include <fstream>
 #include <io.h>
 
+#include <Ogre/OgreAxisAlignedBox.h>
+#include <Strsafe.h>
+
 using namespace Loom::OgreApp;
 using Loom::Core::cSerializerXML;
 using Loom::Core::cLogger;
@@ -34,6 +37,10 @@ cQMainWindow::cQMainWindow()
 	vFileMenu->addAction( "Test Script", this, SLOT( OnTestScript() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_6 ) );
 	vFileMenu->addAction( "Test Serializer", this, SLOT( OnTestSerializer() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_7 ) );
 	vFileMenu->addAction( "Set Material", this, SLOT( OnSetMaterial() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_8 ) );
+	vFileMenu->addAction( "List Entities", this, SLOT( OnListEntities() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_9 ) );
+	vFileMenu->addAction( "Get Bounds Test", this, SLOT( OnGetBounds() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_A ) );
+	vFileMenu->addAction( "Add Line", this, SLOT( OnAddLine() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_B ) );
+	vFileMenu->addAction( "Test", this, SLOT( OnTest() ) );
 
 	mDebugWindow = new QTextEdit();
 	mDebugWindow->setDisabled( true );
@@ -57,6 +64,10 @@ cQMainWindow::cQMainWindow()
 	cOgreResponderOutput::Get().AddListener( *mScene );
 	cOgreResponderSetTexture::Get().AddListener( *mScene );
 	cOgreResponderMoveTo::Get().AddListener( *mScene );
+	cOgreResponderGetEntities::Get().AddListener( *mScene );
+	cOgreResponderGetBoundingBox::Get().AddListener( *mScene );
+	cOgreResponderClearLines::Get().AddListener( *mScene );
+	cOgreResponderAddLine::Get().AddListener( *mScene );
 
 	cLogger::Get().AddWriter( _T( "OgreAppLog" ), new cLogWriterOgreApp( cLogger::LOG_DEBUG ) );
 	cLogger::Get().Log( cLogger::LOG_DEBUG, _T( "OgreAppLog" ), _T( "OgreApp log test" ) );
@@ -120,7 +131,7 @@ void cQMainWindow::OnCreateBox()
 	vParam.Size.y = Ogre::Math::RangeRandom( -1, 1 );
 	vParam.Size.z = Ogre::Math::RangeRandom( -1, 1 );
 	static int vCount = 0;
-	sprintf( vParam.Name, "Box%d", vCount++ );
+	sprintf_s( vParam.Name, 256, "Box%d", vCount++ );
 	cDispatcherHub::IParam vIParam( (void*)&vParam );
 
 	cDispatcherHub::Get().Dispatch( cOgreResponderCreateBox::Get().GetEventName(), vIParam );
@@ -137,7 +148,7 @@ void cQMainWindow::OnMoveCamera()
 	};
 	sTemp vTemp;
 	vTemp.Pos = Ogre::Vector3( 0, 0, -100 );
-	strcpy( vTemp.Name, "MainCamera" );
+	strcpy_s( vTemp.Name, 256, "MainCamera" );
 	cDispatcherHub::IParam vIParam( (void*)&vTemp );
 
 	cDispatcherHub::Get().Dispatch( cOgreResponderSetPosition::Get().GetEventName(), vIParam );
@@ -158,7 +169,7 @@ void cQMainWindow::OnMoveBox0()
 	vTemp.Pos.x = Ogre::Math::RangeRandom( -50, 50 );
 	vTemp.Pos.y = Ogre::Math::RangeRandom( -50, 50 );
 	vTemp.Pos.z = Ogre::Math::RangeRandom( -50, 50 );
-	strcpy( vTemp.Name, "Box0" );
+	strcpy_s( vTemp.Name, 256, "Box0" );
 	cDispatcherHub::IParam vIParam( (void*)&vTemp );
 
 	cDispatcherHub::Get().Dispatch( cOgreResponderMoveTo::Get().GetEventName(), vIParam );
@@ -214,7 +225,7 @@ void Loom::OgreApp::cQMainWindow::OnTestScript()
 		char Name[256];
 	};
 	sTemp vTemp;
-	strcpy( vTemp.Name, vFile.getOpenFileName().toLocal8Bit() );
+	strcpy_s( vTemp.Name, 256, vFile.getOpenFileName().toLocal8Bit() );
 	cDispatcherHub::IParam vIParam( (void*)&vTemp );
 
 //	cDispatcherHub::Get().Dispatch( _T("Scripting::cScriptingResponderRunScript"), vIParam );
@@ -239,7 +250,7 @@ void Loom::OgreApp::cQMainWindow::OnSetMaterial()
 	FILE *f = fopen( "resources/materials/texture_test.jpg", "rb" );
 	size_t vSize = filelength( f->_file );
 	char *vTemp = new char[ 5 + 4 + vSize ];
-	strcpy( vTemp, "Box0" );
+	strcpy_s( vTemp, 256, "Box0" );
 	*(unsigned long*)( vTemp + 5 ) = vSize;
 	fread( vTemp + 9, vSize, 1, f );
 	fclose( f );
@@ -247,4 +258,61 @@ void Loom::OgreApp::cQMainWindow::OnSetMaterial()
 
 	cDispatcherHub::Get().Dispatch( cOgreResponderSetTexture::Get().GetEventName(), vIParam );
 	delete [] vTemp;
+}
+
+/************************************************************************/
+void Loom::OgreApp::cQMainWindow::OnTest()
+/************************************************************************/
+{
+}
+
+/************************************************************************/
+void Loom::OgreApp::cQMainWindow::OnListEntities()
+/************************************************************************/
+{
+	cArray<Ogre::String> vEntities;
+	cOgreResponderGetEntities::Get().Dispatch( &IOgreEvent::OnGetEntities, vEntities );
+
+	cDispatcherHub::Get().Dispatch( _T("Ogre::cOgreResponderOutput"), TEXT( "List of entities:" ) );
+	for ( size_t i=0; i<vEntities.GetSize(); i++ )
+	{
+		TCHAR vTemp[ 256 ];
+		StringCchPrintf( vTemp, 256, L"\t%S", vEntities[i].c_str() );
+		cDispatcherHub::Get().Dispatch( _T("Ogre::cOgreResponderOutput"), vTemp );
+	}
+}
+
+/************************************************************************/
+void Loom::OgreApp::cQMainWindow::OnGetBounds()
+/************************************************************************/
+{
+	Ogre::AxisAlignedBox vBounds;
+	cOgreResponderGetBoundingBox::Get().Dispatch( &IOgreEvent::OnGetBoundingBox, Ogre::String( "Avatar1" ), vBounds );
+
+	TCHAR vTemp[ 256 ];
+	StringCchPrintf( vTemp, 256, L"Avatar1 bounds: [%.2f,%.2f,%.2f]-[%.2f,%.2f,%.2f]", vBounds.getMinimum().x, vBounds.getMinimum().y, vBounds.getMinimum().z, vBounds.getMaximum().x, vBounds.getMaximum().y, vBounds.getMaximum().z );
+	cDispatcherHub::Get().Dispatch( _T("Ogre::cOgreResponderOutput"), vTemp );
+}
+
+/************************************************************************/
+void Loom::OgreApp::cQMainWindow::OnAddLine()
+/************************************************************************/
+{
+	Ogre::Vector3 vFrom;
+	vFrom.x = Ogre::Math::RangeRandom( -50, 50 );
+	vFrom.y = Ogre::Math::RangeRandom( -50, 50 );
+	vFrom.z = Ogre::Math::RangeRandom( -50, 50 );
+
+	Ogre::Vector3 vTo;
+	vTo.x = Ogre::Math::RangeRandom( -50, 50 );
+	vTo.y = Ogre::Math::RangeRandom( -50, 50 );
+	vTo.z = Ogre::Math::RangeRandom( -50, 50 );
+
+	Ogre::ColourValue vColour;
+	vColour.r = Ogre::Math::UnitRandom();
+	vColour.g = Ogre::Math::UnitRandom();
+	vColour.b = Ogre::Math::UnitRandom();
+	vColour.a = 1;
+
+	cOgreResponderAddLine::Get().Dispatch( &IOgreEvent::OnAddLine, vFrom, vTo, vColour );
 }

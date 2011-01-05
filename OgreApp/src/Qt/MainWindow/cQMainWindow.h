@@ -43,6 +43,10 @@ public:
 		void OnTestScript();
 		void OnTestSerializer();
 		void OnSetMaterial();
+		void OnListEntities();
+		void OnGetBounds();
+		void OnAddLine();
+		void OnTest();
 };
 
 END_NAMESPACE()
