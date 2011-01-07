@@ -283,6 +283,10 @@
 								>
 							</File>
 							<File
+								RelativePath=".\src\Qt\Ogre\Event\Responders\cOgreResponderGetScale.h"
+								>
+							</File>
+							<File
 								RelativePath=".\src\Qt\Ogre\Event\Responders\cOgreResponderMoveTo.h"
 								>
 							</File>
@@ -300,6 +304,10 @@
 							</File>
 							<File
 								RelativePath=".\src\Qt\Ogre\Event\Responders\cOgreResponderSetPosition.h"
+								>
+							</File>
+							<File
+								RelativePath=".\src\Qt\Ogre\Event\Responders\cOgreResponderSetScale.h"
 								>
 							</File>
 							<File

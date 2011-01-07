@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'cQMainWindow.h'
 **
-** Created: Wed Jan 5 01:06:18 2011
+** Created: Thu Jan 6 23:34:31 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.6.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_cQMainWindow[] = {
        4,       // revision
        0,       // classname
        0,    0, // classinfo
-      12,   14, // methods
+      13,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -43,6 +43,7 @@ static const uint qt_meta_data_cQMainWindow[] = {
      150,   13,   13,   13, 0x0a,
      164,   13,   13,   13, 0x0a,
      176,   13,   13,   13, 0x0a,
+     192,   13,   13,   13, 0x0a,
 
        0        // eod
 };
@@ -52,7 +53,8 @@ static const char qt_meta_stringdata_cQMainWindow[] = {
     "OnCreateBox()\0OnMoveCamera()\0OnMoveBox0()\0"
     "OnIkTest()\0OnTestScript()\0OnTestSerializer()\0"
     "OnSetMaterial()\0OnListEntities()\0"
-    "OnGetBounds()\0OnAddLine()\0OnTest()\0"
+    "OnGetBounds()\0OnAddLine()\0OnScaleAvatar()\0"
+    "OnTest()\0"
 };
 
 const QMetaObject cQMainWindow::staticMetaObject = {
@@ -95,10 +97,11 @@ int cQMainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 8: OnListEntities(); break;
         case 9: OnGetBounds(); break;
         case 10: OnAddLine(); break;
-        case 11: OnTest(); break;
+        case 11: OnScaleAvatar(); break;
+        case 12: OnTest(); break;
         default: ;
         }
-        _id -= 12;
+        _id -= 13;
     }
     return _id;
 }

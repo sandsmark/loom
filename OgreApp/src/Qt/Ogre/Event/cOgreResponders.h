@@ -13,3 +13,6 @@
 #include <OgreApp/Qt/Ogre/Event/Responders/cOgreResponderGetEntities.h>
 #include <OgreApp/Qt/Ogre/Event/Responders/cOgreResponderAddLine.h>
 #include <OgreApp/Qt/Ogre/Event/Responders/cOgreResponderClearLines.h>
+#include <OgreApp/Qt/Ogre/Event/Responders/cOgreResponderStopMove.h>
+#include <OgreApp/Qt/Ogre/Event/Responders/cOgreResponderSetScale.h>
+#include <OgreApp/Qt/Ogre/Event/Responders/cOgreResponderGetScale.h>

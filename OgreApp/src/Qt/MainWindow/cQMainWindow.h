@@ -46,6 +46,7 @@ public:
 		void OnListEntities();
 		void OnGetBounds();
 		void OnAddLine();
+		void OnScaleAvatar();
 		void OnTest();
 };
 

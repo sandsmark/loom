@@ -59,7 +59,9 @@ public:
 
 	virtual void RenderFrame( void );
 
+	// IOgreEvent methods
 	virtual void OnMoveTo( const Ogre::String &iName, const Ogre::Vector3 &iPosition, float iSpeed );
+	virtual void OnStopMove( const Ogre::String &iName );
 
 	// QWidget methods
 	virtual void mousePressEvent( QMouseEvent *iEvent );

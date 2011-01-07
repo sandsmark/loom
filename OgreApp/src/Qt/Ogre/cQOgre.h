@@ -89,6 +89,9 @@ public:
 	virtual void OnGetBoundingBox( const Ogre::String &iName, Ogre::AxisAlignedBox &oBounds );
 	virtual void OnClearLines( void );
 	virtual void OnAddLine( const Ogre::Vector3 &iFrom, const Ogre::Vector3 &iTo, const Ogre::ColourValue &iColour = Ogre::ColourValue::White );
+	virtual void OnStopMove( const Ogre::String &iName );
+	virtual void OnSetScale( const Ogre::String &iName, const Ogre::Vector3 &iScale );
+	virtual void OnGetScale( const Ogre::String &iName, Ogre::Vector3 &oScale );
 };
 
 END_NAMESPACE()

@@ -309,3 +309,24 @@ void cQScene::OnMoveTo( const Ogre::String &iName, const Ogre::Vector3 &iPositio
 	mAnims.Add( vAnim );
 }
 
+/************************************************************************/
+void Loom::OgreApp::cQScene::OnStopMove( const Ogre::String &iName )
+/************************************************************************/
+{
+	for ( size_t i=0; i<mAnims.size(); i++ )
+	{
+		sAnim *vAnim = mAnims[i];
+		if ( vAnim->Camera && vAnim->Camera->getName() == iName )
+		{
+			mAnims.erase( mAnims.begin() + i );
+			i--;
+			break;
+		}
+		if ( vAnim->Entity && vAnim->Entity->getName() == iName )
+		{
+			mAnims.erase( mAnims.begin() + i );
+			i--;
+			break;
+		}
+	}
+}

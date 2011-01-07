@@ -40,6 +40,7 @@ cQMainWindow::cQMainWindow()
 	vFileMenu->addAction( "List Entities", this, SLOT( OnListEntities() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_9 ) );
 	vFileMenu->addAction( "Get Bounds Test", this, SLOT( OnGetBounds() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_A ) );
 	vFileMenu->addAction( "Add Line", this, SLOT( OnAddLine() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_B ) );
+	vFileMenu->addAction( "Scale Avatar", this, SLOT( OnScaleAvatar() ), QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_C ) );
 	vFileMenu->addAction( "Test", this, SLOT( OnTest() ) );
 
 	mDebugWindow = new QTextEdit();
@@ -68,6 +69,9 @@ cQMainWindow::cQMainWindow()
 	cOgreResponderGetBoundingBox::Get().AddListener( *mScene );
 	cOgreResponderClearLines::Get().AddListener( *mScene );
 	cOgreResponderAddLine::Get().AddListener( *mScene );
+	cOgreResponderStopMove::Get().AddListener( *mScene );
+	cOgreResponderSetScale::Get().AddListener( *mScene );
+	cOgreResponderGetScale::Get().AddListener( *mScene );
 
 	cLogger::Get().AddWriter( _T( "OgreAppLog" ), new cLogWriterOgreApp( cLogger::LOG_DEBUG ) );
 	cLogger::Get().Log( cLogger::LOG_DEBUG, _T( "OgreAppLog" ), _T( "OgreApp log test" ) );
@@ -315,4 +319,11 @@ void Loom::OgreApp::cQMainWindow::OnAddLine()
 	vColour.a = 1;
 
 	cOgreResponderAddLine::Get().Dispatch( &IOgreEvent::OnAddLine, vFrom, vTo, vColour );
+}
+
+/************************************************************************/
+void Loom::OgreApp::cQMainWindow::OnScaleAvatar()
+/************************************************************************/
+{
+	cOgreResponderSetScale::Get().Dispatch( &IOgreEvent::OnSetScale, Ogre::String( "Avatar1" ), Ogre::Vector3( 7, 0.5, 1 ) );
 }

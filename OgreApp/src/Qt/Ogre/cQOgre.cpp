@@ -443,3 +443,41 @@ void Loom::OgreApp::cQOgre::OnAddLine( const Ogre::Vector3 &iFrom, const Ogre::V
 {
 	AddLine( iFrom, iTo, iColour );
 }
+
+/************************************************************************/
+void Loom::OgreApp::cQOgre::OnStopMove( const Ogre::String &iName )
+/************************************************************************/
+{
+}
+
+/************************************************************************/
+void Loom::OgreApp::cQOgre::OnSetScale( const Ogre::String &iName, const Ogre::Vector3 &iScale )
+/************************************************************************/
+{
+	Ogre::Entity *vEntity = mScene->getEntity( iName );
+
+	if ( !vEntity )
+	{
+		TCHAR vTemp[ 256 ];
+		StringCchPrintf( vTemp, 256, _T("Unknown entity: %S"), iName );	// TODO: Use %s if not in unicode
+		cLogger::Get().Log( cLogger::LOG_WARNING, _T("Global"), vTemp );
+	}
+
+	vEntity->getParentNode()->setScale( iScale );
+}
+
+/************************************************************************/
+void Loom::OgreApp::cQOgre::OnGetScale( const Ogre::String &iName, Ogre::Vector3 &oScale )
+/************************************************************************/
+{
+	Ogre::Entity *vEntity = mScene->getEntity( iName );
+
+	if ( !vEntity )
+	{
+		TCHAR vTemp[ 256 ];
+		StringCchPrintf( vTemp, 256, _T("Unknown entity: %S"), iName );	// TODO: Use %s if not in unicode
+		cLogger::Get().Log( cLogger::LOG_WARNING, _T("Global"), vTemp );
+	}
+
+	oScale = vEntity->getParentNode()->getScale();
+}

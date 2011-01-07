@@ -25,6 +25,9 @@ public:
 	virtual void OnOutput( const cString &iText ) = 0;
 	virtual void OnClearLines( void ) = 0;
 	virtual void OnAddLine( const Ogre::Vector3 &iFrom, const Ogre::Vector3 &iTo, const Ogre::ColourValue &Colour = Ogre::ColourValue::White ) = 0;
+	virtual void OnStopMove( const Ogre::String &iName ) = 0;
+	virtual void OnSetScale( const Ogre::String &iName, const Ogre::Vector3 &iScale ) = 0;
+	virtual void OnGetScale( const Ogre::String &iName, Ogre::Vector3 &oScale ) = 0;
 };
 
 END_NAMESPACE()
