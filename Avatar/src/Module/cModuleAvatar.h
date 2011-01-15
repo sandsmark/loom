@@ -9,11 +9,14 @@ BEGIN_NAMESPACE( Avatar )
 
 class cConfig;
 
+class cOgreAvatar;
 class AVATAR_API cModuleAvatar : public IModule
 {
 protected:
 	HANDLE mThread;
 	cConfig *mConfig;
+
+	cOgreAvatar *mAvatar1, *mAvatar2;
 
 	void CreateEnvironment( void );
 

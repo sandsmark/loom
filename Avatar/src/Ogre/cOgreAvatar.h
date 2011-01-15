@@ -2,6 +2,7 @@
 
 #include <Avatar/Event/IAvatarEvent.h>
 #include <OgreApp/Qt/Ogre/Event/IOgreListenerEvent.h>
+#include <Speech/Event/cSpeechResponders.h>
 #include <Ogre/OgreMatrix3.h>
 
 using Loom::OgreApp::IOgreListenerEvent;
@@ -22,7 +23,7 @@ BEGIN_NAMESPACE( Avatar )
 
 class IController;
 
-class AVATAR_API cOgreAvatar : public IAvatarEvent, public IOgreListenerEvent 
+class AVATAR_API cOgreAvatar : public IAvatarEvent, public IOgreListenerEvent, public Speech::ISpeechListenerEvent
 {
 protected:
 	enum eCalibrationState

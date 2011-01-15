@@ -44,6 +44,7 @@ cModuleAvatar::cModuleAvatar()
 : IModule( _T( "Avatar" ) ), mConfig( NULL )
 /************************************************************************/
 {
+	mAvatar1 = mAvatar2 = NULL;
 	mDependencies.Add( cModuleOgreApp::GetName() );
 	mDependencies.Add( cModuleSpeech::GetName() );
 }
@@ -85,17 +86,19 @@ void cModuleAvatar::Init( void )
 
 	CreateEnvironment();
 
- 	cOgreAvatar *vAvatar1 = new cOgreAvatar( "Avatar1" );
-	vAvatar1->SetController( new cControllerTest );
-	vAvatar1->SetPosition( mConfig->Position );
-	vAvatar1->SetRotation( Ogre::Quaternion( Ogre::Degree( mConfig->Orientation ), Ogre::Vector3( 0, 1, 0 ) ) );
+ 	mAvatar1 = new cOgreAvatar( "Avatar1" );
+	mAvatar1->SetController( new cControllerTest );
+	mAvatar1->SetPosition( mConfig->Position );
+	mAvatar1->SetRotation( Ogre::Quaternion( Ogre::Degree( mConfig->Orientation ), Ogre::Vector3( 0, 1, 0 ) ) );
 	if ( !mConfig->SingleAvatar )
 	{
-		cOgreAvatar *vAvatar2 = new cOgreAvatar( "Avatar2" );
-		vAvatar2->SetPosition( Ogre::Vector3( 0, 0, -50 ) );
-		vAvatar2->SetRotation( Ogre::Quaternion( Ogre::Radian( 0 ), Ogre::Vector3( 0, 1, 0 ) ) );
-		vAvatar2->SetController( new cControllerTest );
+		mAvatar2 = new cOgreAvatar( "Avatar2" );
+		mAvatar2->SetPosition( Ogre::Vector3( 0, 0, -50 ) );
+		mAvatar2->SetRotation( Ogre::Quaternion( Ogre::Radian( 0 ), Ogre::Vector3( 0, 1, 0 ) ) );
+		mAvatar2->SetController( new cControllerTest );
 	}
+
+	mThread = CreateThread( NULL, 0, StartThread, this, 0, NULL );
 
 	mInitialized = true;
 }
@@ -104,6 +107,16 @@ void cModuleAvatar::Init( void )
 DWORD cModuleAvatar::StartThread( LPVOID iParam )
 /************************************************************************/
 {
+
+	cModuleAvatar* _this = (cModuleAvatar*) iParam;
+	// First we need to do the calibration
+	cDispatcherHub::Get().Dispatch( _T("Speech::Say"), L"Let us do the calibration now..." );
+	Sleep(500);
+	cDispatcherHub::Get().Dispatch( _T("Speech::Say"), L"First move your arm down..." );
+	Sleep(500);
+
+	_this->mAvatar1->Calibrate();
+
 	while ( true )
 	{
 		Sleep( 1000 );

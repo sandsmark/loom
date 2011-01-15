@@ -35,6 +35,7 @@ cOgreAvatar::cOgreAvatar( const Ogre::String &iName )
 	// Subscribe for Avatar messages
 	cAvatarResponderSetEffectorPosition::Get().AddListener( *this );
 	cAvatarResponderSetEffectorRotation::Get().AddListener( *this );
+	Speech::cSpeechResponderHeard::Get().AddListener( *this );
 
 	// Subscribe for Ogre rendering message
 	cOgreResponderOnRender::Get().AddListener( *this );
@@ -207,7 +208,7 @@ void Loom::Avatar::cOgreAvatar::Calibrate( void )
 void Loom::Avatar::cOgreAvatar::OnHeard( const std::wstring &text )
 /************************************************************************/
 {
-	if ( text != L"done" ) return;
+	if ( ( text != L"done" ) && ( text != L"ok" ) ) return;
 
 	switch ( mCalibrationState )
 	{
