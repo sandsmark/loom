@@ -57,9 +57,10 @@ public:
 
 class TRACKSTAR_API TrackStarFileReader : public TrackStarInterface {
 public:
-	TrackStarFileReader(const char* filename, bool repeat);
+	TrackStarFileReader();
 	virtual ~TrackStarFileReader();
 
+	virtual bool init(const char* filename, bool repeat);
 	virtual bool getNextEntry(int &sensorID, double &x, double &y, double &z, double &a, double &e, double &r, int timeout);
 
 protected:
@@ -73,9 +74,10 @@ protected:
 
 class TRACKSTAR_API TrackStarNetworkReader : public TrackStarInterface {
 public:
-	TrackStarNetworkReader(const char* address, int port);
+	TrackStarNetworkReader();
 	virtual ~TrackStarNetworkReader();
 
+	virtual bool init(const char* address, int port);
 	virtual bool getNextEntry(int &sensorID, double &x, double &y, double &z, double &a, double &e, double &r, int timeout);
 
 protected:
@@ -92,6 +94,7 @@ public:
 	TrackStarDirectReader();
 	virtual ~TrackStarDirectReader();
 
+	virtual bool init();
 	virtual bool getNextEntry(int &sensorID, double &x, double &y, double &z, double &a, double &e, double &r, int timeout);
 
 protected:

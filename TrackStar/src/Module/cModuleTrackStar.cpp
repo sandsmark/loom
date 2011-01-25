@@ -13,6 +13,7 @@ cModuleTrackStar::cModuleTrackStar()
 : IModule( GetName() )
 /************************************************************************/
 {
+	tsInterface = NULL;
 }
 
 /************************************************************************/
@@ -25,6 +26,12 @@ void cModuleTrackStar::Init( void )
 	Speech::cSpeechResponderHeard::Get().AddListener( *this );
 	mThread = CreateThread( NULL, 0, StartThread, this, 0, NULL );
 	
+	tsInterface = new TrackStarDirectReader();
+	if (!((TrackStarDirectReader*)tsInterface)->init()) {
+		delete(tsInterface);
+		tsInterface = NULL;
+	}
+
 	mInitialized = true;
 }
 
@@ -79,6 +86,9 @@ void cModuleTrackStar::Destroy( void )
 {
 	TerminateThread( mThread, 0 );
 
+	delete(tsInterface);
+	tsInterface = NULL;
+
 	mInitialized = false;
 }
 
@@ -86,5 +96,5 @@ void cModuleTrackStar::Destroy( void )
 TrackStarInterface *Loom::TrackStar::cModuleTrackStar::GetInterface( void )
 /************************************************************************/
 {
-	return new TrackStarDirectReader();
+	return tsInterface;
 }

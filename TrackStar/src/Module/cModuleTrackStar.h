@@ -13,6 +13,7 @@ class TRACKSTAR_API cModuleTrackStar : public IModule, public Speech::ISpeechLis
 {
 protected:
 	HANDLE mThread;
+	TrackStarInterface* tsInterface;
 
 public:
 	cModuleTrackStar();

@@ -66,40 +66,10 @@ bool TrackStarMatrix::calcMatrix(double tsX1, double tsY1, double tsZ1, double o
 
 
 
-TrackStarFileReader::TrackStarFileReader(const char* filename, bool repeat) {
+TrackStarFileReader::TrackStarFileReader() {
 	trackData = NULL;
 	trackDataLen = 0;
 	pos = 0;
-
-	FILE* file = fopen(filename, "r");
-	if (file == NULL)
-		return;
-
-	fseek(file, 0, SEEK_END);
-	long len = ftell(file);
-	fseek(file, 0, SEEK_SET);
-
-	if (len <= 0) {
-		fclose(file);
-		return;
-	}
-
-	char* data = new char[len+1];
-
-	int res = (int)fread(data, 1, len, file);
-
-	if (res <= 0) {
-		delete [] data;
-		fclose(file);
-		return;
-	}
-	len = res;
-
-	fclose(file);
-
-	trackDataLen = res;
-	data[len] = 0;
-	trackData = data;
 }
 
 TrackStarFileReader::~TrackStarFileReader() {
@@ -109,6 +79,40 @@ TrackStarFileReader::~TrackStarFileReader() {
 		trackDataLen = 0;
 	}
 }
+
+bool TrackStarFileReader::init(const char* filename, bool repeat) {
+	FILE* file = fopen(filename, "r");
+	if (file == NULL)
+		return false;
+
+	fseek(file, 0, SEEK_END);
+	long len = ftell(file);
+	fseek(file, 0, SEEK_SET);
+
+	if (len <= 0) {
+		fclose(file);
+		return false;
+	}
+
+	char* data = new char[len+1];
+
+	int res = (int)fread(data, 1, len, file);
+
+	if (res <= 0) {
+		delete [] data;
+		fclose(file);
+		return false;
+	}
+	len = res;
+
+	fclose(file);
+
+	trackDataLen = res;
+	data[len] = 0;
+	trackData = data;
+	return true;
+}
+
 
 
 bool TrackStarFileReader::getNextEntry(int &sensorID, double &x, double &y, double &z, double &a, double &e, double &r, int timeout) {
@@ -179,15 +183,20 @@ char* TrackStarFileReader::getNextLine() {
 
 
 
-TrackStarNetworkReader::TrackStarNetworkReader(const char* address, int port) {
-	this->address = new char[strlen(address)+1];
-	strcpy(this->address, address);
-	this->port = port;
+TrackStarNetworkReader::TrackStarNetworkReader() {
+	this->address = NULL;
+	this->port = 0;
 }
 
 TrackStarNetworkReader::~TrackStarNetworkReader() {
 }
 
+bool TrackStarNetworkReader::init(const char* address, int port) {
+	this->address = new char[strlen(address)+1];
+	strcpy(this->address, address);
+	this->port = port;
+	return true;
+}
 
 bool TrackStarNetworkReader::getNextEntry(int &sensorID, double &x, double &y, double &z, double &a, double &e, double &r, int timeout) {
 	char* data = getNextLine();
@@ -242,7 +251,16 @@ char* TrackStarNetworkReader::getNextLine() {
 
 
 TrackStarDirectReader::TrackStarDirectReader() {
+}
 
+TrackStarDirectReader::~TrackStarDirectReader() {
+	id = -1;
+	errorCode = SetSystemParameter(SELECT_TRANSMITTER, &id, sizeof(id));
+	delete[] pSensor;
+	delete[] pXmtr;
+}
+
+bool TrackStarDirectReader::init() {
 	printf("\nTrackStar initialising, please wait (around 10 seconds)...\n\n");
 	fflush(stdout);
 
@@ -250,14 +268,14 @@ TrackStarDirectReader::TrackStarDirectReader() {
 	if(errorCode!=BIRD_ERROR_SUCCESS) {
 		printf(" --- TrackStar init FAILED: InitializeBIRDSystem()\n");
 		fflush(stdout);
-		return;
+		return false;
 	}
 
 	errorCode = GetBIRDSystemConfiguration(&ATC3DG.m_config);
 	if(errorCode!=BIRD_ERROR_SUCCESS) {
 		printf(" --- TrackStar init FAILED: GetBIRDSystemConfiguration()\n");
 		fflush(stdout);
-		return;
+		return false;
 	}
 
 	pSensor = new CSensor[ATC3DG.m_config.numberSensors];
@@ -267,7 +285,7 @@ TrackStarDirectReader::TrackStarDirectReader() {
 		if(errorCode!=BIRD_ERROR_SUCCESS) {
 			printf(" --- TrackStar init FAILED: GetSensorConfiguration()\n");
 			fflush(stdout);
-			return;
+			return false;
 		}
 	}
 
@@ -278,7 +296,7 @@ TrackStarDirectReader::TrackStarDirectReader() {
 		if(errorCode!=BIRD_ERROR_SUCCESS) {
 			printf(" --- TrackStar init FAILED: GetTransmitterConfiguration()\n");
 			fflush(stdout);
-			return;
+			return false;
 		}
 	}
 
@@ -293,21 +311,16 @@ TrackStarDirectReader::TrackStarDirectReader() {
 			if(errorCode!=BIRD_ERROR_SUCCESS) {
 				printf(" --- TrackStar init FAILED: SELECT_TRANSMITTER\n");
 				fflush(stdout);
-				return;
+				return false;
 			}
 			break;
 		}
 	}
 
 	printf("TrackStar initialisation SUCCESS!\n\n");
+	return true;
 }
 
-TrackStarDirectReader::~TrackStarDirectReader() {
-	id = -1;
-	errorCode = SetSystemParameter(SELECT_TRANSMITTER, &id, sizeof(id));
-	delete[] pSensor;
-	delete[] pXmtr;
-}
 
 bool TrackStarDirectReader::getNextEntry(int &sensorID, double &x, double &y, double &z, double &a, double &e, double &r, int timeout) {
 
