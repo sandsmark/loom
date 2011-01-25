@@ -1,5 +1,7 @@
 #include "TrackStarInterface.h"
 
+using namespace Loom::TrackStar;
+
 TrackStarMatrix::TrackStarMatrix() {
 	scale = 1.0;
 	xx = xy = xz = 0;

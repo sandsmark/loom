@@ -1,6 +1,7 @@
 #include <TrackStar/Module/cModuleTrackStar.h>
 #include <Core/Debug/Logger/cLogger.h>
 #include <Core/Event/cDispatcherHub.h>
+#include <TrackStar/Module/TrackStarInterface.h>
 
 using Loom::Core::cLogger;
 using Loom::Core::cDispatcherHub;
@@ -9,7 +10,7 @@ using namespace Loom::TrackStar;
 
 /************************************************************************/
 cModuleTrackStar::cModuleTrackStar()
-: IModule( _T( "TrackStar" ) )
+: IModule( GetName() )
 /************************************************************************/
 {
 }
@@ -79,4 +80,11 @@ void cModuleTrackStar::Destroy( void )
 	TerminateThread( mThread, 0 );
 
 	mInitialized = false;
+}
+
+/************************************************************************/
+TrackStarInterface *Loom::TrackStar::cModuleTrackStar::GetInterface( void )
+/************************************************************************/
+{
+	return new TrackStarDirectReader();
 }

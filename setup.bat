@@ -106,6 +106,8 @@ bin\junction.exe OgreApp\dependencies\win32\Qt    %QT_PATH%     >nul
 bin\junction.exe Weaver\dependencies\win32\Ogre   %OGRE_PATH%   >nul
 bin\junction.exe Weaver\dependencies\win32\Qt     %QT_PATH%     >nul
 
+bin\junction.exe Avatar\dependencies\win32\TrackStar TrackStar\dependencies\win32\TrackStar     >nul
+
 echo Setup is done!
 
 :end

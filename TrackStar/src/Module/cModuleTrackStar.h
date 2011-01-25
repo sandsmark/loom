@@ -7,6 +7,8 @@ using Loom::Core::IModule;
 #include <windows.h>
 BEGIN_NAMESPACE( TrackStar )
 
+class TrackStarInterface;
+
 class TRACKSTAR_API cModuleTrackStar : public IModule, public Speech::ISpeechListenerEvent
 {
 protected:
@@ -22,6 +24,14 @@ public:
 
 	virtual void OnSay( const std::wstring &text );
 	virtual void OnHeard( const std::wstring &text );
+
+	TrackStarInterface *GetInterface( void );
+
+	static const cString &GetName( void )
+	{
+		static const cString vName = _T("TrackStar");
+		return vName;
+	}
 };
 
 END_NAMESPACE()

@@ -6,6 +6,7 @@
 #include <Ogre/OgreEntity.h>
 #include <Ogre/OgreLight.h>
 #include <Ogre/OgreQuaternion.h>
+#include <Ogre/OgreAxisAlignedBox.h>
 #include <Core/Module/cModuleManager.h>
 #include <OgreApp/Module/cModuleOgreApp.h>
 #include <OgreApp/Qt/MainWindow/cQMainWindow.h>
@@ -14,6 +15,9 @@
 #include <Avatar/Event/cAvatarResponder.h>
 #include <Avatar/Controller/IController.h>
 #include <OgreApp/Qt/Ogre/Event/Responders/cOgreResponderOnRender.h>
+#include <TrackStar/TrackStar.h>
+#include <TrackStar/Module/cModuleTrackStar.h>
+#include <TrackStar/Module/TrackStarInterface.h>
 
 using namespace Loom::Avatar;
 using Loom::OgreApp::cModuleOgreApp;
@@ -23,6 +27,8 @@ using Loom::OgreApp::cQScene;
 using Loom::Core::cModuleManager;
 using Loom::Avatar::cAvatarResponderSetEffectorPosition;
 using Loom::OgreApp::cOgreResponderOnRender;
+using Loom::TrackStar::cModuleTrackStar;
+using Loom::TrackStar::TrackStarInterface;
 
 /************************************************************************/
 cOgreAvatar::cOgreAvatar( const Ogre::String &iName )
@@ -210,19 +216,115 @@ void Loom::Avatar::cOgreAvatar::OnHeard( const std::wstring &text )
 {
 	if ( ( text != L"done" ) && ( text != L"ok" ) ) return;
 
+	cModuleTrackStar *vTrackStar = (cModuleTrackStar*)cModuleManager::Get().GetModule( cModuleTrackStar::GetName() );
+	TrackStarInterface *vInterface = vTrackStar->GetInterface();
+
 	switch ( mCalibrationState )
 	{
 	case CALIBRATION_STATE1:
-		cDispatcherHub::Get().Dispatch( _T("Speech::Say"), L"Calibration 2" );
-		mCalibrationState = CALIBRATION_STATE2;
+		{	// X-axis, arms sideways
+			// Get calibration data
+			const int vHeadSensorId  = 0;
+			const int vRightArmSensorId = 1;
+
+			float vHead = FLT_MIN;
+			float vArm  = FLT_MIN;
+			while ( vHead == FLT_MIN || vArm == FLT_MIN )
+			{
+				int vSensorId;
+				double vX, vY, vZ, vA, vE, vR;
+				vInterface->getNextEntry( vSensorId, vX, vY, vZ, vA, vE, vR, 1000 );
+				switch ( vSensorId )
+				{
+				case vHeadSensorId:
+					vHead = vX;
+					break;
+				case vRightArmSensorId:
+					vArm = vX;
+					break;
+				}
+			}
+
+			Ogre::AxisAlignedBox vBounds = mEntity->getBoundingBox();
+
+			Ogre::Vector3 vScale = mNode->getScale();
+			vScale.x = vBounds.getSize().x * 0.5f / ( vArm - vHead );
+			mNode->setScale( vScale );
+
+			// Next
+			cDispatcherHub::Get().Dispatch( _T("Speech::Say"), L"Calibration 2" );
+			mCalibrationState = CALIBRATION_STATE2;
+		}
 		break;
 	case CALIBRATION_STATE2:
-		cDispatcherHub::Get().Dispatch( _T("Speech::Say"), L"Calibration 3" );
-		mCalibrationState = CALIBRATION_STATE3;
+		{	// Y-axis, arms up
+			// Get calibration data
+			const int vHeadSensorId  = 0;
+			const int vRightArmSensorId = 1;
+
+			float vHead = FLT_MIN;
+			float vArm  = FLT_MIN;
+			while ( vHead == FLT_MIN || vArm == FLT_MIN )
+			{
+				int vSensorId;
+				double vX, vY, vZ, vA, vE, vR;
+				vInterface->getNextEntry( vSensorId, vX, vY, vZ, vA, vE, vR, 1000 );
+				switch ( vSensorId )
+				{
+				case vHeadSensorId:
+					vHead = vY;
+					break;
+				case vRightArmSensorId:
+					vArm = vY;
+					break;
+				}
+			}
+
+			Ogre::AxisAlignedBox vBounds = mEntity->getBoundingBox();
+
+			Ogre::Vector3 vScale = mNode->getScale();
+			vScale.y = vBounds.getSize().x * 0.5f / ( vArm - vHead );
+			mNode->setScale( vScale );
+
+			// Next
+			cDispatcherHub::Get().Dispatch( _T("Speech::Say"), L"Calibration 3" );
+			mCalibrationState = CALIBRATION_STATE3;
+		}
 		break;
 	case CALIBRATION_STATE3:
-		cDispatcherHub::Get().Dispatch( _T("Speech::Say"), L"Calibration done" );
-		mCalibrationState = CALIBRATION_DONE;
+		{	// Z-axis, arms front
+			// Get calibration data
+			const int vHeadSensorId  = 0;
+			const int vRightArmSensorId = 1;
+
+			float vHead = FLT_MIN;
+			float vArm  = FLT_MIN;
+			while ( vHead == FLT_MIN || vArm == FLT_MIN )
+			{
+				int vSensorId;
+				double vX, vY, vZ, vA, vE, vR;
+				vInterface->getNextEntry( vSensorId, vX, vY, vZ, vA, vE, vR, 1000 );
+				switch ( vSensorId )
+				{
+				case vHeadSensorId:
+					vHead = vZ;
+					break;
+				case vRightArmSensorId:
+					vArm = vZ;
+					break;
+				}
+			}
+
+			Ogre::AxisAlignedBox vBounds = mEntity->getBoundingBox();
+
+			Ogre::Vector3 vScale = mNode->getScale();
+			vScale.z = vBounds.getSize().x * 0.5f / ( vArm - vHead );
+			mNode->setScale( vScale );
+
+			// Next
+			cDispatcherHub::Get().Dispatch( _T("Speech::Say"), L"Calibration done" );
+			mCalibrationState = CALIBRATION_DONE;
+		}
 		break;
 	}
 }

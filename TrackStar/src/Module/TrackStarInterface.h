@@ -1,7 +1,9 @@
 #pragma once
 
 #include <stdio.h>
-#include "ATC3DG.h"
+#include <ATC3DG.h>
+
+BEGIN_NAMESPACE( TrackStar )
 
 class CSystem
 {
@@ -44,7 +46,7 @@ public:
 };
 
 
-class TrackStarInterface {
+class TRACKSTAR_API TrackStarInterface {
 public:
 	TrackStarInterface() {}
 	virtual ~TrackStarInterface() {}
@@ -53,7 +55,7 @@ public:
 };
 
 
-class TrackStarFileReader : public TrackStarInterface {
+class TRACKSTAR_API TrackStarFileReader : public TrackStarInterface {
 public:
 	TrackStarFileReader(const char* filename, bool repeat);
 	virtual ~TrackStarFileReader();
@@ -69,7 +71,7 @@ protected:
 };
 
 
-class TrackStarNetworkReader : public TrackStarInterface {
+class TRACKSTAR_API TrackStarNetworkReader : public TrackStarInterface {
 public:
 	TrackStarNetworkReader(const char* address, int port);
 	virtual ~TrackStarNetworkReader();
@@ -85,7 +87,7 @@ protected:
 };
 
 
-class TrackStarDirectReader : public TrackStarInterface {
+class TRACKSTAR_API TrackStarDirectReader : public TrackStarInterface {
 public:
 	TrackStarDirectReader();
 	virtual ~TrackStarDirectReader();
@@ -102,3 +104,5 @@ protected:
 	int				sensorID;
 	short			id;
 };
+
+END_NAMESPACE()

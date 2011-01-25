@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/FIAvatar/common.h"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include;.\dependencies\win32\Ogre\include;.\dependencies\win32\Ogre\boost_1_42;.\dependencies\win32\Qt\Include"
+				AdditionalIncludeDirectories="../include;.\dependencies\win32\Ogre\include;.\dependencies\win32\Ogre\boost_1_42;.\dependencies\win32\Qt\Include;.\dependencies\win32\TrackStar"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;AVATAR_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="0"

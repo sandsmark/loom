@@ -11,6 +11,8 @@
 #include <Avatar/Controller/cControllerTest.h>
 #include <Core/Serializer/cSerializerXML.h>
 #include <Avatar/Config/cConfig.h>
+#include <TrackStar/TrackStar.h>
+#include <TrackStar/Module/cModuleTrackStar.h>
 
 #pragma warning( push )
 #pragma warning( disable: 4995 )	// warning C4995: 'vsprintf': name was marked as #pragma deprecated
@@ -29,6 +31,7 @@ using Loom::Core::cLogger;
 using Loom::Core::cDispatcherHub;
 using Loom::OgreApp::cModuleOgreApp;
 using Loom::Speech::cModuleSpeech;
+using Loom::TrackStar::cModuleTrackStar;
 
 using Loom::OgreApp::cModuleOgreApp;
 using Loom::OgreApp::cQMainWindow;
@@ -47,6 +50,7 @@ cModuleAvatar::cModuleAvatar()
 	mAvatar1 = mAvatar2 = NULL;
 	mDependencies.Add( cModuleOgreApp::GetName() );
 	mDependencies.Add( cModuleSpeech::GetName() );
+	mDependencies.Add( cModuleTrackStar::GetName() );
 }
 
 /************************************************************************/
