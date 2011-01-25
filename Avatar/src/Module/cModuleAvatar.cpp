@@ -13,6 +13,7 @@
 #include <Avatar/Config/cConfig.h>
 #include <TrackStar/TrackStar.h>
 #include <TrackStar/Module/cModuleTrackStar.h>
+#include <OgreApp/Qt/Ogre/Event/Responders/cOgreResponderCreateBox.h>
 
 #pragma warning( push )
 #pragma warning( disable: 4995 )	// warning C4995: 'vsprintf': name was marked as #pragma deprecated
@@ -39,6 +40,8 @@ using Loom::OgreApp::cQOgre;
 using Loom::OgreApp::cQScene;
 using Loom::Core::cModuleManager;
 using Loom::Core::cSerializerXML;
+using Loom::OgreApp::cOgreResponderCreateBox;
+using Loom::OgreApp::IOgreEvent;
 
 using namespace Loom::Avatar;
 
@@ -170,4 +173,9 @@ void Loom::Avatar::cModuleAvatar::CreateEnvironment( void )
 	vLightSpot1->setDirection(0.79, -0.38, 0.48);
 	vLightSpot1->setPosition(-790, 380, -480);
 	vLightSpot1->setDiffuseColour(0.5, 0.5, 0.5);
+
+	// Create table
+	vQScene->OnCreateBox( "Table", Ogre::Vector3( 0, -18, -25 ), Ogre::Vector3( 0.5f, 0.3f, 0.3f ) );
+	vQScene->OnCreateBox( "Object_1", Ogre::Vector3( 5, 1.6f, -22 ), Ogre::Vector3( 0.1f, 0.1f, 0.1f ) );
+	vQScene->OnCreateBox( "Object_2", Ogre::Vector3( -10, 0.1f, -27 ), Ogre::Vector3( 0.05f, 0.05f, 0.2f ) );
 }
