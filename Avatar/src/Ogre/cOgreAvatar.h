@@ -4,6 +4,7 @@
 #include <OgreApp/Qt/Ogre/Event/IOgreListenerEvent.h>
 #include <Speech/Event/cSpeechResponders.h>
 #include <Ogre/OgreMatrix3.h>
+#include <Ogre/OgreMatrix4.h>
 
 using Loom::OgreApp::IOgreListenerEvent;
 
@@ -43,6 +44,8 @@ protected:
 	IKChain* mIKChainRight;
 	Ogre::Vector3 mEffectorPositions[ EFFECTOR_MAX ];
 	IController *mController;
+
+	Ogre::Matrix4 mCalibration;
 
 	void CreateEntity( const Ogre::String &iName );
 	void CreateIkChain();

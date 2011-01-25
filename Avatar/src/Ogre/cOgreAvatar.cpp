@@ -164,7 +164,9 @@ void Loom::Avatar::cOgreAvatar::CreateIkChain()
 void Loom::Avatar::cOgreAvatar::SetEffectorPosition( const eEffector iEffector, const Ogre::Vector3 &iPos )
 /************************************************************************/
 {
-	mEffectorPositions[ iEffector ] = iPos;
+	Ogre::Vector4 vPos( iPos.x, iPos.y, iPos.z, 1 );
+	vPos = vPos * mCalibration;
+	mEffectorPositions[ iEffector ] = Ogre::Vector3( vPos.x, vPos.y, vPos.z );
 
 	/*
 	for ( int i=0; i<10; i++ )
@@ -208,6 +210,8 @@ void Loom::Avatar::cOgreAvatar::Calibrate( void )
 {
 	mCalibrationState = CALIBRATION_STATE1;
 	cDispatcherHub::Get().Dispatch( _T("Speech::Say"), L"Calibration 1" );
+
+	mCalibration = Ogre::Matrix4::IDENTITY;
 }
 
 /************************************************************************/
@@ -224,32 +228,34 @@ void Loom::Avatar::cOgreAvatar::OnHeard( const std::wstring &text )
 	case CALIBRATION_STATE1:
 		{	// X-axis, arms sideways
 			// Get calibration data
-			const int vHeadSensorId  = 0;
+			const int vLeftArmSensorId  = 0;
 			const int vRightArmSensorId = 1;
 
-			float vHead = FLT_MIN;
-			float vArm  = FLT_MIN;
-			while ( vHead == FLT_MIN || vArm == FLT_MIN )
+			int vDone = 0;
+			Ogre::Vector3 vLeft;
+			Ogre::Vector3 vRight;
+			while ( vDone != 3 )
 			{
 				int vSensorId;
 				double vX, vY, vZ, vA, vE, vR;
 				vInterface->getNextEntry( vSensorId, vX, vY, vZ, vA, vE, vR, 1000 );
 				switch ( vSensorId )
 				{
-				case vHeadSensorId:
-					vHead = vX;
+				case vLeftArmSensorId:
+					vLeft = Ogre::Vector3( vX, vY, vZ );
+					vDone = vDone | 1;
 					break;
 				case vRightArmSensorId:
-					vArm = vX;
+					vRight = Ogre::Vector3( vX, vY, vZ );
+					vDone = vDone | 2;
 					break;
 				}
 			}
 
 			Ogre::AxisAlignedBox vBounds = mEntity->getBoundingBox();
-
-			Ogre::Vector3 vScale = mNode->getScale();
-			vScale.x = vBounds.getSize().x * 0.5f / ( vArm - vHead );
-			mNode->setScale( vScale );
+			Ogre::Vector3 vAxis = vRight - vLeft;
+			vAxis /= vBounds.getSize().x;
+			*((Ogre::Vector3*)mCalibration[0]) = vAxis;
 
 			// Next
 			cDispatcherHub::Get().Dispatch( _T("Speech::Say"), L"Calibration 2" );
@@ -259,69 +265,54 @@ void Loom::Avatar::cOgreAvatar::OnHeard( const std::wstring &text )
 	case CALIBRATION_STATE2:
 		{	// Y-axis, arms up
 			// Get calibration data
-			const int vHeadSensorId  = 0;
+			const int vLeftArmSensorId  = 0;
 			const int vRightArmSensorId = 1;
+			const int vHeadSensorId = 2;
 
-			float vHead = FLT_MIN;
-			float vArm  = FLT_MIN;
-			while ( vHead == FLT_MIN || vArm == FLT_MIN )
+			int vDone = 0;
+			Ogre::Vector3 vLeft;
+			Ogre::Vector3 vRight;
+			Ogre::Vector3 vHead;
+			while ( vDone != 7 )
 			{
 				int vSensorId;
 				double vX, vY, vZ, vA, vE, vR;
 				vInterface->getNextEntry( vSensorId, vX, vY, vZ, vA, vE, vR, 1000 );
 				switch ( vSensorId )
 				{
-				case vHeadSensorId:
-					vHead = vY;
+				case vLeftArmSensorId:
+					vLeft = Ogre::Vector3( vX, vY, vZ );
+					vDone = vDone | 1;
 					break;
 				case vRightArmSensorId:
-					vArm = vY;
+					vRight = Ogre::Vector3( vX, vY, vZ );
+					vDone = vDone | 2;
+					break;
+				case vHeadSensorId:
+					vHead = Ogre::Vector3( vX, vY, vZ );
+					vDone = vDone | 4;
 					break;
 				}
 			}
 
 			Ogre::AxisAlignedBox vBounds = mEntity->getBoundingBox();
+			Ogre::Vector3 vAxis = ( vLeft + vRight ) * 0.5f - vHead;
+			vAxis.normalise();
+			vAxis *= ((Ogre::Vector3*)mCalibration[0])->length();
+			*((Ogre::Vector3*)mCalibration[1]) = vAxis;
 
-			Ogre::Vector3 vScale = mNode->getScale();
-			vScale.y = vBounds.getSize().x * 0.5f / ( vArm - vHead );
-			mNode->setScale( vScale );
+			Ogre::Vector3 vRightAxis = *((Ogre::Vector3*)mCalibration[0]);
+			Ogre::Vector3 vUpAxis = *((Ogre::Vector3*)mCalibration[1]);
+			vRightAxis.normalise();
+			vUpAxis.normalise();
+			Ogre::Vector3 vFrontAxis = vRightAxis.crossProduct( vUpAxis );
+			vFrontAxis.normalise();
+			vFrontAxis *= ((Ogre::Vector3*)mCalibration[0])->length();
 
-			// Next
-			cDispatcherHub::Get().Dispatch( _T("Speech::Say"), L"Calibration 3" );
-			mCalibrationState = CALIBRATION_STATE3;
-		}
-		break;
-	case CALIBRATION_STATE3:
-		{	// Z-axis, arms front
-			// Get calibration data
-			const int vHeadSensorId  = 0;
-			const int vRightArmSensorId = 1;
+			// Calibration space to normal space
+			mCalibration = mCalibration.inverse();
 
-			float vHead = FLT_MIN;
-			float vArm  = FLT_MIN;
-			while ( vHead == FLT_MIN || vArm == FLT_MIN )
-			{
-				int vSensorId;
-				double vX, vY, vZ, vA, vE, vR;
-				vInterface->getNextEntry( vSensorId, vX, vY, vZ, vA, vE, vR, 1000 );
-				switch ( vSensorId )
-				{
-				case vHeadSensorId:
-					vHead = vZ;
-					break;
-				case vRightArmSensorId:
-					vArm = vZ;
-					break;
-				}
-			}
-
-			Ogre::AxisAlignedBox vBounds = mEntity->getBoundingBox();
-
-			Ogre::Vector3 vScale = mNode->getScale();
-			vScale.z = vBounds.getSize().x * 0.5f / ( vArm - vHead );
-			mNode->setScale( vScale );
-
-			// Next
+			// Next ( don't need calibration state 3! )
 			cDispatcherHub::Get().Dispatch( _T("Speech::Say"), L"Calibration done" );
 			mCalibrationState = CALIBRATION_DONE;
 		}
@@ -333,6 +324,11 @@ void Loom::Avatar::cOgreAvatar::OnHeard( const std::wstring &text )
 void Loom::Avatar::cOgreAvatar::SetEffectorRotation( const eEffector iEffector, const Ogre::Quaternion &iRotation )
 /************************************************************************/
 {
+	Ogre::Matrix3 vMatrix;
+	mCalibration.extract3x3Matrix( vMatrix );
+	Ogre::Quaternion vTransform( vMatrix );
+	Ogre::Quaternion vRotation = iRotation * vTransform;
+
 	/*
 	Ogre::Bone* vNeck = mSkeleton->getBone( "Neck" );
 	vNeck->setManuallyControlled( true );
@@ -340,7 +336,7 @@ void Loom::Avatar::cOgreAvatar::SetEffectorRotation( const eEffector iEffector, 
 	*/
 	Ogre::Bone* vHead = mSkeleton->getBone( "Head" );
 	vHead->setManuallyControlled( true );
-	vHead->setOrientation( iRotation );
+	vHead->setOrientation( vRotation );
 }
 
 /************************************************************************/
