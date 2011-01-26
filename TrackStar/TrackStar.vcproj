@@ -100,7 +100,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy bin\TrackStar_d.dll ..\Weaver\bin\modules&#x0D;&#x0A;copy bin\TrackStar_d.pdb ..\Weaver\bin\modules&#x0D;&#x0A;"
+				CommandLine="copy bin\TrackStar_d.dll ..\Weaver\bin\modules&#x0D;&#x0A;copy bin\TrackStar_d.pdb ..\Weaver\bin\modules&#x0D;&#x0A;copy dependencies\win32\TrackStar\ATC3DG.DLL ..\Weaver\bin&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration

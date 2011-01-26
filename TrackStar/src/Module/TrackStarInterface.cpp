@@ -251,6 +251,8 @@ char* TrackStarNetworkReader::getNextLine() {
 
 
 TrackStarDirectReader::TrackStarDirectReader() {
+	pSensor = NULL;
+	pXmtr = NULL;
 }
 
 TrackStarDirectReader::~TrackStarDirectReader() {

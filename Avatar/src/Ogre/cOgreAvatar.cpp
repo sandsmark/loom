@@ -221,7 +221,9 @@ void Loom::Avatar::cOgreAvatar::OnHeard( const std::wstring &text )
 	if ( ( text != L"done" ) && ( text != L"ok" ) ) return;
 
 	cModuleTrackStar *vTrackStar = (cModuleTrackStar*)cModuleManager::Get().GetModule( cModuleTrackStar::GetName() );
+	if (!vTrackStar) return;
 	TrackStarInterface *vInterface = vTrackStar->GetInterface();
+	if (!vInterface) return;
 
 	switch ( mCalibrationState )
 	{

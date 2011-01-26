@@ -24,7 +24,7 @@ public:
 			Size     = *((Ogre::Vector3*)vData); vData += sizeof( Ogre::Vector3 );
 			char *iName = vData;
 			char *vTemp = new char[ strlen( iName ) + 1 ];
-			strcpy( vTemp, iName );
+			strcpy_s( vTemp, strlen( iName ), iName );
 			Name = vTemp;
 		}
 	};
