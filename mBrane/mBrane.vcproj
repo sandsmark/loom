@@ -219,6 +219,14 @@
 					RelativePath=".\src\Module\cModulemBrane.h"
 					>
 				</File>
+				<File
+					RelativePath=".\src\Module\mBraneInterface.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Module\mBraneInterface.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter

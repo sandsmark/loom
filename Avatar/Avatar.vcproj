@@ -292,11 +292,27 @@
 				Name="Controller"
 				>
 				<File
+					RelativePath=".\src\Controller\cControllerInternal.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Controller\cControllerInternal.h"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Controller\cControllerTest.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\src\Controller\cControllerTest.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Controller\cControllerTrack.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Controller\cControllerTrack.h"
 					>
 				</File>
 				<File

@@ -26,7 +26,7 @@ class IController;
 
 class AVATAR_API cOgreAvatar : public IAvatarEvent, public IOgreListenerEvent, public Speech::ISpeechListenerEvent
 {
-protected:
+public:
 	enum eCalibrationState
 	{
 		CALIBRATION_STATE1 = 0,

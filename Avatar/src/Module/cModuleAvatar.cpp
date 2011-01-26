@@ -8,7 +8,8 @@
 #include <Avatar/Ogre/cOgreAvatar.h>
 #include <Speech/Speech.h>
 #include <Speech/Module/cModuleSpeech.h>
-#include <Avatar/Controller/cControllerTest.h>
+#include <Avatar/Controller/cControllerTrack.h>
+#include <Avatar/Controller/cControllerInternal.h>
 #include <Core/Serializer/cSerializerXML.h>
 #include <Avatar/Config/cConfig.h>
 #include <TrackStar/TrackStar.h>
@@ -94,7 +95,7 @@ void cModuleAvatar::Init( void )
 	CreateEnvironment();
 
  	mAvatar1 = new cOgreAvatar( "Avatar1" );
-	mAvatar1->SetController( new cControllerTest );
+	mAvatar1->SetController( new cControllerTrack );
 	mAvatar1->SetPosition( mConfig->Position );
 	mAvatar1->SetRotation( Ogre::Quaternion( Ogre::Degree( mConfig->Orientation ), Ogre::Vector3( 0, 1, 0 ) ) );
 	if ( !mConfig->SingleAvatar )
@@ -102,7 +103,7 @@ void cModuleAvatar::Init( void )
 		mAvatar2 = new cOgreAvatar( "Avatar2" );
 		mAvatar2->SetPosition( Ogre::Vector3( 0, 0, -50 ) );
 		mAvatar2->SetRotation( Ogre::Quaternion( Ogre::Radian( 0 ), Ogre::Vector3( 0, 1, 0 ) ) );
-		mAvatar2->SetController( new cControllerTest );
+		mAvatar2->SetController( new cControllerInternal );
 	}
 
 	mThread = CreateThread( NULL, 0, StartThread, this, 0, NULL );
