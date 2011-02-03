@@ -1,5 +1,7 @@
 #pragma once
 
+#pragma warning( disable: 4100 )
+
 #include <stdio.h>
 #include <ATC3DG.h>
 
@@ -52,6 +54,7 @@ public:
 	virtual ~TrackStarInterface() {}
 
 	virtual bool getNextEntry(int &sensorID, double &x, double &y, double &z, double &a, double &e, double &r, int timeout) = 0;
+	virtual bool getNextEntryConst(const int sensorID, double &x, double &y, double &z, double &a, double &e, double &r, int timeout) = 0;
 };
 
 
@@ -62,6 +65,7 @@ public:
 
 	virtual bool init(const char* filename, bool repeat);
 	virtual bool getNextEntry(int &sensorID, double &x, double &y, double &z, double &a, double &e, double &r, int timeout);
+	virtual bool getNextEntryConst(const int sensorID, double &x, double &y, double &z, double &a, double &e, double &r, int timeout) { return false; }
 
 protected:
 	char* getNextLine();
@@ -79,6 +83,7 @@ public:
 
 	virtual bool init(const char* address, int port);
 	virtual bool getNextEntry(int &sensorID, double &x, double &y, double &z, double &a, double &e, double &r, int timeout);
+	virtual bool getNextEntryConst(const int sensorID, double &x, double &y, double &z, double &a, double &e, double &r, int timeout) { return false; }
 
 protected:
 	char* getNextLine();
@@ -96,6 +101,7 @@ public:
 
 	virtual bool init();
 	virtual bool getNextEntry(int &sensorID, double &x, double &y, double &z, double &a, double &e, double &r, int timeout);
+	virtual bool getNextEntryConst(const int sensorID, double &x, double &y, double &z, double &a, double &e, double &r, int timeout);
 
 protected:
 	CSystem			ATC3DG;

@@ -323,6 +323,11 @@ bool TrackStarDirectReader::init() {
 	return true;
 }
 
+bool TrackStarDirectReader::getNextEntryConst( const int sensorID, double &x, double &y, double &z, double &a, double &e, double &r, int timeout)
+{
+	int vSensor = sensorID;
+	return getNextEntry( vSensor, x, y, z, a, e, r, timeout );
+}
 
 bool TrackStarDirectReader::getNextEntry(int &sensorID, double &x, double &y, double &z, double &a, double &e, double &r, int timeout) {
 
@@ -346,6 +351,10 @@ bool TrackStarDirectReader::getNextEntry(int &sensorID, double &x, double &y, do
 			e = record.e;
 			r = record.r;
 			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 	return false;

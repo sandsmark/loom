@@ -46,6 +46,10 @@ protected:
 	IController *mController;
 
 	Ogre::Matrix4 mCalibration;
+	Ogre::Vector3 mMidPoint;
+	float mScale;
+	Ogre::Vector3 mTestLeft;
+	Ogre::Vector3 mTestRight;
 
 	void CreateEntity( const Ogre::String &iName );
 	void CreateIkChain();
