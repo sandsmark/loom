@@ -22,7 +22,7 @@ void main( float4 iPosition : POSITION, float2 iTexCoord : TEXCOORD, float4 iCol
     float vTime = mTime + iColour.a * 6.28f;
     
 //    vScreenPos.x += sin( vTime + vScreenPos.y + vScreenPos.x ) * cos( vTime * 1.43f + vScreenPos.y * 0.79f + vScreenPos.x * 1.44f ) * 4;
-    vScreenPos.x += sin( vTime + vScreenPos.y + vScreenPos.x ) * cos( vTime * 1.43f + vScreenPos.y * 0.79f + vScreenPos.x * 1.44f ) * mPerturbance;
+//    vScreenPos.x += sin( vTime + vScreenPos.y + vScreenPos.x ) * cos( vTime * 1.43f + vScreenPos.y * 0.79f + vScreenPos.x * 1.44f ) * mPerturbance;
     
     oPos = vScreenPos.xy / vScreenPos.w;
     

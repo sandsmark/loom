@@ -11,11 +11,11 @@ cCircle::cCircle( cPCircle *iProto )
 /************************************************************************/
 {
 	Ogre::BillboardSet *vBillboardSet = mPrototype->GetBillboardSet();
-	Ogre::Billboard *vBillboard = vBillboardSet->createBillboard( Ogre::Math::RangeRandom( -10, 10 ), Ogre::Math::RangeRandom( -10, 10 ), Ogre::Math::RangeRandom( 0, 1000 ) );
-	float vSize = Ogre::Math::RangeRandom( 20, 70 );
-	vBillboard->setDimensions( vSize, vSize );
-	vBillboard->setColour( Ogre::ColourValue( 0.5, 0.5f, 0.5f, 1.0f ) );
-	mBillboards.Add( vBillboard );
+//	mBillboard = vBillboardSet->createBillboard( Ogre::Math::RangeRandom( -10, 10 ), Ogre::Math::RangeRandom( -10, 10 ), Ogre::Math::RangeRandom( 0, 1000 ) );
+	mBillboard = vBillboardSet->createBillboard( Ogre::Math::RangeRandom( -10, 10 ), Ogre::Math::RangeRandom( -10, 10 ), 0.0f );
+	mBillboard->setDimensions( 16, 16 );
+	mBillboard->setColour( Ogre::ColourValue( 141.0f / 255.0f, 248.0f / 255.0f, 170.0f / 255.0f, 0.5f ) );
+	mBillboards.Add( mBillboard );
 
 	/*
 	Ogre::MaterialPtr vMaterial = Ogre::MaterialManager::getSingleton().getByName( "LineMaterial" );
@@ -27,4 +27,34 @@ cCircle::cCircle( cPCircle *iProto )
 		vParams->setNamedConstant( "mActNode", (float)iIndex );
 	} 
 	*/
+}
+
+/************************************************************************/
+void cCircle::SetColour( const Ogre::ColourValue &iColour )
+/************************************************************************/
+{
+	mBillboard->setColour( iColour );
+}
+
+/************************************************************************/
+void Loom::MoMa::cCircle::SetSkew( const float iSkew )
+/************************************************************************/
+{
+	Ogre::Vector3 vPos = mBillboard->getPosition();
+	vPos.z = iSkew;
+	mBillboard->setPosition( vPos );
+}
+
+/************************************************************************/
+void Loom::MoMa::cCircle::SetRotation( const Ogre::Radian &iRotation )
+/************************************************************************/
+{
+	mBillboard->setRotation( iRotation );
+}
+
+/************************************************************************/
+void Loom::MoMa::cCircle::SetSize( const Ogre::Vector2 &iSize )
+/************************************************************************/
+{
+	mBillboard->setDimensions( iSize.x, iSize.y );
 }

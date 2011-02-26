@@ -302,6 +302,10 @@
 				Name="materials"
 				>
 				<File
+					RelativePath=".\resources\materials\circle.png"
+					>
+				</File>
+				<File
 					RelativePath=".\resources\materials\creature.png"
 					>
 				</File>

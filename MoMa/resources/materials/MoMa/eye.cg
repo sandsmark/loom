@@ -1,4 +1,5 @@
-sampler2D mTexture : TEXUNIT0;
+sampler2D mTexture1 : TEXUNIT0;
+sampler2D mTexture2 : TEXUNIT1;
 uniform float mTime;
 
 void main( float4 iPosition : POSITION, float2 iTexCoord : TEXCOORD, float4 iColour : COLOR,
@@ -83,10 +84,13 @@ float4 mainFP( float4 iColor : COLOR, float2 iTexCoord : TEXCOORD0, float3 iRota
 	vTex += Distort( iTexCoord, iRotation.z );
 	
 	vTex.y = vTex.y * 2 - 1;
-	vTex.y /= iColor.a;
+//	vTex.y /= iColor.a;
 	vTex.y = vTex.y * 0.5f + 0.5f;
 		
-	float4 vResult = tex2D( mTexture, vTex );
+	float4 vResult1 = tex2D( mTexture1, vTex );
+	float4 vResult2 = tex2D( mTexture2, vTex );
+
+	float4 vResult = lerp( vResult1, vResult2, iColor.a );
 //	vResult.a *= iColor.a;
 	
     return vResult;

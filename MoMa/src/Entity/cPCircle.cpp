@@ -30,6 +30,7 @@ cPCircle::cPCircle()
 	mBillboardSet->setAutoextend( true );
 	mBillboardSet->setAutoUpdate( true );
 	mBillboardSet->setVisible( true );
+	mBillboardSet->setBillboardRotationType( Ogre::BBR_VERTEX );
 	vScene->getRootSceneNode()->attachObject( mBillboardSet );
 
 }

@@ -46,7 +46,14 @@ material MoMa.Creature.1
         
       texture_unit
       {
-        texture eye.png
+        texture eye1.png
+        filtering trilinear
+        tex_address_mode border
+        tex_border_colour 0 0 0 0
+      }
+      texture_unit
+      {
+        texture eye2.png
         filtering trilinear
         tex_address_mode border
         tex_border_colour 0 0 0 0
@@ -131,7 +138,12 @@ material MoMa.Circle
         
       texture_unit
       {
-        texture body.png
+        texture circle.png
+        filtering trilinear
+      }
+      texture_unit
+      {
+        texture circle_glow.png
         filtering trilinear
       }
       

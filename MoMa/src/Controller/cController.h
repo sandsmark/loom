@@ -10,12 +10,17 @@ using Loom::Psyclone::IPsycloneSpeechOnEvent;
 BEGIN_NAMESPACE( MoMa )
 
 class cCreature;
+class cCircle;
 
 class cController : public IPsycloneSpeechOnEvent
 {
 protected:
 	HANDLE mThread;
 	cArray<cCreature*> mCreatures;
+	cArray<cCircle*> mCircles;
+
+	DWORD mLastUpdate;
+	float mNextUpdate;
 
 protected:
 	void CreateWaveform();

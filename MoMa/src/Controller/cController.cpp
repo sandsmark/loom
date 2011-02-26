@@ -54,10 +54,11 @@ void cController::Init( void )
 	lMoveEyeTimer = 0;
 	lLookAwaytimer = 0;
 	// Create stuff
-	//CreateCircles();
+	CreateCircles();
 	//CreateWaveform();
 	CreateCreatures();
 
+	mLastUpdate = GetTickCount();
 	mThread = CreateThread( NULL, 0, StartThread, this, 0, NULL );
 }
 
@@ -89,10 +90,11 @@ void Loom::MoMa::cController::CreateCircles()
 /************************************************************************/
 {
 	cPCircle *vPCircle = new cPCircle();
-	for ( int i=0; i<6; i++ )
+//	for ( int i=0; i<6; i++ )
+	for ( int i=0; i<1; i++ )
 	{
 		cCircle *vCircle = vPCircle->CreateInstance();
-		vCircle;
+		mCircles.Add( vCircle );
 	}
 }
 
@@ -105,7 +107,10 @@ void Loom::MoMa::cController::CreateCreatures()
 //	mCreatures.Add( vPrototype->CreateInstance( Ogre::Vector3(  50,  20, 100 ) ) );
 //	mCreatures.Add( vPrototype->CreateInstance( Ogre::Vector3( -90,   0,  50 ) ) );
 //	mCreatures.Add( vPrototype->CreateInstance( Ogre::Vector3(  90,   0,  50 ) ) );
-	mCreatures.Add( vPrototype->CreateInstance( Ogre::Vector3(   0, 10,   -100 ) ) );
+	cCreature *vInstance = vPrototype->CreateInstance( Ogre::Vector3(   0, 10,   -100 ) );
+	vInstance->SetScale( Ogre::Vector2( 0.4f, 0.4f ) );
+	vInstance->SetPosition( Ogre::Vector3(   10, 20,   -100 ) );
+	mCreatures.Add( vInstance );
 }
 
 /************************************************************************/
@@ -208,7 +213,19 @@ void Loom::MoMa::cController::Destroy( void )
 void Loom::MoMa::cController::Update( void )
 /************************************************************************/
 {
-		Sleep( ( rand() % 1500 ) + 500 );
+	DWORD vTime = GetTickCount();
+	float vEllapsed = ( vTime - mLastUpdate ) * 0.001f;
+	mLastUpdate = vTime;
+
+	// Circle test
+	mCircles[0]->SetColour( Ogre::ColourValue( 141.0f / 255.0f, 248.0f / 255.0f, 170.0f / 255.0f, Ogre::Math::RangeRandom( 0.0f, 1.0f ) ) );
+	mCircles[0]->SetSize( Ogre::Vector2( Ogre::Math::RangeRandom( 8, 24 ), Ogre::Math::RangeRandom( 8, 24 ) ) );
+	mCircles[0]->SetRotation( Ogre::Radian( Ogre::Math::RangeRandom( 0, M_PI * 2.0f ) ) );
+
+	mNextUpdate -= vEllapsed;
+	if ( mNextUpdate > 0 ) return;
+
+	mNextUpdate = Ogre::Math::RangeRandom( 0.5f, 2.0f );
 
 		/*
 	mCreatures[0]->SetHeadDistortionPosition( Ogre::Vector2( Ogre::Math::RangeRandom( -1, 1 ), Ogre::Math::RangeRandom( -1, 1 ) ) );
@@ -232,6 +249,9 @@ void Loom::MoMa::cController::Update( void )
 	}
 	mCreatures[0]->SetEyeDistortion(0.0f);
 	
+	// eye type test
+	mCreatures[0]->SetEyeType( ( ( rand() % 2 ) == 1 ) ? 1 : 0 );
+
 	//random blink
 	if ( ( rand() % 10 ) < 8 )
 	{
