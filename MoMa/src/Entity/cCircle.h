@@ -34,6 +34,7 @@ public:
 	void SetSkew( const float iSkew );
 	void SetRotation( const Ogre::Radian &iRotation );
 	void SetSize( const Ogre::Vector2 &iSize );
+	void SetPosition( const Ogre::Vector2 &iPosition );
 };
 
 END_NAMESPACE()

@@ -58,3 +58,13 @@ void Loom::MoMa::cCircle::SetSize( const Ogre::Vector2 &iSize )
 {
 	mBillboard->setDimensions( iSize.x, iSize.y );
 }
+
+/************************************************************************/
+void Loom::MoMa::cCircle::SetPosition( const Ogre::Vector2 &iPosition )
+/************************************************************************/
+{
+	Ogre::Vector3 vPos = mBillboard->getPosition();
+	vPos.x = iPosition.x;
+	vPos.y = iPosition.y;
+	mBillboard->setPosition( vPos );
+}
