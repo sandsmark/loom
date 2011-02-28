@@ -92,6 +92,27 @@ void CORE_API Loom::Core::ISerializer::Write<bool>( const bool *iValue )
 	vSerializer->mStream<<(*iValue)<<"\n";
 }
 
+typedef char* tStringBaszA;
+typedef wchar_t* tStringBaszW;
+
+/************************************************************************/
+template<>
+void CORE_API Loom::Core::ISerializer::Write<tStringBaszA>( const tStringBaszA *iValue )
+/************************************************************************/
+{
+	cSerializerXML *vSerializer = (cSerializerXML*)this;
+	vSerializer->mStream<<(*iValue)<<"\n";
+}
+
+/************************************************************************/
+template<>
+void CORE_API Loom::Core::ISerializer::Write<tStringBaszW>( const tStringBaszW *iValue )
+/************************************************************************/
+{
+	cSerializerXML *vSerializer = (cSerializerXML*)this;
+	vSerializer->mStream<<(*iValue)<<"\n";
+}
+
 /************************************************************************/
 template<>
 CORE_API void Loom::Core::ISerializer::Read<int>( int &iTarget )
@@ -118,5 +139,32 @@ CORE_API void Loom::Core::ISerializer::Read<bool>( bool &iTarget )
 	cSerializerXML *vSerializer = (cSerializerXML*)this;
 	boolalpha( vSerializer->mStream );
 	vSerializer->mStream>>iTarget;
+}
+
+/************************************************************************/
+template<>
+CORE_API void Loom::Core::ISerializer::Read<wchar_t *>( wchar_t * &iTarget )
+/************************************************************************/
+{
+	TCHAR vTemp[ 1024 ];
+	cSerializerXML *vSerializer = (cSerializerXML*)this;
+	vSerializer->mStream.getline( vTemp, 1024 );
+	size_t vLength = wcslen( vTemp ) + 1;
+	iTarget = new wchar_t[ vLength ];
+	memcpy( iTarget, vTemp, vLength * sizeof( wchar_t ) );
+}
+
+/************************************************************************/
+template<>
+CORE_API void Loom::Core::ISerializer::Read<char *>( char * &iTarget )
+/************************************************************************/
+{
+	TCHAR vTemp[ 1024 ];
+	cSerializerXML *vSerializer = (cSerializerXML*)this;
+	vSerializer->mStream.getline( vTemp, 1024 );
+	size_t vLength = wcslen( vTemp ) + 1;
+	iTarget = new char[ vLength ];
+	size_t vConverted;
+	wcstombs_s( &vConverted, iTarget, vLength, vTemp, vLength );
 }
 

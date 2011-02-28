@@ -1,0 +1,113 @@
+#define HYPERBOLIC
+
+uniform float4x4 mWorld;
+uniform float4x4 mView;
+uniform float4x4 mProj;
+
+sampler2D mTexture : TEXUNIT0;
+
+float ComputeFadeNone()
+{
+    return 0;
+}
+
+float ComputeFadeMidDepth( float4x4 mView, float4 vViewPos )
+{
+    float vFade = -vViewPos.z / vViewPos.w;
+    vFade = abs( -mView[2][3] - vFade );
+//    vFade = mView[2][3] + vFade;
+    vFade /= 4;
+    
+    return vFade;
+}
+
+float ComputeFadeFocus( float3 vWorldPos )
+{
+    float vFade = dot( vWorldPos, vWorldPos );
+    vFade /= 4;
+    
+     return vFade;
+}
+
+float ComputeFadeNormal( float4x4 mView, float4 vPosition )
+{
+    float3 vNormal = mul( mView, float4( vPosition.xyz, 0 ) ).xyz;
+    float vFade = -normalize( vNormal ).z;
+    
+    return vFade;
+}
+
+void main( float4 iPosition : POSITION, float4 iColor : COLOR, float2 iTexcoord : TEXCOORD0,
+						  
+						  out float4 oPosition : POSITION,
+						  out float4 oColour   : COLOR,
+						  out float3 oTexcoord : TEXCOORD0,
+                          out float  oFog      : FOG
+
+//						  uniform float4x4 mWorld,
+//						  uniform float4x4 mView,
+//						  uniform float4x4 mProj
+)
+{
+    float vPreScale  = 1; //0.3;
+    float vPostScale = 10;
+
+//    float4 vPosition = mul( mWorld, iPosition );
+    float4 vPosition = mul( mWorld, float4( 0, 0, 0, 1 ) );
+    float3 vWorldPos = vPosition.xyz;
+    vPosition.xyz *= vPreScale;
+    float vLength = length( vPosition.xyz );
+#ifdef HYPERBOLIC
+    vLength = tanh( vLength );
+#endif
+    if ( vLength > 0.01f )
+    {
+        vPosition.xyz = normalize( vPosition.xyz ) * vLength;
+    }
+    vPosition.w = 1;
+//    vPosition.xyz += iPosition.xyz;
+//    float3 vWorldPos = vPosition.xyz;
+    vPosition.xyz *= vPostScale;
+    
+    float4 vViewPos = mul( mView, vPosition );
+//    vViewPos /= vViewPos.w;
+//    vViewPos.xyz += iPosition.xyz * float3( 0.5f, 1, 1 ) * 0.1f * vViewPos.w;
+	float4 vScreenCenter = mul( mProj, vViewPos );
+    float vFactor = vScreenCenter.w * 0.08f;
+    vFactor = max( 1, vFactor );
+    vViewPos.xy += iPosition.xy * 0.1f * vFactor;
+	oPosition = mul( mProj, vViewPos );
+//    oPosition /= oPosition.w;
+//    oPosition.xyz += iPosition.xyz * float3( 1, 1, 1 ) * 0.1f;
+//    oPosition.xy += iPosition.xy * float3( 1, 1, 1 ) * 0.1f * oPosition.w;
+
+    
+//    float vFade = ComputeFadeNone();
+    float vFade = ComputeFadeMidDepth( mView, vViewPos );
+//    float vFade = ComputeFadeFocus( vWorldPos );
+//    float vFade = ComputeFadeNormal( mView, vPosition );
+
+//    vFade = clamp( 1 - vFade, 0.3, 1 );
+    vFade = clamp( 1 - vFade, 0.35, 1 );
+
+    oFog = 1 - vFade;
+//	oColour = iColor * vFade;
+	oColour = iColor;
+    
+    float vAlpha = -vViewPos.z / vViewPos.w;
+//    vAlpha -= -mView[2][3] * 0.5f;
+    vAlpha /= -mView[2][3] * 1.0f;
+    vAlpha = clamp( vAlpha, 0, 1 );
+    oColour.a = vAlpha;
+
+    oTexcoord.xy = iTexcoord;
+    oTexcoord.z  = iColor.w;    // Inverse-amount
+}
+
+float4 mainFP( float3 iTexCoord : TEXCOORD0, float4 iColor : COLOR0 ) : COLOR
+{
+    float4 vColor = tex2D( mTexture, iTexCoord.xy ) * iColor;
+    vColor.a = lerp( 1 - vColor.a, vColor.a, iTexCoord.z );
+
+    return vColor;
+}

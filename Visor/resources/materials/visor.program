@@ -1,0 +1,107 @@
+
+vertex_program Visor/Hyper cg
+{
+	source Hyper.cg
+	entry_point main
+	profiles vp40 vp30 vs_3_0 vs_2_0 arbvp1
+
+	default_params
+	{
+		param_named_auto mWorld WORLD_MATRIX
+		param_named_auto mView VIEW_MATRIX
+		param_named_auto mProj PROJECTION_MATRIX
+	}	
+}
+
+vertex_program Visor/HyperLine cg
+{
+	source HyperLine.cg
+	entry_point main
+	profiles vp40 vp30 vs_3_0 vs_2_0 arbvp1
+
+	default_params
+	{
+		param_named_auto mWorld WORLD_MATRIX
+		param_named_auto mView VIEW_MATRIX
+		param_named_auto mProj PROJECTION_MATRIX
+        param_named mActNode float 0.0
+	}	
+}
+
+
+vertex_program Visor/HyperFont cg
+{
+	source HyperFont.cg
+	entry_point main
+	profiles vp40 vp30 vs_3_0 vs_2_0 arbvp1
+
+	default_params
+	{
+		param_named_auto mWorld WORLD_MATRIX
+		param_named_auto mView VIEW_MATRIX
+		param_named_auto mProj PROJECTION_MATRIX
+	}	
+}
+
+vertex_program Visor/HyperCaptionFont cg
+{
+	source HyperCaptionFont.cg
+	entry_point main
+	profiles vp40 vp30 vs_3_0 vs_2_0 arbvp1
+
+	default_params
+	{
+		param_named_auto mWorld WORLD_MATRIX
+		param_named_auto mView VIEW_MATRIX
+		param_named_auto mProj PROJECTION_MATRIX
+	}	
+}
+
+fragment_program Visor/HyperFontFP cg
+{
+	source HyperFont.cg
+	entry_point mainFP
+	profiles ps_2_0 arbfp1
+}
+
+vertex_program Visor/HyperArrowhead cg
+{
+	source HyperArrowhead.cg
+	entry_point main
+	profiles vp40 vp30 vs_3_0 vs_2_0 arbvp1
+
+	default_params
+	{
+		param_named_auto mWorld WORLD_MATRIX
+		param_named_auto mView VIEW_MATRIX
+		param_named_auto mProj PROJECTION_MATRIX
+	}	
+}
+
+fragment_program Visor/HyperArrowheadFP cg
+{
+	source HyperArrowhead.cg
+	entry_point mainFP
+	profiles ps_2_0 arbfp1
+}
+
+vertex_program Visor/TexturedHyperLine cg
+{
+	source TexturedHyperLine.cg
+	entry_point main
+	profiles vp40 vp30 vs_3_0 vs_2_0 arbvp1
+
+	default_params
+	{
+		param_named_auto mWorld WORLD_MATRIX
+		param_named_auto mView VIEW_MATRIX
+		param_named_auto mProj PROJECTION_MATRIX
+	}	
+}
+
+fragment_program Visor/TexturedHyperLineFP cg
+{
+	source TexturedHyperLine.cg
+	entry_point mainFP
+	profiles ps_2_0 arbfp1
+}

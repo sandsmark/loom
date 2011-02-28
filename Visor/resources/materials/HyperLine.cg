@@ -1,0 +1,126 @@
+#define HYPERBOLIC
+
+float ComputeFadeNone()
+{
+    return 0;
+}
+
+float ComputeFadeMidDepth( float4x4 mView, float4 vViewPos )
+{
+    float vFade = -vViewPos.z / vViewPos.w;
+    vFade = abs( -mView[2][3] - vFade );
+//    vFade = mView[2][3] + vFade;
+    vFade /= 4;
+    
+    return vFade;
+}
+
+float ComputeFadeFocus( float3 vWorldPos )
+{
+    float vFade = dot( vWorldPos, vWorldPos );
+    vFade /= 4;
+    
+     return vFade;
+}
+
+float ComputeFadeNormal( float4x4 mView, float4 vPosition )
+{
+    float3 vNormal = mul( mView, float4( vPosition.xyz, 0 ) ).xyz;
+    float vFade = -normalize( vNormal ).z;
+    
+    return vFade;
+}
+
+void main( float4 iPosition : POSITION, float4 iColor : COLOR, float2 iNode : BLENDINDICES,
+						  
+						  out float4 oPosition : POSITION,
+						  out float4 oColour   : COLOR,
+						  out float  oSize     : PSIZE,
+                          out float  oFog      : FOG,
+
+						  uniform float4x4 mWorld,
+						  uniform float4x4 mView,
+						  uniform float4x4 mProj,
+						  uniform float    mActNode )
+{
+    float vPreScale  = 1; //0.3;
+    float vPostScale = 10;
+
+    float4 vPosition = mul( mWorld, iPosition );
+    float3 vWorldPos = vPosition.xyz;
+    vPosition.xyz *= vPreScale;
+    float vLength = length( vPosition.xyz );
+#ifdef HYPERBOLIC
+    vLength = tanh( vLength );
+#endif
+    if ( vLength > 0.01f )
+    {
+        vPosition.xyz = normalize( vPosition.xyz ) * vLength;
+    }
+    vPosition.w = 1;
+//    float3 vWorldPos = vPosition.xyz;
+    vPosition.xyz *= vPostScale;
+    
+    float4 vViewPos = mul( mView, vPosition );
+	oPosition = mul( mProj, vViewPos );
+
+	oColour = iColor;
+    
+//    float vFade = ComputeFadeNone();
+    float vFade = ComputeFadeMidDepth( mView, vViewPos );
+//    float vFade = ComputeFadeFocus( vWorldPos );
+//    float vFade = ComputeFadeNormal( mView, vPosition );
+
+    vFade = clamp( 1 - vFade, 0.3, 1 );
+
+    oFog = 1 - vFade;
+    
+//    oFog = lerp( 0, oFog, abs( mActNode - iNode ) );
+    float vHighlight = min( abs( mActNode - iNode.x ), abs( mActNode - iNode.y ) );
+//    vHighlight /= 4;
+    vHighlight = min( vHighlight, 1 );
+//    oFog = lerp( 0, oFog, vHighlight );
+
+    // HERE
+    oFog = lerp( 0, 0.75f, vHighlight );
+    
+//    oFog *= vHighlight;
+    
+//	oColour = iColor * vFade;
+//	oColour = iColor;
+
+//    oColour = lerp( oColour, float4( 1, 0, 0, 1 ), abs( mActNode - iNode ) );
+
+//    oColour = lerp( float4( 1, 1, 1, 1 ), float4( 0.75f, 0.75f, 0.75f, 0.75f ), vHighlight );
+    oColour = lerp( iColor, iColor * 0.75f, vHighlight );
+    
+    float vAlpha = -vViewPos.z / vViewPos.w;
+//    vAlpha -= -mView[2][3] * 0.5f;
+    vAlpha /= -mView[2][3] * 1.0f;
+    vAlpha = clamp( vAlpha, 0, 1 );
+    oColour.a = vAlpha;
+    
+    float vZoom = -mView[2][3];
+    float vDepth = ( -vViewPos.z / vViewPos.w );
+    vDepth = max( vDepth - vZoom * 0.5f, 0 );
+
+//    vDepth = 1 + ( vDepth * vDepth );
+//    oSize = 3000 / vDepth;
+//    vDepth = 1 + vDepth;
+//    oSize = 300 / vDepth;
+    vDepth = ( 0 + vDepth ) * 0.8f;
+//    oSize = 300 / ( vDepth * vDepth );
+    oSize = 700 / ( vDepth * vDepth );
+    oSize = min( oSize, 16 );    
+//    oSize = min( oSize, 32 );
+//    oSize = 16;
+
+    oSize *= 1.5f;
+
+/*
+//    vDepth -= vZoom;
+    vDepth /= 1 + vZoom;
+    oSize = 6 / ( vDepth * vDepth );
+    oSize = min( oSize, 16 );    
+*/
+}

@@ -51,7 +51,7 @@ public:
 
 	static const cString &GetLoggerName()
 	{
-		static const cString vLogger( _T("DispatcherHub") );
+		static const cString vLogger( L"DispatcherHub" );
 		return vLogger;
 	}
 

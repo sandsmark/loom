@@ -26,7 +26,7 @@ public:
 
 	static const cString &GetLoggerName()
 	{
-		static const cString vLogger( _T("ModuleManager") );
+		static const cString vLogger( L"ModuleManager" );
 		return vLogger;
 	}
 

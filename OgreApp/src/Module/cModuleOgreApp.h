@@ -22,7 +22,7 @@ public:
 
 	static const cString &GetName( void )
 	{
-		static const cString vName = _T("OgreApp");
+		static const cString vName = L"OgreApp";
 		return vName;
 	}
 

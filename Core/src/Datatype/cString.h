@@ -10,27 +10,27 @@ BEGIN_NAMESPACE( Core )
 class cString
 {
 protected:
-	TCHAR *mData;
+	wchar_t *mData;
 
 public:
-	cString( const TCHAR *iString )
+	cString( const wchar_t *iString )
 	{
-		size_t vSize = _tcslen( iString ) + 1;
-		mData = new TCHAR[ vSize ];
-		_tcscpy_s( mData, vSize, iString );
+		size_t vSize = wcslen( iString ) + 1;
+		mData = new wchar_t[ vSize ];
+		wcscpy_s( mData, vSize, iString );
 	}
 
-//	operator const TCHAR*() const { return mData; }
+//	operator const wchar_t*() const { return mData; }
 
-	const TCHAR *ToCString( void ) const { return mData; }
-	const size_t GetLength( void ) const { return _tcslen( mData ); }
+	const wchar_t *ToCString( void ) const { return mData; }
+	const size_t GetLength( void ) const { return wcslen( mData ); }
 
 	cString &operator +=( const cString &iOther )
 	{
 		size_t vSize = GetLength() + iOther.GetLength() + 1;
-		TCHAR *vNewData = new TCHAR[ vSize ];
-		_tcscpy_s( vNewData, vSize, mData );
-		_tcscat_s( vNewData, vSize, iOther.mData );
+		wchar_t *vNewData = new wchar_t[ vSize ];
+		wcscpy_s( vNewData, vSize, mData );
+		wcscat_s( vNewData, vSize, iOther.mData );
 		delete [] mData;
 		mData = vNewData;
 
@@ -39,12 +39,12 @@ public:
 
 	bool operator ==( const cString &iOther ) const
 	{
-		return ( _tcscmp( mData, iOther.mData ) == 0 );
+		return ( wcscmp( mData, iOther.mData ) == 0 );
 	}
 
 	bool operator !=( const cString &iOther ) const
 	{
-		return ( _tcscmp( mData, iOther.mData ) != 0 );
+		return ( wcscmp( mData, iOther.mData ) != 0 );
 	}
 };
 
@@ -65,6 +65,6 @@ struct std::less<const Loom::Core::cString>
 {	// functor for operator<
 	bool operator()(const Loom::Core::cString& _Left, const Loom::Core::cString& _Right) const
 	{	// apply operator< to operands
-		return ( _tcscmp(_Left.ToCString(), _Right.ToCString()) < 0 );
+		return ( wcscmp(_Left.ToCString(), _Right.ToCString()) < 0 );
 	}
 };

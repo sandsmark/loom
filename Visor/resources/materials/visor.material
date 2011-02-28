@@ -1,0 +1,236 @@
+material ComponentMaterial
+{
+  technique
+  {
+    pass
+    {
+      lighting off
+//      scene_blend add
+//      scene_blend alpha_blend
+//      depth_write off
+        alpha_rejection greater_equal 128
+
+        vertex_program_ref Visor/Hyper
+        {
+            param_named_auto mWorld WORLD_MATRIX
+            param_named_auto mViewProj VIEWPROJ_MATRIX
+        }
+      
+//      point_sprites off
+      point_sprites on
+      
+//      point_size 8
+//      point_size_attenuation off
+      
+//      point_size 0.04
+//      point_size_attenuation on
+//      point_size_attenuation on 0 0 10
+
+      point_size_attenuation on 1 0 0
+      
+      texture_unit
+      {
+        texture node.png
+        filtering trilinear
+      }
+    }
+  }
+}
+
+material LineMaterial
+{
+  technique
+  {
+    pass
+    {
+        vertex_program_ref Visor/HyperLine
+        {
+            param_named_auto mWorld WORLD_MATRIX
+            param_named_auto mView VIEW_MATRIX
+            param_named_auto mProj PROJECTION_MATRIX
+        }
+    
+      lighting off
+//      scene_blend add
+//      depth_write off
+//      scene_blend alpha_blend
+//      depth_write off
+
+//      scene_blend zero one
+//      depth_write off
+    }
+  }
+}
+
+material CustomTextMaterial
+{
+    technique
+    {
+        pass
+        {
+            scene_blend alpha_blend
+                        
+            vertex_program_ref Visor/HyperFont
+            {
+                param_named_auto mWorld WORLD_MATRIX
+                param_named_auto mViewProj VIEWPROJ_MATRIX
+            }
+            
+            fragment_program_ref Visor/HyperFontFP
+            {
+            }
+            
+            texture_unit
+            {
+                texture VisorFontTexture
+            }
+        }
+    }
+}
+
+material CustomCaptionTextMaterial
+{
+    technique
+    {
+        pass
+        {
+            scene_blend alpha_blend
+                        
+            vertex_program_ref Visor/HyperCaptionFont
+            {
+                param_named_auto mWorld WORLD_MATRIX
+                param_named_auto mViewProj VIEWPROJ_MATRIX
+            }
+            
+            texture_unit
+            {
+                texture VisorFontTexture
+            }
+        }
+    }
+}
+
+material ArrowheadMaterial
+{
+  technique
+  {
+    pass
+    {
+      lighting off
+        alpha_rejection greater_equal 128
+
+        vertex_program_ref Visor/HyperArrowhead
+        {
+            param_named_auto mWorld WORLD_MATRIX
+            param_named_auto mViewProj VIEWPROJ_MATRIX
+        }
+
+        fragment_program_ref Visor/HyperArrowheadFP
+        {
+        }
+      
+      point_sprites off
+      
+      point_size_attenuation on 1 0 0
+      
+      texture_unit
+      {
+        texture arrowhead.png
+      }
+    }
+  }
+}
+
+material ArrowfootMaterial
+{
+  technique
+  {
+    pass
+    {
+      lighting off
+        alpha_rejection greater_equal 128
+
+        vertex_program_ref Visor/HyperArrowhead
+        {
+            param_named_auto mWorld WORLD_MATRIX
+            param_named_auto mViewProj VIEWPROJ_MATRIX
+        }
+
+        fragment_program_ref Visor/HyperArrowheadFP
+        {
+        }
+      
+      point_sprites off
+      
+      point_size_attenuation on 1 0 0
+      
+      texture_unit
+      {
+        texture arrowfoot.png
+      }
+    }
+  }
+}
+
+material SelectionMaterial
+{
+  technique
+  {
+    pass
+    {
+      lighting off
+        alpha_rejection greater_equal 128
+
+        vertex_program_ref Visor/Hyper
+        {
+            param_named_auto mWorld WORLD_MATRIX
+            param_named_auto mViewProj VIEWPROJ_MATRIX
+        }
+      
+      point_sprites on
+      
+      point_size_attenuation on 1 0 0
+      
+      texture_unit
+      {
+        texture selection.png
+      }
+    }
+  }
+}
+
+material TexturedLineMaterial
+{
+  technique
+  {
+    pass
+    {
+        vertex_program_ref Visor/TexturedHyperLine
+        {
+            param_named_auto mWorld WORLD_MATRIX
+            param_named_auto mView VIEW_MATRIX
+            param_named_auto mProj PROJECTION_MATRIX
+        }
+    
+        fragment_program_ref Visor/TexturedHyperLineFP
+        {
+        }
+    
+      lighting off
+      cull_hardware none
+      cull_software none
+      
+      fog_override true none
+      
+      scene_blend src_alpha one_minus_src_alpha
+      
+      texture_unit
+      {
+        texture line.png
+        filtering anisotropic
+        max_anisotropy 16
+      }
+      
+    }
+  }
+}

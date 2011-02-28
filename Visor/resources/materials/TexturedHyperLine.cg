@@ -1,0 +1,81 @@
+#define HYPERBOLIC
+
+sampler2D mTexture : TEXUNIT0;
+uniform float4x4 mWorld;
+
+float4 ComputePosition( float4 iPosition )
+{
+    float vPreScale  = 1; //0.3;
+    float vPostScale = 10;
+
+    float4 vPosition = mul( mWorld, iPosition );
+    vPosition.xyz *= vPreScale;
+    float vLength = length( vPosition.xyz );
+#ifdef HYPERBOLIC
+    vLength = tanh( vLength );
+#endif
+    if ( vLength > 0.01f )
+    {
+        vPosition.xyz = normalize( vPosition.xyz ) * vLength;
+    }
+    vPosition.w = 1;
+    vPosition.xyz *= vPostScale;
+    
+    return vPosition;
+}
+
+void main( float4 iPositionFrom : POSITION0, float4 iPositionTo : TEXCOORD1, float iAlpha : TEXCOORD2, float2 iTex : TEXCOORD0,
+						  
+						  out float4 oPosition : POSITION,
+						  out float4 oColour   : COLOR,
+//                          out float  oFog      : FOG,
+                          out float2  oTex     : TEXCOORD,
+
+//						  uniform float4x4 mWorld,
+						  uniform float4x4 mView,
+						  uniform float4x4 mProj
+                        )
+{
+    oTex = iTex;
+    
+    float4 vPositionTo   = ComputePosition( iPositionTo   );
+        
+    float4 vPosition = vPositionTo;
+        
+    float4 vViewPos = mul( mView, vPosition );
+	float4 vProjPositionTo = mul( mProj, vViewPos );
+    vProjPositionTo /= vProjPositionTo.w;
+    vProjPositionTo.z = 0;
+    
+    float4 vProjPositionFrom = iPositionFrom;
+    oPosition = float4( lerp( vProjPositionFrom.xy, vProjPositionTo.xy, iAlpha ), 0, 1 );
+//    oPosition.x = lerp( vProjPositionFrom.x, vProjPositionTo.x, pow( iAlpha, 0.1f ) );
+    oTex.x  = length( oPosition.xy - vProjPositionFrom.xy ) * 64;
+    oTex.x *= 1.6;
+//    oTex.x *= iAlpha - pow( iAlpha, 3 ) / 18 + pow( iAlpha, 5 ) / (24*25);
+    
+    float2 vDirection = oPosition.xy - vProjPositionFrom.xy;
+    float vLength = length( vDirection );
+    if ( vLength < 0.01f )
+    {
+        vDirection = vProjPositionTo.xy - vProjPositionFrom.xy;
+    }
+    vDirection = normalize( vDirection );
+    float2 vNormal = float2( -vDirection.y, vDirection.x );
+    
+//    oPosition.xy += sin( iAlpha * 3.1415926535f ) * 0.2f * vNormal;
+    oPosition.xy += sin( iAlpha * 3.1415926535f ) * 0.2f * ( vNormal * 0.5f + float2( 0.7f, 0 ) );
+
+//    oPosition.x += pow( iAlpha, 0.2f ) * vNormal.x;
+//    oPosition.y += sin( iAlpha * 3.1415926535f ) * 0.2f * vNormal.y;
+
+    oPosition.xy += vNormal * iTex.y * 0.014f;
+    
+    oColour = float4( 1, 1, 1, 1 );
+}
+
+float4 mainFP( float4 iColor : COLOR, float2 iTexCoord : TEXCOORD ) : COLOR
+{
+//    return float4( iTexCoord.xy, 0, 1 );
+    return tex2D( mTexture, iTexCoord ) * iColor;
+}

@@ -52,7 +52,7 @@ cQOgre::~cQOgre()
 /**********************************************************************/
 {
     mRoot->shutdown();
-    delete mRoot;
+    SAFE_DELETE( mRoot );
     destroy();
 }
 

@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="Avatar"
-	ProjectGUID="{C1CAC2DE-D0FB-4F23-84B7-737BF854F2D6}"
-	RootNamespace="Avatar"
+	Name="Visor"
+	ProjectGUID="{126C6A26-D692-4E7A-9DF9-5A7C981B63A7}"
+	RootNamespace="Visor"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -21,7 +21,7 @@
 			OutputDirectory="bin"
 			IntermediateDirectory="build/$(ConfigurationName)"
 			ConfigurationType="2"
-			CharacterSet="1"
+			CharacterSet="2"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -40,10 +40,10 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/FIAvatar/common.h"
+				AdditionalOptions="/FIVisor/common.h"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include;.\dependencies\win32\Ogre\include;.\dependencies\win32\Ogre\boost_1_42;.\dependencies\win32\Qt\Include;.\dependencies\win32\TrackStar"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;AVATAR_EXPORTS"
+				AdditionalIncludeDirectories="../include;.\dependencies\win32\Ogre\include;.\dependencies\win32\Ogre\boost_1_42;.\dependencies\win32\Qt\Include;.\dependencies\win32\TrackStar;C:\Code\CMLabs\Loom\Visor\dependencies\win32"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;VISOR_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="1"
@@ -51,8 +51,8 @@
 				EnableEnhancedInstructionSet="2"
 				FloatingPointModel="2"
 				UsePrecompiledHeader="0"
-				WarningLevel="4"
-				WarnAsError="true"
+				WarningLevel="0"
+				WarnAsError="false"
 				DebugInformationFormat="4"
 				DisableSpecificWarnings="4251;4127;4244"
 			/>
@@ -67,10 +67,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain_d.lib OIS_d.lib OgreRTShaderSystem_d.lib opengl32.lib"
+				AdditionalDependencies="QtCored4.lib QtGuid4.lib QtOpenGLd4.lib CoreLibrary.lib r_code.lib r_comp.lib r_exec.lib OgreMain_d.lib OIS_d.lib OgreRTShaderSystem_d.lib opengl32.lib"
 				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="dependencies\win32\Ogre\boost_1_42\lib;dependencies\win32\Ogre\lib\debug"
+				AdditionalLibraryDirectories="dependencies\win32\Qt\lib;dependencies\win32\Replicode\Debug;dependencies\win32\Ogre\boost_1_42\lib;dependencies\win32\Ogre\lib\debug"
 				GenerateManifest="false"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(TargetDir)$(TargetName).pdb"
@@ -98,7 +98,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy bin\Avatar_d.dll ..\Weaver\bin\modules\&#x0D;&#x0A;copy bin\Avatar_d.pdb ..\Weaver\bin\modules\&#x0D;&#x0A;&#x0D;&#x0A;xcopy /S /Y resources\* ..\Weaver\bin\resources\&#x0D;&#x0A;"
+				CommandLine="mkdir ..\Weaver\bin\replicode&#x0D;&#x0A;&#x0D;&#x0A;copy dependencies\win32\Replicode\Debug\r_code.dll ..\Weaver\bin\&#x0D;&#x0A;copy dependencies\win32\Replicode\Debug\r_comp.dll ..\Weaver\bin\&#x0D;&#x0A;copy dependencies\win32\Replicode\Debug\r_exec.dll ..\Weaver\bin\&#x0D;&#x0A;copy dependencies\win32\Replicode\Debug\corelibrary.dll ..\Weaver\bin\&#x0D;&#x0A;&#x0D;&#x0A;copy bin\Visor_d.dll ..\Weaver\bin\modules&#x0D;&#x0A;copy bin\Visor_d.pdb ..\Weaver\bin\modules&#x0D;&#x0A;&#x0D;&#x0A;xcopy /S /Y resources\replicode\* ..\Weaver\bin\replicode\&#x0D;&#x0A;xcopy /S /Y resources\materials\* ..\Weaver\bin\resources\materials\&#x0D;&#x0A;xcopy /S /Y resources\fonts\* ..\Weaver\bin\resources\fonts\&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -126,11 +126,11 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/FIAvatar/common.h"
+				AdditionalOptions="/FIVisor/common.h"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories="../include;.\dependencies\win32\Ogre\include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;AVATAR_EXPORTS"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;VISOR_EXPORTS"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
 				EnableFunctionLevelLinking="true"
@@ -193,130 +193,26 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\src\Avatar.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\Avatar.h"
-				>
-			</File>
-			<File
 				RelativePath=".\src\common.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Visor.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Visor.h"
 				>
 			</File>
 			<Filter
 				Name="Module"
 				>
 				<File
-					RelativePath=".\src\Module\cModuleAvatar.cpp"
+					RelativePath=".\src\Module\cModuleVisor.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\src\Module\cModuleAvatar.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Ogre"
-				>
-				<File
-					RelativePath=".\src\Ogre\cOgreAvatar.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\Ogre\cOgreAvatar.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="IKChain"
-				>
-				<File
-					RelativePath=".\src\IKChain\IKChain.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\IKChain\IKChain.h"
-					>
-				</File>
-				<File
-					RelativePath=".\src\IKChain\IKJoint.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\IKChain\IKJoint.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Event"
-				>
-				<File
-					RelativePath=".\src\Event\cAvatarResponder.h"
-					>
-				</File>
-				<File
-					RelativePath=".\src\Event\IAvatarEvent.h"
-					>
-				</File>
-				<Filter
-					Name="Responders"
-					>
-					<File
-						RelativePath=".\src\Event\Responders\cAvatarResponderGetEffectorPosition.h"
-						>
-					</File>
-					<File
-						RelativePath=".\src\Event\Responders\cAvatarResponderGetEffectorRotation.h"
-						>
-					</File>
-					<File
-						RelativePath=".\src\Event\Responders\cAvatarResponderSetEffectorPosition.h"
-						>
-					</File>
-					<File
-						RelativePath=".\src\Event\Responders\cAvatarResponderSetEffectorRotation.h"
-						>
-					</File>
-					<File
-						RelativePath=".\src\Event\Responders\IAvatarResponder.h"
-						>
-					</File>
-				</Filter>
-			</Filter>
-			<Filter
-				Name="NewFilter1"
-				>
-			</Filter>
-			<Filter
-				Name="Controller"
-				>
-				<File
-					RelativePath=".\src\Controller\cControllerInternal.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\Controller\cControllerInternal.h"
-					>
-				</File>
-				<File
-					RelativePath=".\src\Controller\cControllerTest.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\Controller\cControllerTest.h"
-					>
-				</File>
-				<File
-					RelativePath=".\src\Controller\cControllerTrack.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\Controller\cControllerTrack.h"
-					>
-				</File>
-				<File
-					RelativePath=".\src\Controller\IController.h"
+					RelativePath=".\src\Module\cModuleVisor.h"
 					>
 				</File>
 			</Filter>
@@ -332,6 +228,106 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Hypertree"
+				>
+				<File
+					RelativePath=".\src\Hypertree\cVisualizerHypertree.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Hypertree\cVisualizerHypertree.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Hypertree\cVisualizerHypertreeNode.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Hypertree\cVisualizerHypertreeNode.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Hypertree\MovableText.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Hypertree\MovableText.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Replicode"
+				>
+				<Filter
+					Name="Component"
+					>
+					<File
+						RelativePath=".\src\Replicode\Component\cComponentReplicode.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Replicode\Component\cComponentReplicode.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Hypertree"
+					>
+					<File
+						RelativePath=".\src\Replicode\Hypertree\cVisualizerReplicode.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Replicode\Hypertree\cVisualizerReplicode.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Replicode\Hypertree\cVisualizerReplicodeNode.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Replicode\Hypertree\cVisualizerReplicodeNode.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Replicode\Hypertree\cVisualizerReplicodeSettings.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Replicode\Hypertree\cVisualizerReplicodeSettings.h"
+						>
+					</File>
+				</Filter>
+			</Filter>
+			<Filter
+				Name="Component"
+				>
+				<File
+					RelativePath=".\src\Component\cComponentRegistry.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Component\cComponentRegistry.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Component\IComponent.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Component\IComponent.h"
+					>
+				</File>
+				<Filter
+					Name="Events"
+					>
+					<File
+						RelativePath=".\src\Component\Events\IListenerComponent.h"
+						>
+					</File>
+				</Filter>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"
@@ -339,34 +335,66 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<Filter
+				Name="replicode"
+				>
+				<File
+					RelativePath=".\resources\replicode\rgrp.user.classes.replicode"
+					>
+				</File>
+				<File
+					RelativePath=".\resources\replicode\settings.xml"
+					>
+				</File>
+				<File
+					RelativePath=".\resources\replicode\std.replicode"
+					>
+				</File>
+				<File
+					RelativePath=".\resources\replicode\test.rgrp.1.replicode"
+					>
+				</File>
+				<File
+					RelativePath=".\resources\replicode\usr_operators.dll"
+					>
+				</File>
+			</Filter>
+			<Filter
 				Name="materials"
 				>
 				<File
-					RelativePath=".\resources\materials\avatar.material"
+					RelativePath=".\resources\materials\Hyper.cg"
 					>
 				</File>
 				<File
-					RelativePath=".\resources\materials\avatar.program"
+					RelativePath=".\resources\materials\HyperArrowhead.cg"
 					>
 				</File>
 				<File
-					RelativePath=".\resources\materials\creature.png"
+					RelativePath=".\resources\materials\HyperCaptionFont.cg"
 					>
 				</File>
-				<Filter
-					Name="Avatar"
+				<File
+					RelativePath=".\resources\materials\HyperFont.cg"
 					>
-					<File
-						RelativePath=".\resources\materials\Avatar\basic.cg"
-						>
-					</File>
-				</Filter>
+				</File>
+				<File
+					RelativePath=".\resources\materials\HyperLine.cg"
+					>
+				</File>
+				<File
+					RelativePath=".\resources\materials\TexturedHyperLine.cg"
+					>
+				</File>
+				<File
+					RelativePath=".\resources\materials\visor.material"
+					>
+				</File>
+				<File
+					RelativePath=".\resources\materials\visor.program"
+					>
+				</File>
 			</Filter>
 		</Filter>
-		<File
-			RelativePath="..\Visor\Visor.vcproj"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

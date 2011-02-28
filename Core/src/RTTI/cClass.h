@@ -77,14 +77,14 @@ public:
 #define BEGIN_RTTI( iClass )	\
 	template<> const Loom::Core::cClass &Loom::Core::cClass::GetRTTI<iClass>()	\
 	{	\
-		static const Loom::Core::cClassInstance<iClass> vRTTI( Loom::Core::cClassInstance<iClass>( _T(#iClass) ) );	\
+		static const Loom::Core::cClassInstance<iClass> vRTTI( Loom::Core::cClassInstance<iClass>( L#iClass ) );	\
 		\
 		return vRTTI;	\
 	}	\
 	Loom::Core::cClassInstance<iClass>::cInitializer Loom::Core::cClassInstance<iClass>::mInitializer;	\
 	template<> Loom::Core::cClassInstance<iClass>::cInitializer::cInitializer()	\
 	{	\
-		Loom::Core::cClassRegistry::Get().Register( _T(#iClass), &Loom::Core::cClass::GetRTTI<iClass>() );	\
+		Loom::Core::cClassRegistry::Get().Register( L#iClass, &Loom::Core::cClass::GetRTTI<iClass>() );	\
 	}	\
 	template<>	\
 	Loom::Core::cClassInstance<iClass>::cClassInstance( const cString &iName )	\
@@ -96,7 +96,7 @@ public:
 
 // Property macro must be used inside BEGIN_RTTI and END_RTTI
 #define PROPERTY( iName )	\
-	AddProperty( _T(#iName), ((int)&(((tThisClass*)4242)->iName)-((int)((IObject*)(tThisClass*)4242))), ((tThisClass*)NULL)->iName );
+	AddProperty( L#iName, ((int)&(((tThisClass*)4242)->iName)-((int)((IObject*)(tThisClass*)4242))), ((tThisClass*)NULL)->iName );
 		
 
 END_NAMESPACE()

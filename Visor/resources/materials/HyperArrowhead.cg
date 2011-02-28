@@ -1,0 +1,126 @@
+#define HYPERBOLIC
+
+sampler2D mTexture : TEXUNIT0;
+
+float ComputeFadeNone()
+{
+    return 0;
+}
+
+float ComputeFadeMidDepth( float4x4 mView, float4 vViewPos )
+{
+    float vFade = -vViewPos.z / vViewPos.w;
+    vFade = abs( -mView[2][3] - vFade );
+//    vFade = mView[2][3] + vFade;
+    vFade /= 4;
+    
+    return vFade;
+}
+
+float ComputeFadeFocus( float3 vWorldPos )
+{
+    float vFade = dot( vWorldPos, vWorldPos );
+    vFade /= 4;
+    
+     return vFade;
+}
+
+float ComputeFadeNormal( float4x4 mView, float4 vPosition )
+{
+    float3 vNormal = mul( mView, float4( vPosition.xyz, 0 ) ).xyz;
+    float vFade = -normalize( vNormal ).z;
+    
+    return vFade;
+}
+
+void main( float4 iPosition : POSITION, float4 iColor : COLOR, float2 iTexCoord : TEXCOORD,
+						  
+						  out float4 oPosition : POSITION,
+						  out float4 oColour   : COLOR,
+						  out float2 oTexCoord : TEXCOORD,
+                          out float  oFog      : FOG,
+
+						  uniform float4x4 mWorld,
+						  uniform float4x4 mView,
+						  uniform float4x4 mProj )
+{
+    float vPreScale  = 1; //0.3;
+    float vPostScale = 10;
+
+    float4 vPosition = mul( mWorld, iPosition );
+    float3 vWorldPos = vPosition.xyz;
+    vPosition.xyz *= vPreScale;
+    float vLength = length( vPosition.xyz );
+#ifdef HYPERBOLIC
+    vLength = tanh( vLength );
+#endif
+    if ( vLength > 0.01f )
+    {
+        vPosition.xyz = normalize( vPosition.xyz ) * vLength;
+    }
+    vPosition.w = 1;
+//    float3 vWorldPos = vPosition.xyz;
+    vPosition.xyz *= vPostScale;
+    
+    float4 vViewPos = mul( mView, vPosition );
+    
+    float3 vNormal = iColor.xyz * 2 - 1;
+#ifdef HYPERBOLIC
+    float4 vTempPos = mul( mWorld, float4( iPosition.xyz + vNormal * iColor.w * 2, 1 ) );
+    vTempPos.xyz *= vPreScale;
+    float vTempLength = length( vTempPos.xyz );
+    vTempLength = tanh( vTempLength );
+    if ( vTempLength > 0.01f )
+    {
+        vTempPos.xyz = normalize( vTempPos.xyz ) * vTempLength;
+    }
+    vTempPos.w = 1;
+    vTempPos.xyz *= vPostScale;
+    vNormal = vTempPos.xyz - vPosition.xyz;
+    vNormal = normalize( vNormal );
+#else
+    vNormal = mul( mWorld, float4( vNormal.xyz, 0 ) ).xyz;
+#endif
+    
+    vNormal = mul( mView, float4( vNormal.xyz, 0 ) ).xyz;
+    vNormal.z = 0;
+    vNormal = normalize( vNormal );
+    float vAngle = atan2( vNormal.y, vNormal.x ) + 3.1415926535f;
+    float2x2 vRotation = float2x2( cos( vAngle ), -sin( vAngle ), sin( vAngle ), cos( vAngle ) );
+    float2 vOffset = ( iTexCoord * float2( 2, -2 ) + float2( -1, 1 ) );
+    vOffset = mul( vRotation, vOffset );
+//    oPosition.xy += vOffset * 0.02f * oPosition.w;
+//    vViewPos.xy += vOffset * 0.14f;
+//    vViewPos.xy += vNormal * 0.3f;
+    vViewPos.xy += vOffset * 0.08f;
+//    vViewPos.xy += vNormal * 0.15f;
+    vViewPos.xy += vNormal * 0.25f;
+    
+	oPosition = mul( mProj, vViewPos );
+	oPosition.z -= 0.1f;
+
+    
+    float vFade = ComputeFadeMidDepth( mView, vViewPos );
+    vFade = clamp( 1 - vFade, 0.3, 1 );
+
+    oFog = 1 - vFade;
+	oColour = iColor;
+    
+    float vAlpha = -vViewPos.z / vViewPos.w;
+    vAlpha /= -mView[2][3] * 1.0f;
+    vAlpha = clamp( vAlpha, 0, 1 );
+    oColour.a = vAlpha;
+    
+    float vZoom = -mView[2][3];
+    float vDepth = ( -vViewPos.z / vViewPos.w );
+    vDepth = max( vDepth - vZoom * 0.5f, 0 );
+
+    vDepth = ( 0 + vDepth ) * 0.8f;
+
+    oTexCoord = iTexCoord;
+}
+
+float4 mainFP( float4 iColor : COLOR, float2 iTexCoord : TEXCOORD, float2 iTexCoord2 : TEXCOORD4 ) : COLOR
+{
+    return tex2D( mTexture, iTexCoord );
+}

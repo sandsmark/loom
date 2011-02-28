@@ -1,0 +1,89 @@
+#define HYPERBOLIC
+
+float ComputeFadeNone()
+{
+    return 0;
+}
+
+float ComputeFadeMidDepth( float4x4 mView, float4 vViewPos )
+{
+    float vFade = -vViewPos.z / vViewPos.w;
+    vFade = abs( -mView[2][3] - vFade );
+//    vFade = mView[2][3] + vFade;
+    vFade /= 4;
+    
+    return vFade;
+}
+
+float ComputeFadeFocus( float3 vWorldPos )
+{
+    float vFade = dot( vWorldPos, vWorldPos );
+    vFade /= 4;
+    
+     return vFade;
+}
+
+float ComputeFadeNormal( float4x4 mView, float4 vPosition )
+{
+    float3 vNormal = mul( mView, float4( vPosition.xyz, 0 ) ).xyz;
+    float vFade = -normalize( vNormal ).z;
+    
+    return vFade;
+}
+
+void main( float4 iPosition : POSITION, float4 iColor : COLOR, float2 iTexcoord : TEXCOORD0,
+						  
+						  out float4 oPosition : POSITION,
+						  out float4 oColour   : COLOR,
+						  out float2 oTexcoord : TEXCOORD0,
+                          out float  oFog      : FOG,
+
+						  uniform float4x4 mWorld,
+						  uniform float4x4 mView,
+						  uniform float4x4 mProj )
+{
+    float vPreScale  = 1; //0.3;
+    float vPostScale = 10;
+
+//    float4 vPosition = mul( mWorld, iPosition );
+    float4 vPosition = mul( mWorld, float4( 0, 0, 0, 1 ) );
+    float3 vWorldPos = vPosition.xyz;
+    vPosition.xyz *= vPreScale;
+    float vLength = length( vPosition.xyz );
+#ifdef HYPERBOLIC
+    vLength = tanh( vLength );
+#endif
+    if ( vLength > 0.01f )
+    {
+        vPosition.xyz = normalize( vPosition.xyz ) * vLength;
+    }
+    vPosition.w = 1;
+//    vPosition.xyz += iPosition.xyz;
+//    float3 vWorldPos = vPosition.xyz;
+    vPosition.xyz *= vPostScale;
+    
+    float4 vViewPos = mul( mView, vPosition );
+//    vViewPos /= vViewPos.w;
+//    vViewPos.xyz += iPosition.xyz * float3( 0.5f, 1, 1 ) * 0.1f * vViewPos.w;
+	float4 vScreenCenter = mul( mProj, vViewPos );
+    float vFactor = vScreenCenter.w * 0.08f;
+    vFactor = max( 1, vFactor );
+    vViewPos.xy += iPosition.xy * 0.1f * vFactor;
+    vViewPos.y += 0.5f;
+	oPosition = mul( mProj, vViewPos );
+//    oPosition /= oPosition.w;
+//    oPosition.xyz += iPosition.xyz * float3( 1, 1, 1 ) * 0.1f;
+//    oPosition.xy += iPosition.xy * float3( 1, 1, 1 ) * 0.1f * oPosition.w;
+
+    
+    oFog = 0;
+	oColour = iColor;
+    
+
+    oTexcoord = iTexcoord;
+}
+
+float4 mainFP( float2 uv : TEXCOORD0 ) : COLOR
+{
+	return float4( frac( uv.x ), frac( uv.y ), 0, 1 );
+}

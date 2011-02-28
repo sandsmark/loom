@@ -42,6 +42,20 @@ if NOT "%MBRANE_PATH%" == "" goto :start
 echo Please set mBrane path in config.bat!
 goto end
 
+:checkReplicode
+
+if NOT "%REPLICODE_PATH%" == "" goto :start
+
+echo Please set Replicode path in config.bat!
+goto end
+
+:checkCoreLibrary
+
+if NOT "%CORELIBRARY_PATH%" == "" goto :start
+
+echo Please set CoreLibrary path in config.bat!
+goto end
+
 :start
 
 echo Ogre path is %OGRE_PATH%
@@ -76,6 +90,7 @@ bin\junction.exe include\mBrane    mBrane\src      >nul
 bin\junction.exe include\Scripting Scripting\src   >nul
 bin\junction.exe include\Speech    Speech\src      >nul
 bin\junction.exe include\OgreApp   OgreApp\src     >nul
+bin\junction.exe include\Visor     Visor\src      >nul
 bin\junction.exe include\Weaver    Weaver\src      >nul
 
 echo Creating dependency directories...
@@ -90,21 +105,27 @@ mkdir mBrane\dependencies         2>nul
 mkdir mBrane\dependencies\win32   2>nul
 mkdir OgreApp\dependencies        2>nul
 mkdir OgreApp\dependencies\win32  2>nul
+mkdir Visor\dependencies         2>nul
+mkdir Visor\dependencies\win32   2>nul
 mkdir Weaver\dependencies         2>nul
 mkdir Weaver\dependencies\win32   2>nul
 
 echo Creating external links...
 
-bin\junction.exe Avatar\dependencies\win32\Ogre   %OGRE_PATH%   >nul
-bin\junction.exe Avatar\dependencies\win32\Qt     %QT_PATH%     >nul
-bin\junction.exe Config\dependencies\win32\Qt     %QT_PATH%     >nul
-bin\junction.exe MoMa\dependencies\win32\Ogre     %OGRE_PATH%   >nul
-bin\junction.exe MoMa\dependencies\win32\Qt       %QT_PATH%     >nul
-bin\junction.exe mBrane\dependencies\win32\mBrane %MBRANE_PATH% >nul
-bin\junction.exe OgreApp\dependencies\win32\Ogre  %OGRE_PATH%   >nul
-bin\junction.exe OgreApp\dependencies\win32\Qt    %QT_PATH%     >nul
-bin\junction.exe Weaver\dependencies\win32\Ogre   %OGRE_PATH%   >nul
-bin\junction.exe Weaver\dependencies\win32\Qt     %QT_PATH%     >nul
+bin\junction.exe Avatar\dependencies\win32\Ogre       %OGRE_PATH%        >nul
+bin\junction.exe Avatar\dependencies\win32\Qt         %QT_PATH%          >nul
+bin\junction.exe Config\dependencies\win32\Qt         %QT_PATH%          >nul
+bin\junction.exe MoMa\dependencies\win32\Ogre         %OGRE_PATH%        >nul
+bin\junction.exe MoMa\dependencies\win32\Qt           %QT_PATH%          >nul
+bin\junction.exe mBrane\dependencies\win32\mBrane     %MBRANE_PATH%      >nul
+bin\junction.exe OgreApp\dependencies\win32\Ogre      %OGRE_PATH%        >nul
+bin\junction.exe OgreApp\dependencies\win32\Qt        %QT_PATH%          >nul
+bin\junction.exe Visor\dependencies\win32\Ogre        %OGRE_PATH%        >nul
+bin\junction.exe Visor\dependencies\win32\Qt          %QT_PATH%          >nul
+bin\junction.exe Visor\dependencies\win32\Replicode   %REPLICODE_PATH%   >nul
+bin\junction.exe Visor\dependencies\win32\CoreLibrary %CORELIBRARY_PATH% >nul
+bin\junction.exe Weaver\dependencies\win32\Ogre       %OGRE_PATH%        >nul
+bin\junction.exe Weaver\dependencies\win32\Qt         %QT_PATH%          >nul
 
 bin\junction.exe Avatar\dependencies\win32\TrackStar TrackStar\dependencies\win32\TrackStar     >nul
 

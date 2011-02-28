@@ -8,7 +8,7 @@
 #endif
 
 #define ASSERT( iExpression )   \
-	if ( !iExpression ) abort();
+	if ( !( iExpression ) ) abort();
 
 #define ASSERT_STRINGIFY( iLine ) #iLine
 #define ASSERT_TOSTRING( iLine ) ASSERT_STRINGIFY( iLine )
