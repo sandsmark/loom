@@ -38,6 +38,7 @@ void cController::Run( void )
 
 void cController::Init( void )
 {
+
 	// Set a black background
 	struct sTemp { Ogre::ColourValue Colour; };
 	sTemp vParam;
@@ -46,6 +47,7 @@ void cController::Init( void )
 	cDispatcherHub::Get().Dispatch( _T("Ogre::cOgreResponderSetBGColour"), vIParam );
 	// Events
 	Psyclone::cPsycloneSpeechOn::Get().AddListener( *this );
+	Psyclone::cDialogueStatus::Get().AddListener( *this );
 
 	bUserTurn = false;
 	bCharacterTurn = false;
@@ -53,6 +55,24 @@ void cController::Init( void )
 	bDoEyeGrow = false;
 	lMoveEyeTimer = 0;
 	lLookAwaytimer = 0;
+	mSpeechState = SPEECH_OFF;
+
+	x = 0;	
+	y = 0;
+	a1 = 0;
+	b1 = 0;
+	c1 = 0;
+	d1 = 0;
+	e1 = 0;
+	f1 = 0;
+
+	a2 = 0;
+	b2 = 0;
+	c2 = 0;
+	d2 = 0;
+	e2 = 0;
+	f2 = 0;
+	threshold = 0;
 	// Create stuff
 	CreateCircles();
 	//CreateWaveform();
@@ -90,12 +110,55 @@ void Loom::MoMa::cController::CreateCircles()
 /************************************************************************/
 {
 	cPCircle *vPCircle = new cPCircle();
-//	for ( int i=0; i<6; i++ )
-	for ( int i=0; i<1; i++ )
-	{
+	/*
+	
+	//	for ( int i=0; i<6; i++ )
+		double y = 0.0;
+		double x = 0.0;
+		double xp = 0.0;
+		double yp = 0.0;
+		double a1 = (rand() % 20) / 10.0 - 1.0;
+		double b1 = (rand() % 20) / 10.0 - 1.0;
+		double c1 = (rand() % 20) / 10.0 - 1.0;
+		double d1 = (rand() % 20) / 10.0 - 1.0;
+		double e1 = (rand() % 20) / 10.0 - 1.0;
+		double f1 = (rand() % 20) / 10.0 - 1.0;
+	
+		double a2 = (rand() % 20) / 10.0 - 1.0;
+		double b2 = (rand() % 20) / 10.0 - 1.0;
+		double c2 = (rand() % 20) / 10.0 - 1.0;
+		double d2 = (rand() % 20) / 10.0 - 1.0;
+		double e2 = (rand() % 20) / 10.0 - 1.0;
+		double f2 = (rand() % 20) / 10.0 - 1.0;
+	
+		int threshold = rand() % 100;*/
+	
+	//for ( int i=0; i<500; i++ )
+	//{
+//		int prob = rand() % 99;
+		double xp= rand() % 50;
+		double yp= rand() % 50;
 		cCircle *vCircle = vPCircle->CreateInstance();
+		/*
+		if (prob < threshold)
+				{
+					xp = a1*x+b1*y+c1;
+					yp = d1*x+e1*y+f1;
+				}
+				else
+				{
+					xp = a2*x+b2*y+c2;
+					yp = d2*x-e2*y+f2;
+				}
+				*/
+		
+		vCircle->SetPosition(Ogre::Vector2(xp,yp));
+		vCircle->SetSize(Ogre::Vector2(6,6));
 		mCircles.Add( vCircle );
-	}
+
+		x = xp;
+		y= yp;
+//	}
 }
 
 /************************************************************************/
@@ -107,10 +170,49 @@ void Loom::MoMa::cController::CreateCreatures()
 //	mCreatures.Add( vPrototype->CreateInstance( Ogre::Vector3(  50,  20, 100 ) ) );
 //	mCreatures.Add( vPrototype->CreateInstance( Ogre::Vector3( -90,   0,  50 ) ) );
 //	mCreatures.Add( vPrototype->CreateInstance( Ogre::Vector3(  90,   0,  50 ) ) );
-	cCreature *vInstance = vPrototype->CreateInstance( Ogre::Vector3(   0, 10,   -100 ) );
-	vInstance->SetScale( Ogre::Vector2( 0.4f, 0.4f ) );
-	vInstance->SetPosition( Ogre::Vector3(   10, 20,   -100 ) );
+	cCreature *vInstance = vPrototype->CreateInstance( Ogre::Vector3(   0, 10,   -10 ) );
+	vInstance->SetScale( Ogre::Vector2( 0.5f, 0.5f ) );
+	vInstance->SetPosition( Ogre::Vector3(   0, -10,   -100 ) );
 	mCreatures.Add( vInstance );
+}
+
+double Loom::MoMa::cController::no1(double x)
+{
+	return 0.5*x*(1.0-x);
+}
+
+/************************************************************************/
+void Loom::MoMa::cController::DialogueStatus( const std::wstring &text )
+/************************************************************************/
+{
+	std::wstring type = L"";
+	std::wstring character = L"";
+	
+	if (text.compare(L"Psyclone.Context:DiP.On.Intro") == 0)
+	{
+		y = 0.0;
+		x = 0.0;
+		
+		a1 = (rand() % 20) / 10.0 - 1.0;
+		b1 = (rand() % 20) / 10.0 - 1.0;
+		c1 = (rand() % 20) / 10.0 - 1.0;
+		d1 = (rand() % 20) / 10.0 - 1.0;
+		e1 = (rand() % 20) / 10.0 - 1.0;
+		f1 = (rand() % 20) / 10.0 - 1.0;
+
+		a2 = (rand() % 20) / 10.0 - 1.0;
+		b2 = (rand() % 20) / 10.0 - 1.0;
+		c2 = (rand() % 20) / 10.0 - 1.0;
+		d2 = (rand() % 20) / 10.0 - 1.0;
+		e2 = (rand() % 20) / 10.0 - 1.0;
+		f2 = (rand() % 20) / 10.0 - 1.0;
+
+		threshold = rand() % 100;
+	}
+	else if (text.compare(L"DiP.Off") == 0)
+	{
+		mCircles.clear();
+	}
 }
 
 /************************************************************************/
@@ -126,6 +228,7 @@ void Loom::MoMa::cController::OnSpeechOn( const std::wstring &text )
 		mCreatures[0]->Blink( 20);
 		mCreatures[0]->SetEyeRotation( M_PI/6, 0 );
 		bDoBlink = true;
+		mCreatures[0]->SetEyeType( 1 );
 	}
 	if (text.compare(L"DiP.I-have-turn") == 0)
 	{	
@@ -157,6 +260,7 @@ void Loom::MoMa::cController::OnSpeechOn( const std::wstring &text )
 				vPrevEyeTarget = mCreatures[0]->GetEyeTarget();								
 				mCreatures[0]->SetEyeRotation( 0, 0 );		
 				mCreatures[0]->StartTransient( -2.0f );
+				CreateCircles();
 			}
 			else
 			{
@@ -165,7 +269,7 @@ void Loom::MoMa::cController::OnSpeechOn( const std::wstring &text )
 			}
 		} else  // person
 		{
-			if (type.compare(L"On") == 0)
+			if (type.compare(L".On") == 0)
 			{		
 				bUserTurn = true;		
 			}
@@ -217,10 +321,56 @@ void Loom::MoMa::cController::Update( void )
 	float vEllapsed = ( vTime - mLastUpdate ) * 0.001f;
 	mLastUpdate = vTime;
 
-	// Circle test
-	mCircles[0]->SetColour( Ogre::ColourValue( 141.0f / 255.0f, 248.0f / 255.0f, 170.0f / 255.0f, Ogre::Math::RangeRandom( 0.0f, 1.0f ) ) );
-	mCircles[0]->SetSize( Ogre::Vector2( Ogre::Math::RangeRandom( 8, 24 ), Ogre::Math::RangeRandom( 8, 24 ) ) );
-	mCircles[0]->SetRotation( Ogre::Radian( Ogre::Math::RangeRandom( 0, M_PI * 2.0f ) ) );
+
+	// Circle test	
+	//CreateCircles();
+	//mCircles[0]->SetColour( Ogre::ColourValue( 141.0f / 255.0f, 248.0f / 255.0f, 170.0f / 255.0f, Ogre::Math::RangeRandom( 0.0f, 1.0f ) ) );
+	//mCircles[0]->SetSize( Ogre::Vector2( Ogre::Math::RangeRandom( 8, 24 ), Ogre::Math::RangeRandom( 8, 24 ) ) );
+	//mCircles[0]->SetRotation( Ogre::Radian( Ogre::Math::RangeRandom( 0, M_PI * 2.0f ) ) );
+	if (bUserTurn)
+	{
+	/*
+			cPCircle *vPCircle = new cPCircle();
+				int prob = rand() % 99;
+				double xp = 0.0;
+				double yp = 0.0;
+				cCircle *vCircle = vPCircle->CreateInstance();
+				if (prob < threshold)
+				{
+					xp = a1*x+b1*y+c1;
+					yp = d1*x+e1*y+f1;
+				}
+				else
+				{
+					xp = a2*x+b2*y+c2;
+					yp = d2*x-e2*y+f2;
+				}
+		
+				vCircle->SetPosition(Ogre::Vector2(xp,yp));
+				vCircle->SetSize(Ogre::Vector2(6,6));
+				mCircles.Add( vCircle );
+		
+				x = xp;
+				y= yp;*/
+		
+/*
+				foreach (cCircle c in mCircles)
+				{
+					c->SetRotation( Ogre::Radian( Ogre::Math::RangeRandom( 0, M_PI * 2.0f ) ) );
+				}*/
+		
+	}
+	else
+	{
+		cArray<cCircle*>::iterator it = mCircles.begin();
+		for (it = mCircles.begin(); it < mCircles.end();it++)
+		{
+			Ogre::ColourValue cv = (*it)->GetColour();
+			cv.a -= 0.05;
+			(*it)->SetColour( cv );
+		}
+		
+	}
 
 	mNextUpdate -= vEllapsed;
 	if ( mNextUpdate > 0 ) return;
@@ -250,7 +400,7 @@ void Loom::MoMa::cController::Update( void )
 	mCreatures[0]->SetEyeDistortion(0.0f);
 	
 	// eye type test
-	mCreatures[0]->SetEyeType( ( ( rand() % 2 ) == 1 ) ? 1 : 0 );
+	//mCreatures[0]->SetEyeType( ( ( rand() % 2 ) == 1 ) ? 1 : 0 );
 
 	//random blink
 	if ( ( rand() % 10 ) < 8 )

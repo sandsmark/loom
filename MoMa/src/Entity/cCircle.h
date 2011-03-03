@@ -31,6 +31,7 @@ public:
 	// alpha = 0.5 : normal display
 	// alpha = 1   : full glow
 	void SetColour( const Ogre::ColourValue &iColour );
+	const Ogre::ColourValue& GetColour( );
 	void SetSkew( const float iSkew );
 	void SetRotation( const Ogre::Radian &iRotation );
 	void SetSize( const Ogre::Vector2 &iSize );

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="MoMa"
 	ProjectGUID="{BD732CBE-5E2C-4023-8D19-B7C4002158F1}"
 	RootNamespace="MoMa"
