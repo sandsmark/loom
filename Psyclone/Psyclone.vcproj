@@ -228,18 +228,34 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\Event\IDialogueStatusEvent.h"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Event\IPsycloneSpeechOnEvent.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Event\Responders\IPsycloneSpeechOnResponder.h"
+					>
+				</File>
+				<File
+					RelativePath="..\OgreApp\src\OgreApp.h"
 					>
 				</File>
 				<Filter
 					Name="Responders"
 					>
 					<File
+						RelativePath=".\src\Event\Responders\cDialogueStatus.h"
+						>
+					</File>
+					<File
 						RelativePath=".\src\Event\Responders\cPsycloneSpeechOn.h"
 						>
 					</File>
 					<File
-						RelativePath=".\src\Event\Responders\IPsycloneSpeechOnResponder.h"
+						RelativePath=".\src\Event\Responders\IDialogueStatusResponder.h"
 						>
 					</File>
 				</Filter>

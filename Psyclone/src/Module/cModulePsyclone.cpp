@@ -81,7 +81,7 @@ DWORD cModulePsyclone::StartThread( LPVOID arg )
 	if (!plug)
 		return 0;
 
-	const TCHAR *vReceivedMessageName = _T("Psyclone::SpeechOn");
+	TCHAR *vReceivedMessageName;
 
 	Message* msg;
 	for ( ;; ) {
@@ -89,18 +89,56 @@ DWORD cModulePsyclone::StartThread( LPVOID arg )
 			// Send appropriate event...
 			JString from = msg->getFrom();
 			JString msgtype = msg->getType().c_str();	
-			const char* cm = msgtype.c_str();
-
-			// Convert to a wchar_t*
-			size_t origsize = strlen(cm) + 1;
-			const size_t newsize = 100;
-			size_t convertedChars = 0;
-			wchar_t wcstring[newsize];
-			mbstowcs_s(&convertedChars, wcstring, origsize, cm, _TRUNCATE);
+			const char* cm = msgtype.c_str();     
 			
-
-			cDispatcherHub::IParam vReceivedParam( (void*)wcstring );			
-			cDispatcherHub::Get().Dispatch( vReceivedMessageName, vReceivedParam );			
+			XMLNode* xml;
+			XMLParser parser;
+			if (!msg->content.equalsIgnoreCase(""))
+			{			
+				if(!parser.parseXML(msg->content))
+					return NULL;
+				xml=parser.getRootNode();
+			
+			}
+									
+			if (msgtype.endsWithIgnoreCase("Speech.Queue"))
+			{
+				// Convert to a wchar_t*
+				size_t origsize = strlen(xml->getTextContent().c_str()) + 1;
+				const size_t newsize = 200;
+				size_t convertedChars = 0;
+				wchar_t wcstring[newsize];
+				vReceivedMessageName = _T("Speech::Queue");
+				mbstowcs_s(&convertedChars, wcstring, origsize, xml->getTextContent().c_str(), _TRUNCATE);
+				cDispatcherHub::IParam vReceivedParam( (void*)wcstring );			
+				cDispatcherHub::Get().Dispatch( vReceivedMessageName, vReceivedParam );
+			}
+			else
+			{
+				// Convert to a wchar_t*
+				size_t origsize = strlen(cm) + 1;
+				const size_t newsize = 100;
+				size_t convertedChars = 0;
+				wchar_t wcstring[newsize];
+				if (msgtype.endsWithIgnoreCase("Speech.Play"))
+				{
+					vReceivedMessageName = _T("Speech::Play");				
+					mbstowcs_s(&convertedChars, wcstring, origsize, cm, _TRUNCATE);
+				}				
+				else if (msgtype.contains(":DiP."))
+				{
+					vReceivedMessageName = _T("Dialogue::Status");				
+					mbstowcs_s(&convertedChars, wcstring, origsize, cm, _TRUNCATE);
+				}
+				else
+				{
+					vReceivedMessageName = _T("Psyclone::SpeechOn");
+					mbstowcs_s(&convertedChars, wcstring, origsize, cm, _TRUNCATE);
+				}
+				cDispatcherHub::IParam vReceivedParam( (void*)wcstring );			
+				cDispatcherHub::Get().Dispatch( vReceivedMessageName, vReceivedParam );
+			}
+						
 		}
 	}
 	
