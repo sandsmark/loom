@@ -6,6 +6,9 @@
 #include <Psyclone\Event\IDialogueStatusEvent.h>
 #include <Psyclone\Event\Responders\cPsycloneSpeechOn.h>
 #include <Psyclone\Event\Responders\cDialogueStatus.h>
+
+#include <MoMa/Entity/cPCircle.h>
+#include <MoMa/Entity/cCircle.h>
 using Loom::Psyclone::IPsycloneSpeechOnEvent;
 using Loom::Psyclone::IDialogueStatusEvent;
 //using Loom::Speech::ISpeechEvent;
@@ -26,7 +29,7 @@ protected:
 	HANDLE mThread;
 	cArray<cCreature*> mCreatures;
 	cArray<cCircle*> mCircles;
-
+	cPCircle* mPCircle;
 	DWORD mLastUpdate;
 	float mNextUpdate;
 	SpeechState mSpeechState;
@@ -40,6 +43,7 @@ protected:
 
 	void Update( void );
 
+	void doGlow1( void );
 	double no1(double x);
 	static DWORD WINAPI StartThread( LPVOID iParam );
 	bool bCharacterTurn;
@@ -67,7 +71,8 @@ protected:
 	double f2;
 
 	int threshold;
-
+	unsigned int rotationstart;
+	unsigned int rotationcount;
 public:
 	cController();
 	~cController();

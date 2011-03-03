@@ -4,8 +4,6 @@
 #include <Ogre/OgreBillboardSet.h>
 #include <MoMa/Entity/cPCreature.h>
 #include <MoMa/Entity/cCreature.h>
-#include <MoMa/Entity/cPCircle.h>
-#include <MoMa/Entity/cCircle.h>
 #include <MoMa/Entity/cWaveform.h>
 #include <Core/Serializer/cSerializerXML.h>
 #include <MoMa/Entity/cSpew.h>
@@ -49,6 +47,7 @@ void cController::Init( void )
 	Psyclone::cPsycloneSpeechOn::Get().AddListener( *this );
 	Psyclone::cDialogueStatus::Get().AddListener( *this );
 
+	mPCircle = new cPCircle();
 	bUserTurn = false;
 	bCharacterTurn = false;
 	bDoBlink = false;
@@ -73,6 +72,8 @@ void cController::Init( void )
 	e2 = 0;
 	f2 = 0;
 	threshold = 0;
+	rotationstart = 0;
+	rotationcount = 0;
 	// Create stuff
 	CreateCircles();
 	//CreateWaveform();
@@ -109,14 +110,13 @@ void Loom::MoMa::cController::CreateWaveform()
 void Loom::MoMa::cController::CreateCircles()
 /************************************************************************/
 {
-	cPCircle *vPCircle = new cPCircle();
-	/*
-	
-	//	for ( int i=0; i<6; i++ )
+	//cPCircle *vPCircle = new cPCircle();
+/*		
 		double y = 0.0;
 		double x = 0.0;
 		double xp = 0.0;
 		double yp = 0.0;
+
 		double a1 = (rand() % 20) / 10.0 - 1.0;
 		double b1 = (rand() % 20) / 10.0 - 1.0;
 		double c1 = (rand() % 20) / 10.0 - 1.0;
@@ -130,15 +130,23 @@ void Loom::MoMa::cController::CreateCircles()
 		double d2 = (rand() % 20) / 10.0 - 1.0;
 		double e2 = (rand() % 20) / 10.0 - 1.0;
 		double f2 = (rand() % 20) / 10.0 - 1.0;
+*/
 	
-		int threshold = rand() % 100;*/
+		//int threshold = rand() % 100;
 	
-	//for ( int i=0; i<500; i++ )
-	//{
+	for ( int i=0; i<1; i++ )
+	{
 //		int prob = rand() % 99;
-		double xp= rand() % 50;
-		double yp= rand() % 50;
-		cCircle *vCircle = vPCircle->CreateInstance();
+		double xp= rand() % 100;
+		double yp= rand() % 100;
+
+		Ogre::ColourValue cv = Ogre::ColourValue( 141.0f / 255.0f, 248.0f / 255.0f, 170.0f / 255.0f, Ogre::Math::RangeRandom( 0.0f, 1.0f ) );
+		int sizex = Ogre::Math::RangeRandom( 4, 10 );
+		int sizey = Ogre::Math::RangeRandom( 4, 10 );
+		Ogre::Radian or = Ogre::Radian( Ogre::Math::RangeRandom( 0, M_PI * 2.0f ) ) ;
+
+		
+		cCircle *vCircle = mPCircle->CreateInstance();;
 		/*
 		if (prob < threshold)
 				{
@@ -152,13 +160,36 @@ void Loom::MoMa::cController::CreateCircles()
 				}
 				*/
 		
-		vCircle->SetPosition(Ogre::Vector2(xp,yp));
-		vCircle->SetSize(Ogre::Vector2(6,6));
+		vCircle->SetPosition(Ogre::Vector2(xp,yp+20));
+		vCircle->SetColour(cv);
+		vCircle->SetSize(Ogre::Vector2(sizex,sizey));
+		vCircle->SetRotation(or);
 		mCircles.Add( vCircle );
 
+		cCircle *vCircle2 = mPCircle->CreateInstance();
+		vCircle2->SetPosition(Ogre::Vector2(-xp,yp+20));
+		vCircle2->SetColour(cv);
+		vCircle2->SetSize(Ogre::Vector2(sizex,sizey));
+		vCircle2->SetRotation(or);
+		mCircles.Add( vCircle2 );
+
+		cCircle *vCircle3 = mPCircle->CreateInstance();
+		vCircle3->SetPosition(Ogre::Vector2(-xp,-yp+20));
+		vCircle3->SetColour(cv);
+		vCircle3->SetRotation(or);
+		vCircle3->SetSize(Ogre::Vector2(sizex,sizey));
+		mCircles.Add( vCircle3 );
+
+		cCircle *vCircle4 = mPCircle->CreateInstance();
+		vCircle4->SetPosition(Ogre::Vector2(xp,-yp+20));
+		vCircle4->SetColour(cv);
+		vCircle4->SetSize(Ogre::Vector2(sizex,sizey));
+		vCircle4->SetRotation(or);
+		mCircles.Add( vCircle4 );
 		x = xp;
 		y= yp;
-//	}
+	}
+	rotationcount = rand() % mCircles.size();
 }
 
 /************************************************************************/
@@ -313,6 +344,11 @@ void Loom::MoMa::cController::Destroy( void )
 	}
 }
 
+void Loom::MoMa::cController::doGlow1( void )
+{
+
+
+}
 /************************************************************************/
 void Loom::MoMa::cController::Update( void )
 /************************************************************************/
@@ -322,11 +358,26 @@ void Loom::MoMa::cController::Update( void )
 	mLastUpdate = vTime;
 
 
-	// Circle test	
-	//CreateCircles();
-	//mCircles[0]->SetColour( Ogre::ColourValue( 141.0f / 255.0f, 248.0f / 255.0f, 170.0f / 255.0f, Ogre::Math::RangeRandom( 0.0f, 1.0f ) ) );
-	//mCircles[0]->SetSize( Ogre::Vector2( Ogre::Math::RangeRandom( 8, 24 ), Ogre::Math::RangeRandom( 8, 24 ) ) );
-	//mCircles[0]->SetRotation( Ogre::Radian( Ogre::Math::RangeRandom( 0, M_PI * 2.0f ) ) );
+	if (rand() % 100 < 5)
+	{
+		doGlow1();
+	}
+
+	// Circle test
+	
+	for (unsigned int i=rotationstart;i<rotationcount;i++)
+		{
+			if (i<mCircles.size())
+			{
+				mCircles[i]->SetRotation(Ogre::Radian( Ogre::Math::RangeRandom( 0, M_PI * 2.0f ) )); 
+			}
+		}
+	if (rand() % 100 < 5)
+		rotationstart++;
+	
+	if (rand() % 100 < 1)	
+		CreateCircles();
+	
 	if (bUserTurn)
 	{
 	/*
@@ -362,13 +413,15 @@ void Loom::MoMa::cController::Update( void )
 	}
 	else
 	{
+		/*
 		cArray<cCircle*>::iterator it = mCircles.begin();
-		for (it = mCircles.begin(); it < mCircles.end();it++)
-		{
-			Ogre::ColourValue cv = (*it)->GetColour();
-			cv.a -= 0.05;
-			(*it)->SetColour( cv );
-		}
+				for (it = mCircles.begin(); it < mCircles.end();it++)
+				{
+					Ogre::ColourValue cv = (*it)->GetColour();
+					cv.a = 0.05;
+					(*it)->SetColour( cv );
+				}*/
+		
 		
 	}
 
