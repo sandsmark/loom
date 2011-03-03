@@ -31,7 +31,8 @@ void cModuleSpeech::Init( void )
 	vLogger.Log( cLogger::LOG_INFO, _T( "Global" ), _T( "cModuleSpeech startup" ) );
 
 	cSpeechResponderSay::Get().AddListener( *this );
-
+	cSpeechQueue::Get().AddListener( * this);
+	cSpeechPlay::Get().AddListener( *this);
 	HRESULT hr = E_FAIL;
 	if (FAILED(hr = ::CoInitialize(NULL)))
 		return;
@@ -65,9 +66,23 @@ void cModuleSpeech::OnSay( const std::wstring &text )
 /************************************************************************/
 {
 	if (cpVoice)
-		cpVoice->Speak( text.c_str(), SPF_ASYNC, NULL );
+		cpVoice->Speak( text.c_str(), SPF_ASYNC, NULL );	
 }
 
+/************************************************************************/
+void cModuleSpeech::OnSpeechPlay()
+/************************************************************************/
+{
+	if (cpVoice)
+		cpVoice->Speak( wstrSavedString.c_str(), SPF_ASYNC, NULL );	
+}
+
+/************************************************************************/
+void cModuleSpeech::OnSpeechQueue( const std::wstring &text )
+/************************************************************************/
+{
+	wstrSavedString = text;	
+}
 /************************************************************************/
 void cModuleSpeech::OnHeard( const std::wstring &text )
 /************************************************************************/

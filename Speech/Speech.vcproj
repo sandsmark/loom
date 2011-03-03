@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="Speech"
 	ProjectGUID="{9ABAFDB6-9697-4E4B-B268-06D06F94483A}"
 	RootNamespace="Speech"
@@ -233,9 +233,25 @@
 					RelativePath=".\src\Event\ISpeechListenerEvent.h"
 					>
 				</File>
+				<File
+					RelativePath=".\src\Event\ISpeechPlayEvent.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Event\ISpeechQueueEvent.h"
+					>
+				</File>
 				<Filter
 					Name="Responders"
 					>
+					<File
+						RelativePath=".\src\Event\Responders\cSpeechPlay.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Event\Responders\cSpeechQueue.h"
+						>
+					</File>
 					<File
 						RelativePath=".\src\Event\Responders\cSpeechResponderHeard.h"
 						>
@@ -246,6 +262,14 @@
 					</File>
 					<File
 						RelativePath=".\src\Event\Responders\ISpeechListenerResponder.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Event\Responders\ISpeechPlayResponder.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Event\Responders\ISpeechQueueResponder.h"
 						>
 					</File>
 					<File

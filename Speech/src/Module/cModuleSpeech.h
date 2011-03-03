@@ -3,6 +3,8 @@
 #include <Core/Module/IModule.h>
 #include <Speech/Event/ISpeechEvent.h>
 #include <Speech/Event/ISpeechListenerEvent.h>
+#include <Speech/Event/ISpeechQueueEvent.h>
+#include <Speech/Event/ISpeechPlayEvent.h>
 using Loom::Core::IModule;
 
 #include <windows.h>
@@ -14,13 +16,14 @@ using Loom::Core::IModule;
 
 BEGIN_NAMESPACE( Speech )
 
-class SPEECH_API cModuleSpeech : public IModule, public ISpeechEvent, public ISpeechListenerEvent
+class SPEECH_API cModuleSpeech : public IModule, public ISpeechEvent, public ISpeechListenerEvent, public ISpeechQueueEvent, public ISpeechPlayEvent
 {
 protected:
 	HANDLE mThread;
 	CComPtr<ISpRecoContext> cpRecoCtxt;
 	CComPtr<ISpRecoGrammar> cpGrammar;
 	CComPtr<ISpVoice> cpVoice;
+	std::wstring wstrSavedString;
 
 public:
 	cModuleSpeech();
@@ -32,6 +35,8 @@ public:
 	
 	virtual void OnSay( const std::wstring &text );
 	virtual void OnHeard( const std::wstring &text );
+	virtual void OnSpeechQueue( const std::wstring &text );
+	virtual void OnSpeechPlay( );
 
 	// Automatic inline
 	HRESULT waitForSpeech(ISpRecoContext * pRecoCtxt, ISpRecoResult ** ppResult, unsigned int timeout)
