@@ -279,7 +279,7 @@ void cCreature::UpdateTransients( const float iEllapsed )
 			float vNewWidth = mBillboardSizes[i].x * ( 1 + vStrength * mTransientStrength );
 			if ( vNewWidth > vWidth )
 			{
-				mBillboards[i]->setDimensions( mBillboardSizes[i].x * ( 1 + vStrength * mTransientStrength ), mBillboardSizes[i].y * ( 1 + vStrength * mTransientStrength ) );
+				mBillboards[i]->setDimensions( mBillboardSizes[i].x * ( 1 + vStrength * mTransientStrength ) * mScale.x, mBillboardSizes[i].y * ( 1 + vStrength * mTransientStrength ) * mScale.y );
 //				mBillboards[i]->setDimensions( mBillboardSizes[i].x * ( 1 + vStrength * mTransientStrength ), mBillboardSizes[i].y * ( 1 + vStrength * mTransientStrength ) * 5 );
 			}
 		}
