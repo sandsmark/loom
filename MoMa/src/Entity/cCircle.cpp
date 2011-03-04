@@ -14,6 +14,12 @@ cCircle::cCircle( cPCircle *iProto )
 : mPrototype( iProto ), mInited( false )
 /************************************************************************/
 {
+	mPosition = Ogre::Vector3( Ogre::Math::RangeRandom( -10, 10 ), Ogre::Math::RangeRandom( -10, 10 ), 0.0f );
+	mDimensions = Ogre::Vector2( 16, 16 );
+	mColour = Ogre::ColourValue( 141.0f / 255.0f, 248.0f / 255.0f, 170.0f / 255.0f, 0.5f );
+	mRotation = Ogre::Radian( 0 );
+	mDirty = true;
+
 	cOgreResponderOnRender::Get().AddListener( *this );
 }
 
@@ -93,15 +99,10 @@ void cCircle::Init( void )
 	Ogre::BillboardSet *vBillboardSet = mPrototype->GetBillboardSet();
 //	mBillboard = vBillboardSet->createBillboard( Ogre::Math::RangeRandom( -10, 10 ), Ogre::Math::RangeRandom( -10, 10 ), Ogre::Math::RangeRandom( 0, 1000 ) );
 
-	mPosition = Ogre::Vector3( Ogre::Math::RangeRandom( -10, 10 ), Ogre::Math::RangeRandom( -10, 10 ), 0.0f );
-	mDimensions = Ogre::Vector2( 16, 16 );
-	mColour = Ogre::ColourValue( 141.0f / 255.0f, 248.0f / 255.0f, 170.0f / 255.0f, 0.5f );
-	mRotation = Ogre::Radian( 0 );
-	mDirty = true;
-
 	mBillboard = vBillboardSet->createBillboard( mPosition );
-	mBillboard->setDimensions( 16, 16 );
-	mBillboard->setColour( Ogre::ColourValue( 141.0f / 255.0f, 248.0f / 255.0f, 170.0f / 255.0f, 0.5f ) );
+	mBillboard->setDimensions( mDimensions.x, mDimensions.y );
+	mBillboard->setColour( mColour );
+	mBillboard->setRotation( mRotation );
 	mBillboards.Add( mBillboard );
 
 	/*
