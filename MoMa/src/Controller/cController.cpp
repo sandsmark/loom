@@ -364,7 +364,16 @@ void Loom::MoMa::cController::Update( void )
 	}
 
 	// Circle test
-	
+
+	for ( size_t i=0; i<mCircles.size(); i++ )
+	{
+		mCircles[i]->SetPosition(Ogre::Vector2( Ogre::Math::RangeRandom( -50, 50 ),Ogre::Math::RangeRandom( -50, 50 ) )); 
+		mCircles[i]->SetColour( Ogre::ColourValue( 1, 1, 1, Ogre::Math::RangeRandom( 0, 1 ) ) );
+		mCircles[i]->SetSkew( Ogre::Math::RangeRandom( -50, 50 ) );
+		mCircles[i]->SetRotation( Ogre::Radian( Ogre::Math::RangeRandom( 0, M_PI * 2 ) ) );
+		mCircles[i]->SetColour( Ogre::ColourValue( 1, 1, 1, Ogre::Math::RangeRandom( 0, 1 ) ) );
+	}
+
 	for (unsigned int i=rotationstart;i<rotationcount;i++)
 		{
 			if (i<mCircles.size())
