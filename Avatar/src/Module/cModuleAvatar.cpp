@@ -185,6 +185,19 @@ void cModuleAvatar::Init( void )
 
 	mThread = CreateThread( NULL, 0, StartThread, this, 0, NULL );
 
+	if ( !mConfig->ViewportVisible1 )
+	{
+		Ogre::RenderWindow *vWindow = vQScene->GetWindow();
+		vWindow->getViewport(0)->setAutoUpdated( false );
+		vWindow->getViewport(1)->setDimensions( 0, 0, 1.0f, 1.0f );
+	}
+	if ( !mConfig->ViewportVisible1 )
+	{
+		Ogre::RenderWindow *vWindow = vQScene->GetWindow();
+		vWindow->getViewport(1)->setAutoUpdated( false );
+		vWindow->getViewport(0)->setDimensions( 0, 0, 1.0f, 1.0f );
+	}
+
 	mInitialized = true;
 }
 

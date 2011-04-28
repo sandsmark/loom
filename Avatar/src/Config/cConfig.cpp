@@ -9,6 +9,8 @@ BEGIN_RTTI( Loom::Avatar::cConfig )
 	PROPERTY( Id2 )
 	PROPERTY( Controller1 )
 	PROPERTY( Controller2 )
+	PROPERTY( ViewportVisible1 )
+	PROPERTY( ViewportVisible2 )
 END_RTTI()
 
 using namespace Loom::Avatar;

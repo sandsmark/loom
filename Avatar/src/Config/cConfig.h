@@ -16,6 +16,8 @@ public:
 	int Id2;
 	char *Controller1;
 	char *Controller2;
+	bool ViewportVisible1;
+	bool ViewportVisible2;
 
 	cConfig();
 };
