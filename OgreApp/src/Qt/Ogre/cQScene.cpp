@@ -88,7 +88,7 @@ void cQScene::RenderFrame( void )
 	float vEllapsed = ( vTime - mLastUpdate ) * 0.001f;
 	mLastUpdate = vTime;
 
-	UpdateCamera( vEllapsed );
+//	UpdateCamera( vEllapsed );
 	UpdateAnims( vEllapsed );
 
     update();

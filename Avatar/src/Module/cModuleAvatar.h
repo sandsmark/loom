@@ -26,6 +26,9 @@ public:
 	virtual void Init( void );
 	virtual void Destroy( void );
 
+	cOgreAvatar *GetAvatar( const size_t iIndex ) const;
+	cOgreAvatar *GetAvatarById( const size_t iId ) const;
+
 	static DWORD WINAPI StartThread( LPVOID iParam );
 };
 

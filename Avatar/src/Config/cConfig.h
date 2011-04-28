@@ -12,6 +12,10 @@ public:
 	bool  SingleAvatar;
 	float Orientation;
 	Ogre::Vector3 Position;
+	int Id1;
+	int Id2;
+	char *Controller1;
+	char *Controller2;
 
 	cConfig();
 };

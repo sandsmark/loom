@@ -95,6 +95,8 @@ public:
 	__declspec( dllexport ) static char* GetWords();
 	__declspec( dllexport ) static void UpdatePitchTrackerParams(double AmplitudeThreshold, double NoiseThreshold, double AmplificationFactor);
 
+	__declspec( dllexport ) static void ClearWordBuffer();
+
 private:
 	SpeechPitchIntegrator();
 	~SpeechPitchIntegrator();

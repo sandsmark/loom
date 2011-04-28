@@ -11,6 +11,7 @@ public:
 	class cParam
 	{
 	public:
+		size_t Id;
 		eEffector Effector;
 		Ogre::Vector3 Position;
 
@@ -19,6 +20,7 @@ public:
 		cParam( const cDispatcherHub::IParam &iParam )
 		{
 			cParam *vData = (cParam*)iParam.GetData();
+			Id = vData->Id;
 			Effector = vData->Effector;
 			Position = vData->Position;
 		}
@@ -30,7 +32,7 @@ public:
 	virtual void Respond( const cDispatcherHub::IParam &iParam )
 	{
 		cParam vParam( iParam );
-		Dispatch( &IAvatarEvent::OnSetEffectorPosition, vParam.Effector, vParam.Position );
+		Dispatch( &IAvatarEvent::OnSetEffectorPosition, vParam.Id, vParam.Effector, vParam.Position );
 	}
 };
 

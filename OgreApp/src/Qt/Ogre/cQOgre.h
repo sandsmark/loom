@@ -26,6 +26,9 @@ BEGIN_NAMESPACE( OgreApp )
     
 class OGREAPP_API cQOgre : public QGLWidget, public IOgreEvent
 {
+public:
+	typedef const Ogre::String* LPOGRESTR;
+
 //    Q_OBJECT
 protected:
 	struct sLineVertex
@@ -58,6 +61,7 @@ public:
     
     virtual void RenderFrame( void ) {}
 	Ogre::SceneManager *GetScene( void ) const { return mScene; }
+	Ogre::RenderWindow *GetWindow( void ) const { return mWindow; }
     
     // QGLWidget methods
     virtual void initializeGL();
@@ -76,14 +80,18 @@ public:
 	void ClearLines( void );
 	void AddLine( const Ogre::Vector3 &iFrom, const Ogre::Vector3 &iTo, const Ogre::ColourValue &iColour = Ogre::ColourValue::White );
 
+	void OnGetEntitiesNoStd( LPOGRESTR *oNames, size_t &oNumNames );
+
 	// IOgreEvent methods
 	virtual void OnSetBackgroundColour( const Ogre::ColourValue &iColour );
 	virtual void OnCreateBox( const Ogre::String &iName, const Ogre::Vector3 &iPosition, const Ogre::Vector3 &iSize );
+	virtual void OnCreateSphere( const Ogre::String &iName, const Ogre::Vector3 &iPosition, const Ogre::Vector3 &iSize );
 	virtual void OnSetPosition( const Ogre::String &iName, const Ogre::Vector3 &iPosition );
 	virtual void OnGetPosition( const Ogre::String &iName, Ogre::Vector3 &oPosition );
 	virtual void OnDebugLog( const cString &iText );
 	virtual void OnOutput( const cString &iText );
 	virtual void OnSetTexture( const Ogre::String &iName, void *iTextureData, unsigned long iSize );
+	virtual void OnSetTextureFile( const Ogre::String &iName, const Ogre::String &iTextureName );
 	virtual void OnMoveTo( const Ogre::String &iName, const Ogre::Vector3 &iPosition, float iSpeed );
 	virtual void OnGetEntities( cArray<Ogre::String> &oNames );
 	virtual void OnGetBoundingBox( const Ogre::String &iName, Ogre::AxisAlignedBox &oBounds );

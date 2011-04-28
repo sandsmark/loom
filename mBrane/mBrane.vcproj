@@ -28,6 +28,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+				Description="Copying dependencies and resources"
+				CommandLine="copy bin\mBrane_d.dll ..\Weaver\bin\modules&#x0D;&#x0A;copy bin\mBrane_d.pdb ..\Weaver\bin\modules&#x0D;&#x0A;copy dependencies\win32\mBrane\Debug\*.dll ..\Weaver\bin&#x0D;&#x0A;copy dependencies\win32\mBrane\Debug\*.pdb ..\Weaver\bin&#x0D;&#x0A;copy resources\*.xml ..\Weaver\bin&#x0D;&#x0A;"
+				Outputs="..\Weaver\bin\modules\mBrane_d.dll;..\Weaver\bin\modules\mBrane_d.pdb;..\Weaver\bin\Core.dll;..\Weaver\bin\CoreLibrary.dll;..\Weaver\bin\mBraneLib.dll;..\Weaver\bin\Perf.dll;..\Weaver\bin\pingpong.dll;..\Weaver\bin\TCP.dll;..\Weaver\bin\UDP.dll;..\Weaver\bin\Core.pdb;..\Weaver\bin\CoreLibrary.pdb;..\Weaver\bin\mBraneLib.pdb;..\Weaver\bin\Perf.pdb;..\Weaver\bin\pingpong.pdb;..\Weaver\bin\TCP.pdb;..\Weaver\bin\UDP.pdb;..\Weaver\bin\mBrane.xml;..\Weaver\bin\mBraneApp.xml"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -42,7 +45,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/FImBrane/common.h"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include;./dependencies\win32\mBrane\mBrane;dependencies\win32\mBrane\CoreLibrary;dependencies\win32\mBrane\Core"
+				AdditionalIncludeDirectories=".\dependencies\win32\Qt\Include;.\dependencies\win32\Ogre\boost_1_42;../include;./dependencies\win32\Ogre\include;./dependencies\win32\mBrane\mBrane;dependencies\win32\mBrane\CoreLibrary;dependencies\win32\mBrane\Core;dependencies\win32\Humanobs;./dependencies\win32"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;MBRANE_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="0"
@@ -67,10 +70,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="mBraneLib.lib Core.lib CoreLibrary.lib Ws2_32.lib Psapi.lib Rpcrt4.lib IPHlpApi.Lib"
+				AdditionalDependencies="OgreMain_d.lib mBraneLib.lib Core.lib CoreLibrary.lib Ws2_32.lib Psapi.lib Rpcrt4.lib IPHlpApi.Lib r_code.lib r_comp.lib r_exec.lib HumanobsD1.lib"
 				OutputFile="$(OutDir)\$(ProjectName)_d.dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="dependencies\win32\mBrane\Debug"
+				AdditionalLibraryDirectories="dependencies\win32\Ogre\lib\debug;dependencies\win32\Ogre\boost_1_42\lib;dependencies\win32\mBrane\Debug;dependencies\win32\HumanobsD1\Debug;dependencies\win32\Replicode\Debug"
 				GenerateManifest="false"
 				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames=""
@@ -99,7 +102,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy bin\mBrane_d.dll ..\Weaver\bin\modules&#x0D;&#x0A;copy bin\mBrane_d.pdb ..\Weaver\bin\modules&#x0D;&#x0A;copy dependencies\win32\mBrane\Debug\*.dll ..\Weaver\bin&#x0D;&#x0A;copy dependencies\win32\mBrane\Debug\*.pdb ..\Weaver\bin&#x0D;&#x0A;copy resources\*.xml ..\Weaver\bin&#x0D;&#x0A;"
+				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
@@ -217,14 +220,6 @@
 				</File>
 				<File
 					RelativePath=".\src\Module\cModulemBrane.h"
-					>
-				</File>
-				<File
-					RelativePath=".\src\Module\mBraneInterface.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\Module\mBraneInterface.h"
 					>
 				</File>
 			</Filter>

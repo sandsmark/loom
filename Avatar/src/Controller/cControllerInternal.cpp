@@ -1,3 +1,4 @@
+#include "StdAfx.h"
 #include <Avatar/Controller/cControllerInternal.h>
 #include <Avatar/Ogre/cOgreAvatar.h>
 #include <Ogre/OgreVector3.h>
@@ -34,6 +35,7 @@ void cControllerInternal::Init( cOgreAvatar *iAvatar )
 void cControllerInternal::Update()
 /************************************************************************/
 {
+#if 0
 	DWORD vTime = GetTickCount();
 	float vEllapsed = ( vTime - mLastUpdate ) * 0.001f;
 	mLastUpdate = vTime;
@@ -58,4 +60,5 @@ void cControllerInternal::Update()
 	mAvatar->SetEffectorPosition( EFFECTOR_LEFT_HAND , vLeft );
 	mAvatar->SetEffectorPosition( EFFECTOR_RIGHT_HAND, vRight );
 	// mAvatar->SetEffectorPosition( EFFECTOR_HEAD, vHead );
+#endif
 }

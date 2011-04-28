@@ -38,6 +38,7 @@
 //_/_/
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
+#include "StdAfx.h"
 #include "IKChain.h"
 #include <Ogre/OgreSkeletonInstance.h>
 

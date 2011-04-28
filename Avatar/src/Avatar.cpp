@@ -1,3 +1,4 @@
+#include "StdAfx.h"
 #include <Avatar/Avatar.h>
 #include <Avatar/Module/cModuleAvatar.h>
 

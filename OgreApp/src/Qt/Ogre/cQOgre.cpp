@@ -31,6 +31,7 @@
 
 #include <Ogre/OgreSceneManager.h>
 #include <Ogre/OgreMovableObject.h>
+#include <io.h>
 
 using namespace Loom::OgreApp;
 using Loom::Core::cLogger;
@@ -136,8 +137,29 @@ bool cQOgre::InitScene( void )
 /**********************************************************************/
 {
     mScene    = mRoot->createSceneManager( Ogre::ST_GENERIC );    
+	mScene->setShadowTechnique( Ogre::SHADOWTYPE_STENCIL_MODULATIVE );
     mCamera   = mScene->createCamera( "MainCamera" );
-    mViewport = mWindow->addViewport( mCamera );
+//    mViewport = mWindow->addViewport( mCamera, 1, 0.0f, 0.0f, 0.5f, 1.0f );
+	mViewport = mWindow->addViewport( mCamera, 1, 0.0f, 0.1f, 0.5f, 0.9f );
+	mViewport->setVisibilityMask( 0xffffffff );
+	mCamera->setAutoAspectRatio( true );
+
+	Ogre::Camera *vCamera = mScene->createCamera( "SecondaryCamera" );
+//	Ogre::Viewport *vViewport = mWindow->addViewport( vCamera, 0, 0.5f, 0.0f, 0.5f, 1.0f );
+	Ogre::Viewport *vViewport = mWindow->addViewport( vCamera, 0, 0.5f, 0.1f, 0.5f, 0.9f );
+	vViewport->setClearEveryFrame( true );
+	vViewport->setAutoUpdated( true );
+	vViewport->setVisibilityMask( 0xffffffff );
+	Ogre::ColourValue vBGColor; vBGColor.setAsABGR( 0x88004400 );
+	vViewport->setBackgroundColour( vBGColor );
+	vCamera->setAutoAspectRatio( true );
+
+	vCamera->setPosition( Ogre::Vector3( 0, 0, -200 ) );
+	vCamera->lookAt( Ogre::Vector3( 0, 0, 0 ) );
+	vCamera->setNearClipDistance( 1 );
+	vCamera->setFarClipDistance( 1000 );
+
+	int vNum = mWindow->getNumViewports();
     
     return true;
 }
@@ -159,6 +181,9 @@ void cQOgre::paintGL()
 {
     RenderFrame();
     mRoot->renderOneFrame();
+//	mWindow->update();
+//	mWindow->getViewport(0)->update();
+//	mWindow->getViewport(1)->update();
 }
 
 /**********************************************************************/
@@ -210,6 +235,8 @@ void cQOgre::OnCreateBox( const Ogre::String &iName, const Ogre::Vector3 &iPosit
 
 	Ogre::Entity *vCube = mScene->createEntity( iName, Ogre::SceneManager::PT_CUBE );
 	vCube->setMaterialName( "CubeMaterial" );
+	vCube->setVisibilityFlags( 3 );
+	vCube->setCastShadows( true );
 	Ogre::SceneNode *vNode = mScene->getRootSceneNode()->createChildSceneNode( iPosition );
 	vNode->attachObject( vCube );
 	vNode->setScale( iSize );
@@ -232,6 +259,7 @@ void Loom::OgreApp::cQOgre::OnSetPosition( const Ogre::String &iName, const Ogre
 		TCHAR vTemp[ 256 ];
 		StringCchPrintf( vTemp, 256, _T("Unknown entity: %S"), iName );	// TODO: Use %s if not in unicode
 		cLogger::Get().Log( cLogger::LOG_WARNING, _T("Global"), vTemp );
+		return;
 	}
 
 	vEntity->getParentNode()->setPosition( iPosition );
@@ -247,6 +275,8 @@ void Loom::OgreApp::cQOgre::OnGetPosition( const Ogre::String &iName, Ogre::Vect
 		return;
 	}
 
+	if ( !mScene->hasEntity( iName ) ) return;
+
 	Ogre::Entity *vEntity = mScene->getEntity( iName );
 
 	if ( !vEntity )
@@ -254,6 +284,7 @@ void Loom::OgreApp::cQOgre::OnGetPosition( const Ogre::String &iName, Ogre::Vect
 		TCHAR vTemp[ 256 ];
 		StringCchPrintf( vTemp, 256, _T("Unknown entity: %S"), iName );	// TODO: Use %s if not in unicode
 		cLogger::Get().Log( cLogger::LOG_WARNING, _T("Global"), vTemp );
+		return;
 	}
 
 	oPosition = vEntity->getParentNode()->getPosition();
@@ -481,3 +512,54 @@ void Loom::OgreApp::cQOgre::OnGetScale( const Ogre::String &iName, Ogre::Vector3
 
 	oScale = vEntity->getParentNode()->getScale();
 }
+
+/************************************************************************/
+void Loom::OgreApp::cQOgre::OnCreateSphere( const Ogre::String &iName, const Ogre::Vector3 &iPosition, const Ogre::Vector3 &iSize )
+/************************************************************************/
+{
+	Ogre::Entity *vCube = mScene->createEntity( iName, Ogre::SceneManager::PT_SPHERE );
+	vCube->setMaterialName( "CubeMaterial" );
+	vCube->setCastShadows( true );
+	Ogre::SceneNode *vNode = mScene->getRootSceneNode()->createChildSceneNode( iPosition );
+	vNode->attachObject( vCube );
+	vNode->setScale( iSize );
+}
+
+/************************************************************************/
+void Loom::OgreApp::cQOgre::OnSetTextureFile( const Ogre::String &iName, const Ogre::String &iTextureName )
+/************************************************************************/
+{
+	FILE *f = fopen( iTextureName.c_str(), "rb" );
+	if ( !f ) return;
+	size_t vSize = filelength( f->_file );
+	char *vTemp = new char[ vSize ];
+	fread( vTemp, vSize, 1, f );
+	fclose( f );
+
+	OnSetTexture( iName, vTemp, vSize );
+	delete [] vTemp;
+}
+
+/************************************************************************/
+void Loom::OgreApp::cQOgre::OnGetEntitiesNoStd( LPOGRESTR *oNames, size_t &oNumNames )
+/************************************************************************/
+{
+	oNumNames = 0;
+	Ogre::SceneManager::MovableObjectIterator vIterator = mScene->getMovableObjectIterator("Entity");
+	while ( vIterator.hasMoreElements() )
+	{
+		vIterator.getNext();
+		oNumNames++;
+	}
+
+	if ( !oNames ) return;
+	
+	size_t iCount = 0;
+	vIterator = mScene->getMovableObjectIterator("Entity");
+	while ( vIterator.hasMoreElements() )
+	{
+		Ogre::MovableObject *vObject = vIterator.getNext();
+		oNames[iCount++] = &vObject->getName();
+	}
+}
+

@@ -50,7 +50,7 @@
 				BufferSecurityCheck="false"
 				EnableEnhancedInstructionSet="2"
 				FloatingPointModel="2"
-				UsePrecompiledHeader="0"
+				UsePrecompiledHeader="2"
 				WarningLevel="4"
 				WarnAsError="true"
 				DebugInformationFormat="4"
@@ -259,15 +259,55 @@
 					RelativePath=".\src\Event\IAvatarEvent.h"
 					>
 				</File>
+				<File
+					RelativePath=".\src\Event\IAvatarListenerEvent.h"
+					>
+				</File>
 				<Filter
 					Name="Responders"
 					>
+					<File
+						RelativePath=".\src\Event\Responders\cAvatarResponderAttach.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Event\Responders\cAvatarResponderDetach.h"
+						>
+					</File>
 					<File
 						RelativePath=".\src\Event\Responders\cAvatarResponderGetEffectorPosition.h"
 						>
 					</File>
 					<File
 						RelativePath=".\src\Event\Responders\cAvatarResponderGetEffectorRotation.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Event\Responders\cAvatarResponderGrab.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Event\Responders\cAvatarResponderListenerGrab.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Event\Responders\cAvatarResponderListenerRelease.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Event\Responders\cAvatarResponderNotifyBones.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Event\Responders\cAvatarResponderNotifyPosition.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Event\Responders\cAvatarResponderNotifyRotation.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Event\Responders\cAvatarResponderRelease.h"
 						>
 					</File>
 					<File
@@ -279,14 +319,34 @@
 						>
 					</File>
 					<File
+						RelativePath=".\src\Event\Responders\IAvatarListenerResponder.h"
+						>
+					</File>
+					<File
 						RelativePath=".\src\Event\Responders\IAvatarResponder.h"
 						>
 					</File>
 				</Filter>
 			</Filter>
 			<Filter
-				Name="NewFilter1"
+				Name="StdAfx"
 				>
+				<File
+					RelativePath=".\src\StdAfx\StdAfx.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="1"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\src\StdAfx\StdAfx.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Controller"
@@ -300,11 +360,35 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\Controller\cControllerMouse.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Controller\cControllerMouse.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Controller\cControllerNetwork.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Controller\cControllerNetwork.h"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Controller\cControllerTest.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\src\Controller\cControllerTest.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Controller\cControllerTest2.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Controller\cControllerTest2.h"
 					>
 				</File>
 				<File

@@ -1,3 +1,4 @@
+#include "StdAfx.h"
 #include <Avatar/Controller/cControllerTrack.h>
 #include <Avatar/Ogre/cOgreAvatar.h>
 #include <Ogre/OgreVector3.h>
@@ -31,6 +32,7 @@ void cControllerTrack::Init( cOgreAvatar *iAvatar )
 	ASSERTTXT( mAvatar == NULL, _T( "Avatar to control is already set!" ) );
 
 	mAvatar = iAvatar;
+	mAvatar->SetInteractive( true );
 }
 
 /************************************************************************/

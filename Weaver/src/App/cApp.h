@@ -15,10 +15,29 @@ BEGIN_NAMESPACE( Weaver )
 
 //class cQMainWindow;
 
+class cDebugOutput : public std::streambuf
+{
+public:
+	cDebugOutput()
+	{
+		setp(0, 0);
+	}
+
+	virtual int_type overflow( int_type c = traits_type::eof() )
+	{
+		return fputc(c, stdout) == EOF ? traits_type::eof() : c;
+	}
+};
+
 class cApp : public Loom::Core::IApp, public QApplication, public Loom::Core::ISingleton<cApp>
 {
 protected:
 //	cQMainWindow *mMainWindow;
+	FILE *mConsole;
+	std::streambuf *mOldOut;
+	std::streambuf *mOldErr;
+
+	cDebugOutput mNewOut;
 
 	void Init( void );
 	void Destroy( void );

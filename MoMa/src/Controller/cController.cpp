@@ -16,6 +16,8 @@ using namespace Loom::MoMa;
 using Loom::Core::cDispatcherHub;
 using Loom::Core::cSerializerXML;
 
+#include <unordered_set>
+
 /************************************************************************/
 cController::cController()
 /************************************************************************/

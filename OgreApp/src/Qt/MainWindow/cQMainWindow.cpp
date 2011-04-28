@@ -47,14 +47,16 @@ cQMainWindow::cQMainWindow()
 	mDebugWindow->setDisabled( true );
 	mDebugDock = new QDockWidget( this );
 	mDebugDock->setWidget( mDebugWindow );
-	mDebugDock->show();
+//	mDebugDock->show();
+	mDebugDock->hide();
 	mScene->SetDebugPanel( mDebugWindow );
 
 	mOutputWindow = new QTextEdit();
 	mOutputWindow->setDisabled( true );
 	mOutputDock = new QDockWidget( this );
 	mOutputDock->setWidget( mOutputWindow );
-	mOutputDock->show();
+//	mOutputDock->show();
+	mOutputDock->hide();
 	mScene->SetOutputPanel( mOutputWindow );
 
 	// Subscribe for Ogre messages
@@ -84,9 +86,9 @@ cQMainWindow::~cQMainWindow()
 /************************************************************************/
 {
 	SAFE_DELETE( mOutputDock );
-	SAFE_DELETE( mOutputWindow );
+//	SAFE_DELETE( mOutputWindow );
 	SAFE_DELETE( mDebugDock );
-	SAFE_DELETE( mDebugWindow );
+//	SAFE_DELETE( mDebugWindow );
 	SAFE_DELETE( mScene );
 	SAFE_DELETE( mMenuBar );
 }

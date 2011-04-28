@@ -38,6 +38,7 @@
 //_/_/
 //_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 
+#include "StdAfx.h"
 #include "IKJoint.h"
 
 // Default min/max angle of a joint
