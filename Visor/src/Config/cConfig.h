@@ -7,7 +7,7 @@ BEGIN_NAMESPACE( Visor )
 class cConfig : public cObject<cConfig>
 {
 public:
-	TCHAR *ConfigPath;
+	wchar_t *ConfigPath;
 
 	cConfig();
 };

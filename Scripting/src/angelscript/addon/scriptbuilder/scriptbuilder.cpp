@@ -646,7 +646,7 @@ static const char *GetCurrentDir(char *buf, size_t size)
 {
 #ifdef _MSC_VER
 #ifdef _WIN32_WCE
-    static TCHAR apppath[MAX_PATH] = TEXT("");
+    static wchar_t apppath[MAX_PATH] = TEXT("");
     if (!apppath[0])
     {
         GetModuleFileName(NULL, apppath, MAX_PATH);

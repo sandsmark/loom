@@ -387,7 +387,7 @@ DWORD cModulemBrane::StartThread( LPVOID arg )
 
 	std::wstring text = _T("mBrane is running...");
 	cDispatcherHub::IParam vReceivedParam( (void*)text.c_str() );
-	const TCHAR *vReceivedMessageName = _T("Speech::Say");
+	const wchar_t *vReceivedMessageName = _T("Speech::Say");
 	cDispatcherHub::Get().Dispatch( vReceivedMessageName, vReceivedParam );
 
 	// std::cout<<"Running\n";

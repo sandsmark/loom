@@ -9,7 +9,7 @@ using namespace Loom::Core;
 void cSandboxEventListener::OnDebugMessage( const cParam &iParam )
 /************************************************************************/
 {
-	TCHAR vTemp[ 256 ];
+	wchar_t vTemp[ 256 ];
 	StringCchPrintf( vTemp, 256, _T("%s %d"), iParam.mMessage, iParam.mNumber );
 	cLogger::Get().Log( cLogger::LOG_DEBUG, _T("Gecike"), vTemp );
 }

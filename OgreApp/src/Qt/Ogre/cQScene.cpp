@@ -294,7 +294,7 @@ void cQScene::OnMoveTo( const Ogre::String &iName, const Ogre::Vector3 &iPositio
 
 	if ( !vEntity )
 	{
-		TCHAR vTemp[ 256 ];
+		wchar_t vTemp[ 256 ];
 		StringCchPrintf( vTemp, 256, _T("Unknown entity: %S"), iName );	// TODO: Use %s if not in unicode
 		cLogger::Get().Log( cLogger::LOG_WARNING, _T("Global"), vTemp );
 		return;

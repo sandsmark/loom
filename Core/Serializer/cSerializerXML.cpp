@@ -31,7 +31,7 @@ IObject *cSerializerXML::Deserialize( void )
 	if ( !vClass )
 	{
 		cLogger &vLogger = cLogger::Get();
-		TCHAR vTemp[ 1024 ];
+		wchar_t vTemp[ 1024 ];
 		StringCchPrintf( vTemp, 1024, _T("Can't find class: '%s'"), vLine );
 		vLogger.Log( cLogger::LOG_WARNING, _T( "Global" ), vTemp );
 		return NULL;
@@ -40,7 +40,7 @@ IObject *cSerializerXML::Deserialize( void )
 	for ( size_t i=0; i<vClass->GetNumProperties(); i++ )
 	{
 		const cProperty &vProperty = vClass->GetProperty(i);
-		TCHAR vTemp[ 1024 ];
+		wchar_t vTemp[ 1024 ];
 		mStream.getline( vTemp, 1024, '=' );
 		vLine = vTemp;
 		size_t vIdx = vLine.find_last_of( _T(" \n\r\t") ) + 1;
@@ -49,7 +49,7 @@ IObject *cSerializerXML::Deserialize( void )
 		if ( vProperty.GetName() != vLineString )
 		{
 			cLogger &vLogger = cLogger::Get();
-			TCHAR vTemp[ 1024 ];
+			wchar_t vTemp[ 1024 ];
 			StringCchPrintf( vTemp, 1024, _T("Class '%s' is in invalid format."), vLine );
 			vLogger.Log( cLogger::LOG_WARNING, _T( "Global" ), vTemp );
 			delete vResult;
@@ -145,7 +145,7 @@ template<>
 CORE_API void Loom::Core::ISerializer::Read<wchar_t *>( wchar_t * &iTarget )
 /************************************************************************/
 {
-	TCHAR vTemp[ 1024 ];
+	wchar_t vTemp[ 1024 ];
 	cSerializerXML *vSerializer = (cSerializerXML*)this;
 	vSerializer->mStream.getline( vTemp, 1024 );
 	size_t vLength = wcslen( vTemp ) + 1;
@@ -158,7 +158,7 @@ template<>
 CORE_API void Loom::Core::ISerializer::Read<char *>( char * &iTarget )
 /************************************************************************/
 {
-	TCHAR vTemp[ 1024 ];
+	wchar_t vTemp[ 1024 ];
 	cSerializerXML *vSerializer = (cSerializerXML*)this;
 	vSerializer->mStream.getline( vTemp, 1024 );
 	size_t vLength = wcslen( vTemp ) + 1;

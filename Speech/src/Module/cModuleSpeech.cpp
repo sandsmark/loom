@@ -180,7 +180,7 @@ DWORD cModuleSpeech::StartThread( LPVOID arg )
 #else
 	// For MS Speech Reco alone, comment out for PitchTracker
 	std::wstring text;
-	const TCHAR *vReceivedMessageName = _T("Speech::Heard");
+	const wchar_t *vReceivedMessageName = _T("Speech::Heard");
 
 	// Do listening and routing here
 	// Listen for message name and data and send with Dispatch

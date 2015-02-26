@@ -71,7 +71,7 @@ DWORD cModuleTrackStar::StartThread( LPVOID /*iParam*/ )
 	//	std::wstring text = _T("Hello World");
 	//	cDispatcherHub::IParam vReceivedParam( (void*)text.c_str() );
 
-	//	const TCHAR *vReceivedMessageName = _T("Speech::Say");
+	//	const wchar_t *vReceivedMessageName = _T("Speech::Say");
 
 		// Dispatch received message
 	//	cDispatcherHub::Get().Dispatch( vReceivedMessageName, vReceivedParam );

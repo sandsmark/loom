@@ -81,7 +81,7 @@ DWORD cModulePsyclone::StartThread( LPVOID arg )
 	if (!plug)
 		return 0;
 
-	TCHAR *vReceivedMessageName;
+	wchar_t *vReceivedMessageName;
 
 	Message* msg;
 	for ( ;; ) {

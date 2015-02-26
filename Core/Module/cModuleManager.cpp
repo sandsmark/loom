@@ -32,7 +32,7 @@ void cModuleManager::Init( void )
 		ASSERTTXT( vCreateModule, _T( "Invalid loom module" ) );
 
 		// TODO: Make log function with printf
-		TCHAR Temp[ 256 ];
+		wchar_t Temp[ 256 ];
 		StringCchPrintf( Temp, 256, _T("[cModuleManager::Init] \"%s\" module loaded"), vFile.cFileName );
 		cLogger::Get().Log( cLogger::LOG_INFO, GetLoggerName(), Temp );
 

@@ -45,10 +45,10 @@ BEGIN_NAMESPACE( Core )
 class CORE_API cDebug
 {
 public:
-	static bool Alert( const TCHAR *iMessage, const TCHAR *iHeader = _T("Alert") );
-	static bool Alert( const TCHAR *iMessage, const TCHAR *iFunction, const TCHAR *iLine );
+	static bool Alert( const wchar_t *iMessage, const wchar_t *iHeader = _T("Alert") );
+	static bool Alert( const wchar_t *iMessage, const wchar_t *iFunction, const wchar_t *iLine );
 
-	static void Notify( const TCHAR *iMessage, const TCHAR *iHeader = _T("Notification") );
+	static void Notify( const wchar_t *iMessage, const wchar_t *iHeader = _T("Notification") );
 };
 
 END_NAMESPACE()

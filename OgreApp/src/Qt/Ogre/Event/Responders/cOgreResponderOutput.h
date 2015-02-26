@@ -20,8 +20,8 @@ public:
 		cParam() {}
 		cParam( const cDispatcherHub::IParam &iParam )
 		{
-			TCHAR *iText = ((TCHAR*)iParam.GetData());
-			TCHAR *vTemp = new TCHAR[ _tcslen( iText ) + 1 ];
+			wchar_t *iText = ((wchar_t*)iParam.GetData());
+			wchar_t *vTemp = new wchar_t[ _tcslen( iText ) + 1 ];
 			_tcscpy( vTemp, iText );
 			Text = new cString( vTemp );
 		}

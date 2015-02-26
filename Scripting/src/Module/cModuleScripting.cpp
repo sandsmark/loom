@@ -106,7 +106,7 @@ void Loom::Scripting::cModuleScripting::OnDispatch( std::string iEventName, std:
 {
 //	cDispatcherHub::IParam vIParam( iData );
 	const char *vName = iEventName.c_str();
-	TCHAR vTemp[ 1024 ];
+	wchar_t vTemp[ 1024 ];
 	mbstowcs_s( NULL, vTemp, 1024, vName, 1023 );
 	cDispatcherHub::Get().Dispatch( vTemp, (void*)iData.c_str() );
 }

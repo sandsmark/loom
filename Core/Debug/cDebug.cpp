@@ -13,18 +13,18 @@
 using namespace Loom::Core;
 
 /**********************************************************************/
-bool cDebug::Alert( const TCHAR *iMessage, const TCHAR *iHeader )
+bool cDebug::Alert( const wchar_t *iMessage, const wchar_t *iHeader )
 /**********************************************************************/
 {
 	return ( MessageBox( NULL, iMessage, iHeader, MB_OKCANCEL ) == IDOK );
 }
 
 /**********************************************************************/
-bool cDebug::Alert( const TCHAR *iMessage, const TCHAR *iFunction, const TCHAR *iLine )
+bool cDebug::Alert( const wchar_t *iMessage, const wchar_t *iFunction, const wchar_t *iLine )
 /**********************************************************************/
 {
 	int vMaxLength = _tcslen( iFunction ) + _tcslen( iLine ) + 7;
-    TCHAR *vTemp = new TCHAR[ vMaxLength ];
+    wchar_t *vTemp = new wchar_t[ vMaxLength ];
 	StringCchPrintf( vTemp, vMaxLength, _T("%s line %s"), iFunction, iLine );
     
     bool vResult = Alert( iMessage, vTemp );
@@ -35,7 +35,7 @@ bool cDebug::Alert( const TCHAR *iMessage, const TCHAR *iFunction, const TCHAR *
 }
 
 /**********************************************************************/
-void cDebug::Notify( const TCHAR *iMessage, const TCHAR *iHeader )
+void cDebug::Notify( const wchar_t *iMessage, const wchar_t *iHeader )
 /**********************************************************************/
 {
 	MessageBox( NULL, iMessage, iHeader, MB_OK );

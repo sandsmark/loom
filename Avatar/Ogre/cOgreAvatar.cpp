@@ -767,7 +767,7 @@ void Loom::Avatar::cOgreAvatar::OnAttach( const size_t iId, const Ogre::String &
 
 	if ( !vEntity )
 	{
-		TCHAR vTemp[ 256 ];
+		wchar_t vTemp[ 256 ];
 		StringCchPrintf( vTemp, 256, _T("Unknown entity: %S"), iEntityName );	// TODO: Use %s if not in unicode
 		cLogger::Get().Log( cLogger::LOG_WARNING, _T("Global"), vTemp );
 		return;
@@ -790,7 +790,7 @@ void Loom::Avatar::cOgreAvatar::OnDetach( const size_t iId, const Ogre::String &
 
 	if ( !vEntity )
 	{
-		TCHAR vTemp[ 256 ];
+		wchar_t vTemp[ 256 ];
 		StringCchPrintf( vTemp, 256, _T("Unknown entity: %S"), iEntityName );	// TODO: Use %s if not in unicode
 		cLogger::Get().Log( cLogger::LOG_WARNING, _T("Global"), vTemp );
 		return;

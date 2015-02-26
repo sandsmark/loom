@@ -282,7 +282,7 @@ void Loom::OgreApp::cQMainWindow::OnListEntities()
 	cDispatcherHub::Get().Dispatch( _T("Ogre::cOgreResponderOutput"), TEXT( "List of entities:" ) );
 	for ( size_t i=0; i<vEntities.GetSize(); i++ )
 	{
-		TCHAR vTemp[ 256 ];
+		wchar_t vTemp[ 256 ];
 		StringCchPrintf( vTemp, 256, L"\t%S", vEntities[i].c_str() );
 		cDispatcherHub::Get().Dispatch( _T("Ogre::cOgreResponderOutput"), vTemp );
 	}
@@ -295,7 +295,7 @@ void Loom::OgreApp::cQMainWindow::OnGetBounds()
 	Ogre::AxisAlignedBox vBounds;
 	cOgreResponderGetBoundingBox::Get().Dispatch( &IOgreEvent::OnGetBoundingBox, Ogre::String( "Avatar1" ), vBounds );
 
-	TCHAR vTemp[ 256 ];
+	wchar_t vTemp[ 256 ];
 	StringCchPrintf( vTemp, 256, L"Avatar1 bounds: [%.2f,%.2f,%.2f]-[%.2f,%.2f,%.2f]", vBounds.getMinimum().x, vBounds.getMinimum().y, vBounds.getMinimum().z, vBounds.getMaximum().x, vBounds.getMaximum().y, vBounds.getMaximum().z );
 	cDispatcherHub::Get().Dispatch( _T("Ogre::cOgreResponderOutput"), vTemp );
 }

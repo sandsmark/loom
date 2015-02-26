@@ -24,7 +24,7 @@ void cDispatcherHub::Dispatch( const cString &iName, const IParam &iParam )
 	if ( !vList ) return;
 
 	// TODO: Make log function with printf
-	TCHAR Temp[ 256 ];
+	wchar_t Temp[ 256 ];
 	StringCchPrintf( Temp, 256, _T("[cDispatcherHub::Dispatch] Dispatching \"%s\""), iName.ToCString() );
 	cLogger::Get().Log( cLogger::LOG_DEBUG, GetLoggerName(), Temp );
 
